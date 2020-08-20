@@ -42,7 +42,9 @@ stat_wide
 ggplot(data=Rate_Child,aes(x=Who_Region,y=Rate_Mort_Child))+
  geom_boxplot(aes(fill=Who_Region)) +
   ggtitle("Mortality Rate Child(Under Five years) per 1000 live births")+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5))+
+  theme(axis.text.x=element_text(angle=60, hjust=1))
+
 
 
 ggplot(data=Rate_Child,aes(x=year,y=Rate_Mort_Child))+
