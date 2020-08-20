@@ -1,0 +1,75 @@
+---
+title: "TFM_v1"
+author: "María Perea"
+date: "9 de julio de 2020"
+output: html_document
+---
+
+#### Importando fichero "Mortality_rate_Newborn_Child.csv"
+****IMPORTANDO fichero con el indicador: Selección y cambio de nombre en columnas, creando tabla de Wide a Longer.
+```{r}
+Rate_Child<-read.csv("Mortality_rate_Newborn_Child.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 2)
+Rate_Child<-Rate_Child[ ,c(1,31:59)]
+colnames(Rate_Child)<-c("Who_Region","2018","2017","2016","2015","2014","2013","2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000","1999","1998","1997","1996","1995","1994","1993","1992","1991","1990")
+
+Rate_Child <- Rate_Child %>%
+  pivot_longer(cols=`2018`:`1990`,
+               names_to="year",
+               values_to = "Rate_Mort_Child",
+               names_ptypes = list(year=integer()))
+glimpse(Rate_Child)
+unique(Rate_Child$Who_Region)
+unique(Rate_Child$year)
+```
+
+#### Análisis indicador Rate_Mort_Child
+****Pivotando tabla de Longer a Wide (Regiones en columnas)
+
+```{r}
+Rate_Child_wide <- Rate_Child %>%
+  pivot_wider(names_from=Who_Region, 
+              values_from=Rate_Mort_Child)
+
+stat_wide<-stat.desc(Rate_Child_wide,norm = TRUE)
+stat_wide<-round(stat_wide,2)
+stat_wide
+
+```
+
+###### Gráficos
+
+```{r}
+ggplot(data=Rate_Child,aes(x=Who_Region,y=Rate_Mort_Child))+
+ geom_boxplot(aes(fill=Who_Region)) +
+  ggtitle("Mortality Rate Child(Under Five years) per 1000 live births")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+
+ggplot(data=Rate_Child,aes(x=year,y=Rate_Mort_Child))+
+  geom_point(aes(col=Who_Region))+
+  ggtitle("Mortality Rate Child(Under Five years) per 1000 live births")
+```
+
+
+
+
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
