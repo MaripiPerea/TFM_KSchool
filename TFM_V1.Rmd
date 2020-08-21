@@ -53,6 +53,129 @@ ggplot(data=Rate_Child,aes(x=year,y=Rate_Mort_Child))+
 ```
 
 
+#### Importando fichero "International_Health_Regulations.csv""
+**** Contiene 13 indicadores de la Regulación Internacional de Salud(Encuestas)
+**** Se importa el fichero seleccionando las columnas de cada indicador
+**** Pivotando cada tabla de Wide a Longer
+
+
+```{r}
+
+Int_Health_Regulat<-read.csv("International_Health_Regulations.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 1)
+
+#### Legislation
+Int_Health_Regulat_Legislation<-Int_Health_Regulat[ ,c(1:9)]
+colnames(Int_Health_Regulat_Legislation)<-c("Who_Region","2017","2016","2015","2014","2013","2012","2011","2010")
+Int_Health_Regulat_Legislation <- Int_Health_Regulat_Legislation %>%
+  pivot_longer(cols=`2017`:`2010`,
+               names_to="year",
+               values_to = "Legislation",
+               names_ptypes = list(year=integer()))
+
+#### Coordination
+Int_Health_Regulat_Coordination<-Int_Health_Regulat[ ,c(1,10:17)]
+colnames(Int_Health_Regulat_Coordination)<-c("Who_Region","2017","2016","2015","2014","2013","2012","2011","2010")
+Int_Health_Regulat_Coordination<- Int_Health_Regulat_Coordination %>%
+  pivot_longer(cols=`2017`:`2010`,
+               names_to="year",
+               values_to = "Coordination",
+               names_ptypes = list(year=integer()))
+
+#### Surveillance
+Int_Health_Regulat_Surveillance<-Int_Health_Regulat[ ,c(1,18:25)]                                          
+colnames(Int_Health_Regulat_Surveillance)<-c("Who_Region","2017","2016","2015","2014","2013","2012","2011","2010")
+Int_Health_Regulat_Surveillance<- Int_Health_Regulat_Surveillance %>%
+  pivot_longer(cols=`2017`:`2010`,
+               names_to="year",
+               values_to = "Surveillance",
+               names_ptypes = list(year=integer()))
+#### Response
+Int_Health_Regulat_Response<-Int_Health_Regulat[ ,c(1,26:33)]
+colnames(Int_Health_Regulat_Response)<-c("Who_Region","2017","2016","2015","2014","2013","2012","2011","2010")
+Int_Health_Regulat_Response<- Int_Health_Regulat_Response %>%
+  pivot_longer(cols=`2017`:`2010`,
+               names_to="year",
+               values_to = "Response",
+               names_ptypes = list(year=integer()))
+#### Preparedness
+Int_Health_Regulat_Preparedness<-Int_Health_Regulat[ ,c(1,34:41)]
+colnames(Int_Health_Regulat_Preparedness)<-c("Who_Region","2017","2016","2015","2014","2013","2012","2011","2010")
+Int_Health_Regulat_Preparedness<- Int_Health_Regulat_Preparedness %>%
+  pivot_longer(cols=`2017`:`2010`,
+               names_to="year",
+               values_to = "Preparedness",
+               names_ptypes = list(year=integer()))
+ 
+#### Risk_communication
+Int_Health_Regulat_Risk_communication<-Int_Health_Regulat[ ,c(1,42:49)]
+colnames(Int_Health_Regulat_Risk_communication)<-c("Who_Region","2017","2016","2015","2014","2013","2012","2011","2010")
+Int_Health_Regulat_Risk_communication<- Int_Health_Regulat_Risk_communication %>%
+  pivot_longer(cols=`2017`:`2010`,
+               names_to="year",
+               values_to = "Risk_communication",
+               names_ptypes = list(year=integer()))
+
+#### Human_resources
+Int_Health_Regulat_Human_resources<-Int_Health_Regulat[ ,c(1,50:57)]
+colnames(Int_Health_Regulat_Human_resources)<-c("Who_Region","2017","2016","2015","2014","2013","2012","2011","2010")
+Int_Health_Regulat_Human_resources<- Int_Health_Regulat_Human_resources %>%
+  pivot_longer(cols=`2017`:`2010`,
+               names_to="year",
+               values_to = "Human_resources",
+               names_ptypes = list(year=integer()))
+
+#### Laboratory
+Int_Health_Regulat_Laboratory<-Int_Health_Regulat[ ,c(1,58:65)]
+colnames(Int_Health_Regulat_Laboratory)<-c("Who_Region","2017","2016","2015","2014","2013","2012","2011","2010")
+Int_Health_Regulat_Laboratory<- Int_Health_Regulat_Laboratory %>%
+  pivot_longer(cols=`2017`:`2010`,
+               names_to="year",
+               values_to = "Laboratory",
+               names_ptypes = list(year=integer()))
+#### Points_entry
+Int_Health_Regulat_Points_entry<-Int_Health_Regulat[ ,c(1,66:73)]
+colnames(Int_Health_Regulat_Points_entry)<-c("Who_Region","2017","2016","2015","2014","2013","2012","2011","2010")
+Int_Health_Regulat_Points_entry<- Int_Health_Regulat_Points_entry %>%
+  pivot_longer(cols=`2017`:`2010`,
+               names_to="year",
+               values_to = "Points_entry",
+               names_ptypes = list(year=integer()))
+#### Zoonosis
+Int_Health_Regulat_Zoonosis<-Int_Health_Regulat[ ,c(1,74:81)]
+colnames(Int_Health_Regulat_Zoonosis)<-c("Who_Region","2017","2016","2015","2014","2013","2012","2011","2010")
+Int_Health_Regulat_Zoonosis<- Int_Health_Regulat_Zoonosis %>%
+  pivot_longer(cols=`2017`:`2010`,
+               names_to="year",
+               values_to = "Zoonosis",
+               names_ptypes = list(year=integer()))
+#### Food_safety
+Int_Health_Regulat_Food_safety<-Int_Health_Regulat[ ,c(1,82:89)]
+colnames(Int_Health_Regulat_Food_safety)<-c("Who_Region","2017","2016","2015","2014","2013","2012","2011","2010")
+Int_Health_Regulat_Food_safety<- Int_Health_Regulat_Food_safety %>%
+  pivot_longer(cols=`2017`:`2010`,
+               names_to="year",
+               values_to = "Food_safety",
+               names_ptypes = list(year=integer()))
+#### Chemical
+Int_Health_Regulat_Chemical<-Int_Health_Regulat[ ,c(1,90:97)]
+colnames(Int_Health_Regulat_Chemical)<-c("Who_Region","2017","2016","2015","2014","2013","2012","2011","2010")
+Int_Health_Regulat_Chemical<- Int_Health_Regulat_Chemical %>%
+  pivot_longer(cols=`2017`:`2010`,
+               names_to="year",
+               values_to = "Chemical",
+               names_ptypes = list(year=integer()))
+
+#### Radionuclear
+Int_Health_Regulat_Radionuclear<-Int_Health_Regulat[ ,c(1,98:105)]
+colnames(Int_Health_Regulat_Radionuclear)<-c("Who_Region","2017","2016","2015","2014","2013","2012","2011","2010")
+Int_Health_Regulat_Radionuclear<- Int_Health_Regulat_Radionuclear %>%
+  pivot_longer(cols=`2017`:`2010`,
+               names_to="year",
+               values_to = "Radionuclear",
+               names_ptypes = list(year=integer()))
+```
+
+
 
 
 
