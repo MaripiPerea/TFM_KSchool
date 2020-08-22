@@ -8,8 +8,8 @@ output: html_document
 #### Importando fichero "Mortality_rate_Newborn_Child.csv"
 ****IMPORTANDO fichero con el indicador: Selección y cambio de nombre en columnas, creando tabla de Wide a Longer.
 ```{r}
-Rate_Child<-read.csv("Mortality_rate_Newborn_Child.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 2)
-Rate_Child<-Rate_Child[ ,c(1,31:59)]
+Rate_Child_all<-read.csv("Mortality_rate_Newborn_Child.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 2)
+Rate_Child<-Rate_Child_all[ ,c(1,31:59)]
 colnames(Rate_Child)<-c("Who_Region","2018","2017","2016","2015","2014","2013","2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000","1999","1998","1997","1996","1995","1994","1993","1992","1991","1990")
 
 Rate_Child <- Rate_Child %>%
@@ -173,6 +173,114 @@ Int_Health_Regulat_Radionuclear<- Int_Health_Regulat_Radionuclear %>%
                names_to="year",
                values_to = "Radionuclear",
                names_ptypes = list(year=integer()))
+```
+
+#### Fusionando con merge los 13 indicadores. Análisis de la fusión con glimpse, unique and stat.desc
+
+```{r}
+m1<-Reduce(function(...) merge(..., all=T), list(Int_Health_Regulat_Legislation,
+                                                 Int_Health_Regulat_Coordination,
+                                                 Int_Health_Regulat_Surveillance,
+                                                 Int_Health_Regulat_Response,
+                                                 Int_Health_Regulat_Preparedness,
+                                                 Int_Health_Regulat_Risk_communication,
+                                                 Int_Health_Regulat_Human_resources,
+                                                 Int_Health_Regulat_Laboratory,
+                                                 Int_Health_Regulat_Points_entry,
+                                                 Int_Health_Regulat_Zoonosis,
+                                                 Int_Health_Regulat_Food_safety,
+                                                 Int_Health_Regulat_Chemical,
+                                                 Int_Health_Regulat_Radionuclear))
+
+glimpse(m1)
+unique(m1$Who_Region)
+unique(m1$year)
+m1_num<-select_if(m1,is.numeric)
+stat_m1<-stat.desc(m1_num)
+stat_m1<-round(stat_m1,0)
+stat_m1
+
+
+```
+
+#### Fusionando indicador principal con indicadores International_Health_Regulation 
+**** Se decide excluir "Global" del indicador principal, porque en el resto de indicadores sólo está para dos años
+**** Por tanto, nos quedaríamos con 7 años de evolutivo (2010-2017)
+```{r}
+Rate_Child_new<-Rate_Child %>% filter(Who_Region != "Global")
+m2<-Reduce(function(...) merge (..., all=F), list(Rate_Child_new,m1))
+glimpse(m2)
+unique(m2$Who_Region)
+unique(m2$year)
+```
+
+#### Importando 12 ficheros con los Ratios de Mortalidad por causa (variable: <5 años)
+**** Sólo nos interesa la variable (0-4 years)
+**** Se homogeiniza valores de "Who_Region"
+
+```{r}
+#### Asphyxia
+Mort_Asphyxia_rate<-read.csv("MORT_Asphyxia_rate.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 2)
+Mort_Asphyxia_rate<-Mort_Asphyxia_rate[ ,c(1:2,5)]
+colnames(Mort_Asphyxia_rate)<-c("Who_Region","year","Mort_Asphyxia_rate")
+
+Mort_Asphyxia_rate$Who_Region[Mort_Asphyxia_rate$Who_Region == "Africa Region"]<-"Africa" 
+Mort_Asphyxia_rate$Who_Region[Mort_Asphyxia_rate$Who_Region == "Region of the Americas"]<-"Americas"
+Mort_Asphyxia_rate$Who_Region[Mort_Asphyxia_rate$Who_Region == "Eastern Mediterranean Region"]<-"Eastern Mediterranean"
+Mort_Asphyxia_rate$Who_Region[Mort_Asphyxia_rate$Who_Region == "European Region"]<-"Europe"
+Mort_Asphyxia_rate$Who_Region[Mort_Asphyxia_rate$Who_Region == "South-East Asia Region"]<-"South-East Asia"
+Mort_Asphyxia_rate$Who_Region[Mort_Asphyxia_rate$Who_Region == "Western Pacific Region"]<-"Western Pacific"
+
+glimpse(Mort_Asphyxia_rate)
+unique(Mort_Asphyxia_rate$Who_Region)
+
+####  Congenital_anom
+Mort_Congenital_rate<-read.csv("MORT_Congenital_rate.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 2)
+Mort_Congenital_rate<-Mort_Congenital_rate[ ,c(1:2,5)]
+colnames(Mort_Congenital_rate)<-c("Who_Region","year","Mort_Congenital_rate")
+
+Mort_Congenital_rate$Who_Region[Mort_Congenital_rate$Who_Region == "Africa Region"]<-"Africa" 
+Mort_Congenital_rate$Who_Region[Mort_Congenital_rate$Who_Region == "Region of the Americas"]<-"Americas"
+Mort_Congenital_rate$Who_Region[Mort_Congenital_rate$Who_Region == "Eastern Mediterranean Region"]<-"Eastern Mediterranean"
+Mort_Congenital_rate$Who_Region[Mort_Congenital_rate$Who_Region == "European Region"]<-"Europe"
+Mort_Congenital_rate$Who_Region[Mort_Congenital_rate$Who_Region == "South-East Asia Region"]<-"South-East Asia"
+Mort_Congenital_rate$Who_Region[Mort_Congenital_rate$Who_Region == "Western Pacific Region"]<-"Western Pacific"
+
+glimpse(Mort_Congenital_rate)
+unique(Mort_Congenital_rate$Who_Region)
+
+####  Diarrhoeal_diseases
+
+Mort_Diarrhoeal_diseases_rate<-read.csv("MORT_Diarre_rate.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 2)
+Mort_Diarrhoeal_diseases_rate<-Mort_Diarrhoeal_diseases_rate[ ,c(1:2,5)]
+colnames(Mort_Diarrhoeal_diseases_rate)<-c("Who_Region","year","Mort_Diarrhoeal_rate")
+
+Mort_Diarrhoeal_diseases_rate$Who_Region[Mort_Diarrhoeal_diseases_rate$Who_Region == "Africa Region"]<-"Africa" 
+Mort_Diarrhoeal_diseases_rate$Who_Region[Mort_Diarrhoeal_diseases_rate$Who_Region == "Region of the Americas"]<-"Americas"
+Mort_Diarrhoeal_diseases_rate$Who_Region[Mort_Diarrhoeal_diseases_rate$Who_Region == "Eastern Mediterranean Region"]<-"Eastern Mediterranean"
+Mort_Diarrhoeal_diseases_rate$Who_Region[Mort_Diarrhoeal_diseases_rate$Who_Region == "European Region"]<-"Europe"
+Mort_Diarrhoeal_diseases_rate$Who_Region[Mort_Diarrhoeal_diseases_rate$Who_Region == "South-East Asia Region"]<-"South-East Asia"
+Mort_Diarrhoeal_diseases_rate$Who_Region[Mort_Diarrhoeal_diseases_rate$Who_Region == "Western Pacific Region"]<-"Western Pacific"
+
+glimpse(Mort_Diarrhoeal_diseases_rate)
+unique(Mort_Diarrhoeal_diseases_rate$Who_Region)
+
+
+####  MORT_HIVAIDS_rate
+
+Mort_HIVAIDS_rate<-read.csv("MORT_HIVAIDS_rate.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 2)
+Mort_HIVAIDS_rate<-Mort_HIVAIDS_rate[ ,c(1:2,5)]
+colnames(Mort_HIVAIDS_rate)<-c("Who_Region","year","Mort_HIVAIDS_dis_rate")
+
+Mort_HIVAIDS_rate$Who_Region[Mort_HIVAIDS_rate$Who_Region == "Africa Region"]<-"Africa" 
+Mort_HIVAIDS_rate$Who_Region[Mort_HIVAIDS_rate$Who_Region == "Region of the Americas"]<-"Americas"
+Mort_HIVAIDS_rate$Who_Region[Mort_HIVAIDS_rate$Who_Region == "Eastern Mediterranean Region"]<-"Eastern Mediterranean"
+Mort_HIVAIDS_rate$Who_Region[Mort_HIVAIDS_rate$Who_Region == "European Region"]<-"Europe"
+Mort_HIVAIDS_rate$Who_Region[Mort_HIVAIDS_rate$Who_Region == "South-East Asia Region"]<-"South-East Asia"
+Mort_HIVAIDS_rate$Who_Region[Mort_HIVAIDS_rate$Who_Region == "Western Pacific Region"]<-"Western Pacific"
+
+glimpse(Mort_HIVAIDS_rate)
+unique(Mort_HIVAIDS_rate$Who_Region)
 ```
 
 
