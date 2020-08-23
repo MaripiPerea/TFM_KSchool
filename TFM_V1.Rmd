@@ -281,10 +281,388 @@ Mort_HIVAIDS_rate$Who_Region[Mort_HIVAIDS_rate$Who_Region == "Western Pacific Re
 
 glimpse(Mort_HIVAIDS_rate)
 unique(Mort_HIVAIDS_rate$Who_Region)
+
+#### MORT_Malaria_rate
+
+Mort_Malaria_rate<-read.csv("MORT_Malaria_rate.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 2)
+Mort_Malaria_rate<-Mort_Malaria_rate[ ,c(1:2,5)]
+colnames(Mort_Malaria_rate)<-c("Who_Region","year","Mort_Malaria_rate")
+
+Mort_Malaria_rate$Who_Region[Mort_Malaria_rate$Who_Region == "Africa Region"]<-"Africa" 
+Mort_Malaria_rate$Who_Region[Mort_Malaria_rate$Who_Region == "Region of the Americas"]<-"Americas"
+Mort_Malaria_rate$Who_Region[Mort_Malaria_rate$Who_Region == "Eastern Mediterranean Region"]<-"Eastern Mediterranean"
+Mort_Malaria_rate$Who_Region[Mort_Malaria_rate$Who_Region == "European Region"]<-"Europe"
+Mort_Malaria_rate$Who_Region[Mort_Malaria_rate$Who_Region == "South-East Asia Region"]<-"South-East Asia"
+Mort_Malaria_rate$Who_Region[Mort_Malaria_rate$Who_Region == "Western Pacific Region"]<-"Western Pacific"
+
+glimpse(Mort_Malaria_rate)
+unique(Mort_Malaria_rate$Who_Region)
+
+#### MORT_Measles_rate
+
+Mort_Measles_rate<-read.csv("MORT_Measles_rate.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 2)
+Mort_Measles_rate<-Mort_Measles_rate[ ,c(1:2,5)]
+colnames(Mort_Measles_rate)<-c("Who_Region","year","Mort_Measles_rate")
+
+Mort_Measles_rate$Who_Region[Mort_Measles_rate$Who_Region == "Africa Region"]<-"Africa" 
+Mort_Measles_rate$Who_Region[Mort_Measles_rate$Who_Region == "Region of the Americas"]<-"Americas"
+Mort_Measles_rate$Who_Region[Mort_Measles_rate$Who_Region == "Eastern Mediterranean Region"]<-"Eastern Mediterranean"
+Mort_Measles_rate$Who_Region[Mort_Measles_rate$Who_Region == "European Region"]<-"Europe"
+Mort_Measles_rate$Who_Region[Mort_Measles_rate$Who_Region == "South-East Asia Region"]<-"South-East Asia"
+Mort_Measles_rate$Who_Region[Mort_Measles_rate$Who_Region == "Western Pacific Region"]<-"Western Pacific"
+
+glimpse(Mort_Measles_rate)
+unique(Mort_Measles_rate$Who_Region)
+
+#### MORT_Meningitis_rate
+
+Mort_Meningitis_rate<-read.csv("MORT_Meningitis_rate.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 2)
+Mort_Meningitis_rate<-Mort_Meningitis_rate[ ,c(1:2,5)]
+colnames(Mort_Meningitis_rate)<-c("Who_Region","year","Mort_Meningitis_rate")
+
+Mort_Meningitis_rate$Who_Region[Mort_Meningitis_rate$Who_Region == "Africa Region"]<-"Africa" 
+Mort_Meningitis_rate$Who_Region[Mort_Meningitis_rate$Who_Region == "Region of the Americas"]<-"Americas"
+Mort_Meningitis_rate$Who_Region[Mort_Meningitis_rate$Who_Region == "Eastern Mediterranean Region"]<-"Eastern Mediterranean"
+Mort_Meningitis_rate$Who_Region[Mort_Meningitis_rate$Who_Region == "European Region"]<-"Europe"
+Mort_Meningitis_rate$Who_Region[Mort_Meningitis_rate$Who_Region == "South-East Asia Region"]<-"South-East Asia"
+Mort_Meningitis_rate$Who_Region[Mort_Meningitis_rate$Who_Region == "Western Pacific Region"]<-"Western Pacific"
+
+glimpse(Mort_Meningitis_rate)
+unique(Mort_Meningitis_rate$Who_Region)
+
+#### MORT_Other_rate
+
+Mort_Other_rate<-read.csv("MORT_Other_Nutri_rate.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 2)
+Mort_Other_rate<-Mort_Other_rate[ ,c(1:2,5)]
+colnames(Mort_Other_rate)<-c("Who_Region","year","Mort_Other_rate")
+
+Mort_Other_rate$Who_Region[Mort_Other_rate$Who_Region == "Africa Region"]<-"Africa" 
+Mort_Other_rate$Who_Region[Mort_Other_rate$Who_Region == "Region of the Americas"]<-"Americas"
+Mort_Other_rate$Who_Region[Mort_Other_rate$Who_Region == "Eastern Mediterranean Region"]<-"Eastern Mediterranean"
+Mort_Other_rate$Who_Region[Mort_Other_rate$Who_Region == "European Region"]<-"Europe"
+Mort_Other_rate$Who_Region[Mort_Other_rate$Who_Region == "South-East Asia Region"]<-"South-East Asia"
+Mort_Other_rate$Who_Region[Mort_Other_rate$Who_Region == "Western Pacific Region"]<-"Western Pacific"
+
+glimpse(Mort_Other_rate)
+unique(Mort_Other_rate$Who_Region)
+
+
+#### MORT_Prematurity_rate
+
+Mort_Prematurity_rate<-read.csv("MORT_Prematurity_rate.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 2)
+Mort_Prematurity_rate<-Mort_Prematurity_rate[ ,c(1:2,5)]
+colnames(Mort_Prematurity_rate)<-c("Who_Region","year","Mort_Prematurity_rate")
+
+Mort_Prematurity_rate$Who_Region[Mort_Prematurity_rate$Who_Region == "Africa Region"]<-"Africa" 
+Mort_Prematurity_rate$Who_Region[Mort_Prematurity_rate$Who_Region == "Region of the Americas"]<-"Americas"
+Mort_Prematurity_rate$Who_Region[Mort_Prematurity_rate$Who_Region == "Eastern Mediterranean Region"]<-"Eastern Mediterranean"
+Mort_Prematurity_rate$Who_Region[Mort_Prematurity_rate$Who_Region == "European Region"]<-"Europe"
+Mort_Prematurity_rate$Who_Region[Mort_Prematurity_rate$Who_Region == "South-East Asia Region"]<-"South-East Asia"
+Mort_Prematurity_rate$Who_Region[Mort_Prematurity_rate$Who_Region == "Western Pacific Region"]<-"Western Pacific"
+
+glimpse(Mort_Prematurity_rate)
+unique(Mort_Prematurity_rate$Who_Region)
+
+#### MORT_Respiratory_rate
+
+Mort_Respiratory_rate<-read.csv("MORT_Respiratory_rate.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 2)
+Mort_Respiratory_rate<-Mort_Respiratory_rate[ ,c(1:2,5)]
+colnames(Mort_Respiratory_rate)<-c("Who_Region","year","Mort_Respiratory_rate")
+
+Mort_Respiratory_rate$Who_Region[Mort_Respiratory_rate$Who_Region == "Africa Region"]<-"Africa" 
+Mort_Respiratory_rate$Who_Region[Mort_Respiratory_rate$Who_Region == "Region of the Americas"]<-"Americas"
+Mort_Respiratory_rate$Who_Region[Mort_Respiratory_rate$Who_Region == "Eastern Mediterranean Region"]<-"Eastern Mediterranean"
+Mort_Respiratory_rate$Who_Region[Mort_Respiratory_rate$Who_Region == "European Region"]<-"Europe"
+Mort_Respiratory_rate$Who_Region[Mort_Respiratory_rate$Who_Region == "South-East Asia Region"]<-"South-East Asia"
+Mort_Respiratory_rate$Who_Region[Mort_Respiratory_rate$Who_Region == "Western Pacific Region"]<-"Western Pacific"
+
+glimpse(Mort_Respiratory_rate)
+unique(Mort_Respiratory_rate$Who_Region)
+
+#### MORT_Sepsis_rate
+
+Mort_Sepsis_rate<-read.csv("MORT_Sepsis_rate.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 2)
+Mort_Sepsis_rate<-Mort_Sepsis_rate[ ,c(1:2,5)]
+colnames(Mort_Sepsis_rate)<-c("Who_Region","year","Mort_Sepsis_rate")
+
+Mort_Sepsis_rate$Who_Region[Mort_Sepsis_rate$Who_Region == "Africa Region"]<-"Africa" 
+Mort_Sepsis_rate$Who_Region[Mort_Sepsis_rate$Who_Region == "Region of the Americas"]<-"Americas"
+Mort_Sepsis_rate$Who_Region[Mort_Sepsis_rate$Who_Region == "Eastern Mediterranean Region"]<-"Eastern Mediterranean"
+Mort_Sepsis_rate$Who_Region[Mort_Sepsis_rate$Who_Region == "European Region"]<-"Europe"
+Mort_Sepsis_rate$Who_Region[Mort_Sepsis_rate$Who_Region == "South-East Asia Region"]<-"South-East Asia"
+Mort_Sepsis_rate$Who_Region[Mort_Sepsis_rate$Who_Region == "Western Pacific Region"]<-"Western Pacific"
+
+glimpse(Mort_Sepsis_rate)
+unique(Mort_Sepsis_rate$Who_Region)
+
+#### MORT_Tetanos_rate
+
+Mort_Tetanos_rate<-read.csv("MORT_Tetanos_rate.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 2)
+Mort_Tetanos_rate<-Mort_Tetanos_rate[ ,c(1:2,5)]
+colnames(Mort_Tetanos_rate)<-c("Who_Region","year","Mort_Tetanos_rate")
+
+Mort_Tetanos_rate$Who_Region[Mort_Tetanos_rate$Who_Region == "Africa Region"]<-"Africa" 
+Mort_Tetanos_rate$Who_Region[Mort_Tetanos_rate$Who_Region == "Region of the Americas"]<-"Americas"
+Mort_Tetanos_rate$Who_Region[Mort_Tetanos_rate$Who_Region == "Eastern Mediterranean Region"]<-"Eastern Mediterranean"
+Mort_Tetanos_rate$Who_Region[Mort_Tetanos_rate$Who_Region == "European Region"]<-"Europe"
+Mort_Tetanos_rate$Who_Region[Mort_Tetanos_rate$Who_Region == "South-East Asia Region"]<-"South-East Asia"
+Mort_Tetanos_rate$Who_Region[Mort_Tetanos_rate$Who_Region == "Western Pacific Region"]<-"Western Pacific"
+
+glimpse(Mort_Tetanos_rate)
+unique(Mort_Tetanos_rate$Who_Region)
+
 ```
 
 
 
+#### Fusionando los 12 indicadores de las causas de Mortalidad Infantil(Rate)
+
+```{r}
+m3<-Reduce(function(...) merge(..., all=T), list(Mort_Asphyxia_rate,
+                                                 Mort_Congenital_rate,
+                                                 Mort_Diarrhoeal_diseases_rate,
+                                                 Mort_HIVAIDS_rate,
+                                                 Mort_Malaria_rate,
+                                                 Mort_Measles_rate,
+                                                 Mort_Meningitis_rate,
+                                                 Mort_Other_rate,
+                                                 Mort_Respiratory_rate,
+                                                 Mort_Prematurity_rate,
+                                                 Mort_Sepsis_rate,
+                                                 Mort_Tetanos_rate))
+
+glimpse(m3)
+unique(m3$Who_Region)
+unique(m3$year)
+m3_num<-select_if(m3,is.numeric)
+stat_m3<-stat.desc(m3_num)
+stat_m3<-round(stat_m3,0)
+View(stat_m3)
+```
+
+
+#### Fusionando tabla principal acumulado con la tabla indicadores "Mort_Cause_Rate""
+
+```{r}
+m4<-Reduce(function(...) merge (..., all=F), list(m2,m3))
+glimpse(m4)
+unique(m4$Who_Region)
+unique(m4$year)
+View(m4)
+
+```
+
+
+#### Importando ficheros con los indicadores "Immunization coverage"
+**** Se pivota de wide a longer
+**** Son nueve en total
+```{r}
+#### Inm_BCG.csv
+Inm_BCG<-read.csv("Inm_BCG.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 1)
+Inm_BCG<-Inm_BCG[ ,c(1:10)]
+colnames(Inm_BCG)<-c("Who_Region","2018","2017","2016","2015","2014","2013","2012","2011","2010")
+
+Inm_BCG<- Inm_BCG %>%
+  pivot_longer(cols=`2018`:`2010`,
+               names_to="year",
+               values_to = "Inm_BCG_coverage",
+               names_ptypes = list(year=integer()))
+
+glimpse(Inm_BCG)
+unique(Inm_BCG$Who_Region)
+unique(Inm_BCG$year)
+
+#### Inm_DTP3.csv
+Inm_DTP3<-read.csv("Inm_DTP3.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 1)
+Inm_DTP3<-Inm_DTP3[ ,c(1:10)]
+colnames(Inm_DTP3)<-c("Who_Region","2018","2017","2016","2015","2014","2013","2012","2011","2010")
+
+Inm_DTP3<- Inm_DTP3 %>%
+  pivot_longer(cols=`2018`:`2010`,
+               names_to="year",
+               values_to = "Inm_DTP3_coverage",
+               names_ptypes = list(year=integer()))
+
+glimpse(Inm_DTP3)
+unique(Inm_DTP3$Who_Region)
+unique(Inm_DTP3$year)
+
+
+#### Inm_Hep3.csv
+Inm_Hep3<-read.csv("Inm_Hep3.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 1)
+Inm_Hep3<-Inm_Hep3[ ,c(1:10)]
+colnames(Inm_Hep3)<-c("Who_Region","2018","2017","2016","2015","2014","2013","2012","2011","2010")
+
+Inm_Hep3<- Inm_Hep3 %>%
+  pivot_longer(cols=`2018`:`2010`,
+               names_to="year",
+               values_to = "Inm_Hep3_coverage",
+               names_ptypes = list(year=integer()))
+
+glimpse(Inm_Hep3)
+unique(Inm_Hep3$Who_Region)
+unique(Inm_Hep3$year)
+
+#### Inm_HepB3.csv
+Inm_HepB3<-read.csv("Inm_HepB3.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 1)
+Inm_HepB3<-Inm_HepB3[ ,c(1:10)]
+colnames(Inm_HepB3)<-c("Who_Region","2018","2017","2016","2015","2014","2013","2012","2011","2010")
+
+Inm_HepB3<- Inm_HepB3 %>%
+  pivot_longer(cols=`2018`:`2010`,
+               names_to="year",
+               values_to = "Inm_HepB3_coverage",
+               names_ptypes = list(year=integer()))
+
+glimpse(Inm_HepB3)
+unique(Inm_HepB3$Who_Region)
+unique(Inm_HepB3$year)
+
+#### Inm_MCV1_1st.csv
+Inm_MCV1_1st<-read.csv("Inm_MCV1_1st.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 1)
+Inm_MCV1_1st<-Inm_MCV1_1st[ ,c(1:10)]
+colnames(Inm_MCV1_1st)<-c("Who_Region","2018","2017","2016","2015","2014","2013","2012","2011","2010")
+
+Inm_MCV1_1st<- Inm_MCV1_1st %>%
+  pivot_longer(cols=`2018`:`2010`,
+               names_to="year",
+               values_to = "Inm_MCV1_1st_coverage",
+               names_ptypes = list(year=integer()))
+
+glimpse(Inm_MCV1_1st)
+unique(Inm_MCV1_1st$Who_Region)
+unique(Inm_MCV1_1st$year)
+
+#### Inm_MCV2_2nd.csv
+Inm_MCV2_2nd<-read.csv("Inm_MCV2_2nd.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 1)
+Inm_MCV2_2nd<-Inm_MCV2_2nd[ ,c(1:10)]
+colnames(Inm_MCV2_2nd)<-c("Who_Region","2018","2017","2016","2015","2014","2013","2012","2011","2010")
+
+Inm_MCV2_2nd<- Inm_MCV2_2nd %>%
+  pivot_longer(cols=`2018`:`2010`,
+               names_to="year",
+               values_to = "Inm_MCV2_2nd_coverage",
+               names_ptypes = list(year=integer()))
+
+glimpse(Inm_MCV2_2nd)
+unique(Inm_MCV2_2nd$Who_Region)
+unique(Inm_MCV2_2nd$year)
+
+#### Inm_PCV3.csv
+Inm_PCV3<-read.csv("Inm_PCV3.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 1)
+Inm_PCV3<-Inm_PCV3[ ,c(1:10)]
+colnames(Inm_PCV3)<-c("Who_Region","2018","2017","2016","2015","2014","2013","2012","2011","2010")
+
+Inm_PCV3<- Inm_PCV3 %>%
+  pivot_longer(cols=`2018`:`2010`,
+               names_to="year",
+               values_to = "Inm_PCV3_coverage",
+               names_ptypes = list(year=integer()))
+
+glimpse(Inm_PCV3)
+unique(Inm_PCV3$Who_Region)
+unique(Inm_PCV3$year)
+
+#### Inm_Pol3.csv
+Inm_Pol3<-read.csv("Inm_Pol3.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 1)
+Inm_Pol3<-Inm_Pol3[ ,c(1:10)]
+colnames(Inm_Pol3)<-c("Who_Region","2018","2017","2016","2015","2014","2013","2012","2011","2010")
+
+Inm_Pol3<- Inm_Pol3 %>%
+  pivot_longer(cols=`2018`:`2010`,
+               names_to="year",
+               values_to = "Inm_Pol3_coverage",
+               names_ptypes = list(year=integer()))
+
+glimpse(Inm_Pol3)
+unique(Inm_Pol3$Who_Region)
+unique(Inm_Pol3$year)
+
+#### Inm_ROTAC.csv
+Inm_ROTAC<-read.csv("Inm_ROTAC.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 1)
+Inm_ROTAC<-Inm_ROTAC[ ,c(1:10)]
+colnames(Inm_ROTAC)<-c("Who_Region","2018","2017","2016","2015","2014","2013","2012","2011","2010")
+
+Inm_ROTAC<- Inm_ROTAC %>%
+  pivot_longer(cols=`2018`:`2010`,
+               names_to="year",
+               values_to = "Inm_ROTAC_coverage",
+               names_ptypes = list(year=integer()))
+
+glimpse(Inm_ROTAC)
+unique(Inm_ROTAC$Who_Region)
+unique(Inm_ROTAC$year)
+```
+
+
+#### Fusionando tablas con los indicadores "Inm_Cause_Rate"
+
+```{r}
+m5<-Reduce(function(...) merge(..., all=T), list(Inm_BCG,
+                                                 Inm_DTP3,
+                                                 Inm_Hep3,
+                                                 Inm_HepB3,
+                                                 Inm_MCV1_1st,
+                                                 Inm_MCV2_2nd,
+                                                 Inm_PCV3,
+                                                 Inm_Pol3,
+                                                 Inm_ROTAC))
+
+glimpse(m5)
+unique(m5$Who_Region)
+unique(m5$year)
+m5_num<-select_if(m5,is.numeric)
+stat_m5<-stat.desc(m5_num)
+stat_m5<-round(stat_m5,0)
+stat_m5
+```
+
+#### Merge de la tabla principal con la tabla "Inm_Cause_Rate"
+**** Total con 37 variables y 48 registros
+
+```{r}
+m6<-Reduce(function(...) merge (..., all=F), list(m4,m5))
+glimpse(m6)
+unique(m6$Who_Region)
+unique(m6$year)
+m6
+```
+
+
+#### Importando ficheros con los indicadores "Child Malnutrition"
+**** Son dos indicadores, las variables contienen el valor y el intervalo de confianza, es de tipo carácter, se convierte a numérico
+**** En el indicador "ANAEMIA_Children5" se tiene que pivotar la tabla de wide a longer
+
+
+```{r}
+#### Weight_Low_birth
+A_Weight_Low_birth<-read.csv("A_Weight_Low_birth.csv",sep=",",header = TRUE,stringsAsFactors = FALSE)
+A_Weight_Low_birth<-A_Weight_Low_birth[,c(1:2,4)]
+colnames(A_Weight_Low_birth)<-c("Who_Region","year","Low_birth_weight")
+A_Weight_Low_birth$Low_birth_weight<-substr(A_Weight_Low_birth$Low_birth_weight,1,4)
+A_Weight_Low_birth$Low_birth_weight<-as.numeric(A_Weight_Low_birth$Low_birth_weight)
+glimpse(A_Weight_Low_birth)
+unique(A_Weight_Low_birth$Who_Region)
+unique(A_Weight_Low_birth$year)
+
+
+#### ANAEMIA_Children5
+ANAEMIA_Children5<-read.csv("ANAEMIA_Children5.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 1)
+ANAEMIA_Children5<-ANAEMIA_Children5[,c(1:8)]
+colnames(ANAEMIA_Children5)<-c("Who_Region","2016","2015","2014","2013","2012","2011","2010")
+
+ANAEMIA_Children5<- ANAEMIA_Children5 %>%
+  pivot_longer(cols=`2016`:`2010`,
+               names_to="year",
+               values_to = "ANAEMIA_Children5",
+               names_ptypes = list(year=integer()))
+
+ANAEMIA_Children5$ANAEMIA_Children5<-substr(ANAEMIA_Children5$ANAEMIA_Children5,1,4)
+ANAEMIA_Children5$ANAEMIA_Children5<-as.numeric(ANAEMIA_Children5$ANAEMIA_Children5)
+glimpse(ANAEMIA_Children5)
+unique(ANAEMIA_Children5$Who_Region)
+unique(ANAEMIA_Children5$year)
+```
 
 
 ## R Markdown
