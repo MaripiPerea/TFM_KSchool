@@ -724,7 +724,7 @@ ggplot(data=A_Weight_Low_birth,aes(x=year,y=Low_birth_weight))+
 ```
 
 #### Se genera un "Lineal model" para cada Who_Region
-**** Todos los "lm" superan de R2 un 0.9, excepto América que tiene un R2 muy bajo "0.01", porque sus valores tienen poca variabilidad.
+**** Todos los "lm" superan de R2 un 0.9, excepto América que tiene un R2 muy bajo "0.01", porque sus valores tienen poca variabilidad. Se observa que la estimación que hace del indicador no es mala.
 
 ```{r}
 Low_birth_weight_Africa<-A_Weight_Low_birth %>% filter(Who_Region== 'Africa')
@@ -769,13 +769,66 @@ view(A_Weight_Low_birth)
 ```
 
 
-#### Se actualizanal dataset las estimaciones de estos indicadores
+#### Se actualizan al dataset las estimaciones de estos indicadores
 ```{r}
 m7<-Reduce(function(...) merge (..., all.x=TRUE), list(m6,ANAEMIA_Children5,A_Weight_Low_birth))
 glimpse(m7)
 unique(m7$Who_Region)
 unique(m7$year)
-View(m7)
+
+```
+
+
+
+#### Analizando valores nulos y NAs del dataset "m7" montado hasta ahora.
+
+```{r}
+m7_num<-select_if(m7,is.numeric)
+stat_m7<-stat.desc(m7_num)
+stat_m7<-round(stat_m7,1)
+
+stat_m7[,(stat_m7["nbr.null",]>0)] #### nos indica las variables con valores Nulls
+stat_m7[,(stat_m7["nbr.na",]>0)] #### nos indica las variables con valores NAs
+
+```
+
+#### Identificando las regiones dónde están los NAs y "Analizando"" cuál es la mejor estimación.
+
+```{r}
+m7$Who_Region[which(is.na(m7$Inm_PCV3_coverage))]
+m7$Who_Region[which(is.na(m7$Inm_ROTAC_coverage))]
+
+Inm_PCV3_South_East_Asia<-Inm_PCV3 %>% filter(Inm_PCV3$Who_Region=="South-East Asia" & year>='2015')
+
+ggplot(data=Inm_PCV3_South_East_Asia,aes(x=year,y=Inm_PCV3_coverage))+
+  geom_point()  
+
+### Hay que estimar del 2010 a 2014 por regresión lineal para South_East_Asia (se visualiza gráfico con evolutivo)
+
+model_3<-lm(Inm_PCV3_coverage~year, data =Inm_PCV3_South_East_Asia )
+summary(model_3)
+new_data<-data.frame(year=c(2010,2011,2012,2013,2014))
+model_3 %>% predict(new_data) 
+#### Cómo el resultado de 2014 ya sale 0, se ponen todos los NAs a 0.
+
+#### Analizando "Eastern Mediterranean" "South-East Asia" para el indicador "Inm_ROTAC", ocurre lo mismo que en el anterior,por tanto, se ponen los NAs a 0 también.
+
+```
+
+
+#### Cambiando los valores NAs por 0.
+
+```{r}
+m7[is.na(m7)]<-0
+
+m7_num<-select_if(m7,is.numeric)
+stat_m7<-stat.desc(m7_num)
+stat_m7<-round(stat_m7,1)
+
+
+stat_m7[,(stat_m7["nbr.null",]>0)] #### Se comprueba que los NAs han pasado a "nulls"
+stat_m7[,(stat_m7["nbr.na",]>0)] #### Y que en los NAs no sale ninguno ya.
+
 ```
 
 
@@ -785,16 +838,6 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
-```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
