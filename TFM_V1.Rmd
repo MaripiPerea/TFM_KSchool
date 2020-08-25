@@ -664,6 +664,120 @@ unique(ANAEMIA_Children5$Who_Region)
 unique(ANAEMIA_Children5$year)
 ```
 
+#### Para el indicador "ANAEMIA_Children5" falta el año 2017, se estima por regresión lineal para cada Who_Region.
+**** Se genera un ggplot para ver evolutivo
+```{r}
+ggplot(data=ANAEMIA_Children5,aes(x=year,y=ANAEMIA_Children5))+
+  geom_point(aes(col=Who_Region))
+```
+
+#### Se genera un "Lineal model" para cada Who_Region
+**** Todos los "lm" superan de R2 un 0.9, excepto Europa y América que están entorno al 0.7
+```{r}
+Anaemia_Africa<-ANAEMIA_Children5 %>% filter(Who_Region== 'Africa')
+Anaemia_Americas<-ANAEMIA_Children5 %>% filter(Who_Region== 'Americas')
+Anaemia_South_East_Asia<-ANAEMIA_Children5 %>% filter(Who_Region== "South-East Asia")
+Anaemia_Europe<-ANAEMIA_Children5 %>% filter(Who_Region== 'Europe')
+Anaemia_Eastern_Mediterranean<-ANAEMIA_Children5 %>% filter(Who_Region== 'Eastern Mediterranean')
+Anaemia_Western_Pacific<-ANAEMIA_Children5 %>% filter(Who_Region== 'Western Pacific')
+
+model_Africa<-lm(ANAEMIA_Children5~year,data=Anaemia_Africa)
+model_Americas<-lm(ANAEMIA_Children5~year,data=Anaemia_Americas)
+model_South_East_Asia<-lm(ANAEMIA_Children5~year,data=Anaemia_South_East_Asia)
+model_Europe<-lm(ANAEMIA_Children5~year,data=Anaemia_Europe)
+model_Eastern_Mediterranean<-lm(ANAEMIA_Children5~year,data=Anaemia_Eastern_Mediterranean)
+model_Western_Pacific<-lm(ANAEMIA_Children5~year,data=Anaemia_Western_Pacific)
+
+summary(model_Africa)
+summary(model_Americas)
+summary(model_South_East_Asia)
+summary(model_Europe)
+summary(model_Eastern_Mediterranean)
+summary(model_Western_Pacific)
+
+newdata<-data.frame(year=c(2017))
+pred_Africa<-model_Africa %>% predict(newdata)
+pred_Americas<-model_Americas %>% predict(newdata)
+pred_South<-model_South_East_Asia %>% predict(newdata)
+pred_Europe<-model_Europe %>% predict(newdata)
+pred_Eastern<-model_Eastern_Mediterranean %>% predict(newdata)
+pred_Western<-model_Western_Pacific %>% predict(newdata)
+
+pred_2017_Anaemia<-data.frame(Who_Region=c("Africa","Americas","South-East Asia","Europe","Eastern Mediterranean","Western Pacific"),
+                year=rep(2017,6),
+                ANAEMIA_Children5=c(pred_Africa,pred_Americas ,pred_South ,pred_Europe ,pred_Eastern ,pred_Western))
+         
+pred_2017_Anaemia$ANAEMIA_Children5<-round(pred_2017_Anaemia$ANAEMIA_Children5,1)   
+pred_2017_Anaemia$Who_Region<-as.character(pred_2017_Anaemia$Who_Region)
+glimpse(pred_2017_Anaemia)
+ANAEMIA_Children5<-rbind(ANAEMIA_Children5,pred_2017_Anaemia)
+unique(ANAEMIA_Children5$year)
+
+```
+
+#### Para el indicador "Weight_Low_birth" falta el año 2016&2017, se estima por regresión lineal para cada Who_Region.
+**** Se genera un ggplot para ver evolutivo
+
+```{r}
+ggplot(data=A_Weight_Low_birth,aes(x=year,y=Low_birth_weight))+
+  geom_point(aes(col=Who_Region))
+```
+
+#### Se genera un "Lineal model" para cada Who_Region
+**** Todos los "lm" superan de R2 un 0.9, excepto América que tiene un R2 muy bajo "0.01", porque sus valores tienen poca variabilidad.
+
+```{r}
+Low_birth_weight_Africa<-A_Weight_Low_birth %>% filter(Who_Region== 'Africa')
+Low_birth_weight_Americas<-A_Weight_Low_birth %>% filter(Who_Region== 'Americas')
+Low_birth_weight_South_East_Asia<-A_Weight_Low_birth %>% filter(Who_Region== "South-East Asia")
+Low_birth_weight_Europe<-A_Weight_Low_birth %>% filter(Who_Region== 'Europe')
+Low_birth_weight_Eastern_Mediterranean<-A_Weight_Low_birth %>% filter(Who_Region== 'Eastern Mediterranean')
+Low_birth_weight_Western_Pacific<-A_Weight_Low_birth %>% filter(Who_Region== 'Western Pacific')
+
+model_Africa<-lm(Low_birth_weight~year,data=Low_birth_weight_Africa)
+model_Americas<-lm(Low_birth_weight~year,data=Low_birth_weight_Americas)
+model_South_East_Asia<-lm(Low_birth_weight~year,data=Low_birth_weight_South_East_Asia)
+model_Europe<-lm(Low_birth_weight~year,data=Low_birth_weight_Europe)
+model_Eastern_Mediterranean<-lm(Low_birth_weight~year,data=Low_birth_weight_Eastern_Mediterranean)
+model_Western_Pacific<-lm(Low_birth_weight~year,data=Low_birth_weight_Western_Pacific)
+
+summary(model_Africa)
+summary(model_Americas)
+summary(model_South_East_Asia)
+summary(model_Europe)
+summary(model_Eastern_Mediterranean)
+summary(model_Western_Pacific)
+
+newdata<-data.frame(year=c(2016,2017))
+pred_Africa<-model_Africa %>% predict(newdata)
+pred_Americas<-model_Americas %>% predict(newdata)
+pred_South<-model_South_East_Asia %>% predict(newdata)
+pred_Europe<-model_Europe %>% predict(newdata)
+pred_Eastern<-model_Eastern_Mediterranean %>% predict(newdata)
+pred_Western<-model_Western_Pacific %>% predict(newdata)
+
+pred_2016_17_Low_birth_weight<-data.frame(Who_Region=c(rep("Africa",2),rep("Americas",2),rep("South-East Asia",2),rep("Europe",2),rep("Eastern Mediterranean",2),rep("Western Pacific",2)),
+                              year=c(rep(2016:2017,6)),
+                              Low_birth_weight=c(pred_Africa,pred_Americas ,pred_South ,pred_Europe ,pred_Eastern ,pred_Western))
+
+pred_2016_17_Low_birth_weight$Low_birth_weight<-round(pred_2016_17_Low_birth_weight$Low_birth_weight,1)
+pred_2016_17_Low_birth_weight$Who_Region<-as.character(pred_2016_17_Low_birth_weight$Who_Region)
+glimpse(pred_2016_17_Low_birth_weight)
+
+A_Weight_Low_birth<-rbind(A_Weight_Low_birth,pred_2016_17_Low_birth_weight)
+view(A_Weight_Low_birth)
+```
+
+
+#### Se actualizanal dataset las estimaciones de estos indicadores
+```{r}
+m7<-Reduce(function(...) merge (..., all.x=TRUE), list(m6,ANAEMIA_Children5,A_Weight_Low_birth))
+glimpse(m7)
+unique(m7$Who_Region)
+unique(m7$year)
+View(m7)
+```
+
 
 ## R Markdown
 
