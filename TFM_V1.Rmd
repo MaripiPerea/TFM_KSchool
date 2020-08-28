@@ -1100,11 +1100,22 @@ glimpse(ANAEMIA_RW)
 
 
 ```{r}
-dataset<-Reduce(function(...) merge (..., all.x=TRUE), list(m7,ANAEMIA_RW,ANAEMIA_PW,Life_expectancy_birth))
+dataset<-Reduce(function(...) merge (..., all.x=TRUE), list(dataset,ANAEMIA_RW,ANAEMIA_PW,Life_expectancy_birth))
 glimpse(dataset)
 unique(dataset$Who_Region)
 unique(dataset$year)
 ```
+
+```{r}
+dataset_num<-select_if(dataset,is.numeric)
+stat_dataset<-stat.desc(dataset_num)
+stat_dataset<-round(stat_dataset,1)
+
+stat_dataset[,(stat_dataset["nbr.null",]>0)] #### nos indica las variables con valores Nulls
+stat_dataset[,(stat_dataset["nbr.na",]>0)] #### nos indica las variables con valores NAs
+```
+
+
 
 ## R Markdown
 
