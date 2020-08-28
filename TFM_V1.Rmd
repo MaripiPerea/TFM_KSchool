@@ -914,7 +914,7 @@ Life_expectancy_birth
 dataset<-Reduce(function(...) merge (..., all.x=TRUE), list(m7,ANAEMIA_RW,ANAEMIA_PW,Maternal_Mort_Rate,Life_expectancy_birth))
 glimpse(dataset)
 unique(dataset$Who_Region)
-unique($year)
+unique(dataset$year)
 ```
 
 #### Analizando valores NULOS y NAS del nuevo dataset(ya definitivo, porque no se van a incluir más variables)
@@ -984,7 +984,126 @@ pred_Life_all<-data.frame(rbind(pred_Africa,pred_Americas,pred_Eastern_Mediterra
 pred_Life_all$Who_Region<-as.character(pred_Life_all$Who_Region)
 pred_Life_all$Life_expectancy_at_birth<-round(pred_Life_all$Life_expectancy_at_birth,1) 
 pred_Life_all$year<-as.integer(pred_Life_all$year) 
-glimpse(pred_Life_all)
+Life_expectancy_birth<-rbind(Life_expectancy_birth,pred_Life_all)
+glimpse(Life_expectancy_birth)
+```
+
+####Observando los gráficos se decide estimar 2017 por "regresión lineal" desde el 2013,  
+####porque el evolutivo en algunas regiones (en años anteriores) no se comporta de forma lineal
+
+```{r}
+dataset_Anaemia<-dataset %>% select(Who_Region,year,ANAEMIA_PW,ANAEMIA_RW)
+
+ggplot(dataset_Anaemia,aes(x=year,y=ANAEMIA_PW))+
+  geom_point(aes(col=Who_Region))
+
+ggplot(dataset_Anaemia,aes(x=year,y=ANAEMIA_RW))+
+  geom_point(aes(col=Who_Region))
+
+
+```
+
+#### Estimación por "lm" para el indicador "ANAEMIA_PW"
+
+```{r}
+dataset_Anaemia<-dataset %>% select(Who_Region,year,ANAEMIA_PW,ANAEMIA_RW) %>% filter (year >= "2013")
+
+Anaemia_Africa<-dataset_Anaemia%>% filter(Who_Region=="Africa")
+Anaemia_Americas<-dataset_Anaemia%>% filter(Who_Region=="Americas")
+Anaemia_Eastern_Mediterranean<-dataset_Anaemia%>% filter(Who_Region=="Eastern Mediterranean")
+Anaemia_Europe<-dataset_Anaemia%>% filter(Who_Region=="Europe")
+Anaemia_South_East_Asia<-dataset_Anaemia%>% filter(Who_Region=="South-East Asia")
+Anaemia_Western_Pacific<-dataset_Anaemia%>% filter(Who_Region=="Western Pacific")
+
+model_Africa<-lm(ANAEMIA_PW~year,data=Anaemia_Africa)
+model_Americas<-lm(ANAEMIA_PW~year,data=Anaemia_Americas)
+model_Eastern_Mediterranean<-lm(ANAEMIA_PW~year,data=Anaemia_Eastern_Mediterranean)
+model_Europe<-lm(ANAEMIA_PW~year,data=Anaemia_Europe)
+model_South_East_Asia<-lm(ANAEMIA_PW~year,data=Anaemia_South_East_Asia)
+model_Western_Pacific<-lm(ANAEMIA_PW~year,data=Anaemia_Western_Pacific)
+
+summary(model_Africa)
+summary(model_Americas)
+summary(model_Eastern_Mediterranean)
+summary(model_Europe)
+summary(model_South_East_Asia)
+summary(model_Western_Pacific)
+
+new_data<-data.frame(year=c(2017))
+pred_Africa<-model_Africa %>% predict(new_data)
+pred_Americas<-model_Americas %>% predict(new_data)
+pred_Eastern_Mediterranean<-model_Eastern_Mediterranean %>% predict(new_data)
+pred_Europe<-model_Europe %>% predict(new_data)
+pred_South_East_Asia<-model_South_East_Asia %>% predict(new_data)
+pred_Western_Pacific<-model_Western_Pacific %>% predict(new_data)
+
+
+pred_Africa<-data.frame(Who_Region=c("Africa"),year=c(2017),ANAEMIA_PW=pred_Africa)
+pred_Americas<-data.frame(Who_Region=c("Americas"),year=c(2017),ANAEMIA_PW=pred_Americas)
+pred_Eastern_Mediterranean<-data.frame(Who_Region=c("Eastern Mediterranean"),year=c(2017),ANAEMIA_PW=pred_Eastern_Mediterranean)
+pred_Europe<-data.frame(Who_Region=c("Europe"),year=c(2017),ANAEMIA_PW=pred_Europe)
+pred_South_East_Asia<-data.frame(Who_Region=c("South-East Asia"),year=c(2017),ANAEMIA_PW=pred_South_East_Asia)
+pred_Western_Pacific<-data.frame(Who_Region=c("Western Pacific"),year=c(2017),ANAEMIA_PW=pred_Western_Pacific)
+
+pred_Anaemia_PW<-data.frame(rbind(pred_Africa,pred_Americas,pred_Eastern_Mediterranean,pred_Europe,pred_South_East_Asia,pred_Western_Pacific))
+
+pred_Anaemia_PW$Who_Region<-as.character(pred_Anaemia_PW$Who_Region)
+pred_Anaemia_PW$ANAEMIA_PW<-round(pred_Anaemia_PW$ANAEMIA_PW,1) 
+pred_Anaemia_PW$year<-as.integer(pred_Anaemia_PW$year) 
+ANAEMIA_PW<-rbind(ANAEMIA_PW,pred_Anaemia_PW)
+glimpse(ANAEMIA_PW)
+```
+
+
+#### Estimación por "lm" para el indicador "ANAEMIA_RW"
+**** Todas las Regiones superan el R2 de 0.92, excepto "Africa" que obtiene un R2 muy bajo (0.16), pero se observa que la estimación que realiza no es mala, porque los valores no tienen mucha variablidad, por tanto, se utiliza ésta.
+
+```{r}
+model_Africa<-lm(ANAEMIA_RW~year,data=Anaemia_Africa)
+model_Americas<-lm(ANAEMIA_RW~year,data=Anaemia_Americas)
+model_Eastern_Mediterranean<-lm(ANAEMIA_RW~year,data=Anaemia_Eastern_Mediterranean)
+model_Europe<-lm(ANAEMIA_RW~year,data=Anaemia_Europe)
+model_South_East_Asia<-lm(ANAEMIA_RW~year,data=Anaemia_South_East_Asia)
+model_Western_Pacific<-lm(ANAEMIA_RW~year,data=Anaemia_Western_Pacific)
+
+summary(model_Africa)
+summary(model_Americas)
+summary(model_Eastern_Mediterranean)
+summary(model_Europe)
+summary(model_South_East_Asia)
+summary(model_Western_Pacific)
+
+new_data<-data.frame(year=c(2017))
+pred_Africa<-model_Africa %>% predict(new_data)
+pred_Americas<-model_Americas %>% predict(new_data)
+pred_Eastern_Mediterranean<-model_Eastern_Mediterranean %>% predict(new_data)
+pred_Europe<-model_Europe %>% predict(new_data)
+pred_South_East_Asia<-model_South_East_Asia %>% predict(new_data)
+pred_Western_Pacific<-model_Western_Pacific %>% predict(new_data)
+
+
+pred_Africa<-data.frame(Who_Region=c("Africa"),year=c(2017),ANAEMIA_RW=pred_Africa)
+pred_Americas<-data.frame(Who_Region=c("Americas"),year=c(2017),ANAEMIA_RW=pred_Americas)
+pred_Eastern_Mediterranean<-data.frame(Who_Region=c("Eastern Mediterranean"),year=c(2017),ANAEMIA_RW=pred_Eastern_Mediterranean)
+pred_Europe<-data.frame(Who_Region=c("Europe"),year=c(2017),ANAEMIA_RW=pred_Europe)
+pred_South_East_Asia<-data.frame(Who_Region=c("South-East Asia"),year=c(2017),ANAEMIA_RW=pred_South_East_Asia)
+pred_Western_Pacific<-data.frame(Who_Region=c("Western Pacific"),year=c(2017),ANAEMIA_RW=pred_Western_Pacific)
+
+pred_Anaemia_RW<-data.frame(rbind(pred_Africa,pred_Americas,pred_Eastern_Mediterranean,pred_Europe,pred_South_East_Asia,pred_Western_Pacific))
+
+pred_Anaemia_RW$Who_Region<-as.character(pred_Anaemia_RW$Who_Region)
+pred_Anaemia_RW$ANAEMIA_RW<-round(pred_Anaemia_RW$ANAEMIA_RW,1) 
+pred_Anaemia_RW$year<-as.integer(pred_Anaemia_RW$year) 
+ANAEMIA_RW<-rbind(ANAEMIA_RW,pred_Anaemia_RW)
+glimpse(ANAEMIA_RW)
+```
+
+
+```{r}
+dataset<-Reduce(function(...) merge (..., all.x=TRUE), list(m7,ANAEMIA_RW,ANAEMIA_PW,Life_expectancy_birth))
+glimpse(dataset)
+unique(dataset$Who_Region)
+unique(dataset$year)
 ```
 
 ## R Markdown
