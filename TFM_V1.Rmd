@@ -437,7 +437,7 @@ unique(m3$year)
 m3_num<-select_if(m3,is.numeric)
 stat_m3<-stat.desc(m3_num)
 stat_m3<-round(stat_m3,0)
-View(stat_m3)
+stat_m3
 ```
 
 
@@ -448,7 +448,6 @@ m4<-Reduce(function(...) merge (..., all=F), list(m2,m3))
 glimpse(m4)
 unique(m4$Who_Region)
 unique(m4$year)
-View(m4)
 
 ```
 
@@ -724,7 +723,7 @@ ggplot(data=A_Weight_Low_birth,aes(x=year,y=Low_birth_weight))+
 ```
 
 #### Se genera un "Lineal model" para cada Who_Region
-**** Todos los "lm" superan de R2 un 0.9, excepto América que tiene un R2 muy bajo "0.01", porque sus valores tienen poca variabilidad. Se observa que la estimación que hace del indicador no es mala.
+**** Todos los "lm" superan de R2 un 0.9, excepto América que tiene un R2 muy bajo "0.01", porque sus valores tienen poca variabilidad. La estimación que hace es buena porque los valores son muy constantes.
 
 ```{r}
 Low_birth_weight_Africa<-A_Weight_Low_birth %>% filter(Who_Region== 'Africa')
@@ -765,7 +764,7 @@ pred_2016_17_Low_birth_weight$Who_Region<-as.character(pred_2016_17_Low_birth_we
 glimpse(pred_2016_17_Low_birth_weight)
 
 A_Weight_Low_birth<-rbind(A_Weight_Low_birth,pred_2016_17_Low_birth_weight)
-view(A_Weight_Low_birth)
+A_Weight_Low_birth
 ```
 
 
@@ -792,6 +791,7 @@ stat_m7[,(stat_m7["nbr.na",]>0)] #### nos indica las variables con valores NAs
 
 ```
 
+#### Se identifican NAs en los siguientes indicadores: Inm_PCV3_coverage & Inm_ROTAC_coverage
 #### Identificando las regiones dónde están los NAs y "Analizando" cuál es la mejor estimación.
 
 ```{r}
@@ -940,7 +940,7 @@ ggplot(data=dataset_Life, aes(x=year, y=Life_expectancy_at_birth))+
 ```
 
 
-#### Se decide hace las estimaciones por regresión lineal
+#### Se decide hacer las estimaciones por regresión lineal
 
 ```{r}
 Life_Africa<-dataset_Life%>% filter(Who_Region=="Africa")
@@ -1098,24 +1098,280 @@ ANAEMIA_RW<-rbind(ANAEMIA_RW,pred_Anaemia_RW)
 glimpse(ANAEMIA_RW)
 ```
 
+#### Actualizando los valores estimados en el "dataset"
 
 ```{r}
+dataset<-dataset %>% select(-Life_expectancy_at_birth,-ANAEMIA_RW,-ANAEMIA_PW) ## por error reiterativo en el merge siguiente, se decide incluir esta línea de comandos para solucionarlo.
 dataset<-Reduce(function(...) merge (..., all.x=TRUE), list(dataset,ANAEMIA_RW,ANAEMIA_PW,Life_expectancy_birth))
 glimpse(dataset)
 unique(dataset$Who_Region)
 unique(dataset$year)
 ```
 
+#### Verificando estadísticas del dataset y los valores Nulls & NAs
 ```{r}
 dataset_num<-select_if(dataset,is.numeric)
 stat_dataset<-stat.desc(dataset_num)
 stat_dataset<-round(stat_dataset,1)
+stat_dataset
 
 stat_dataset[,(stat_dataset["nbr.null",]>0)] #### nos indica las variables con valores Nulls
 stat_dataset[,(stat_dataset["nbr.na",]>0)] #### nos indica las variables con valores NAs
 ```
 
+#### REGRESION PENALIZADA "CRESTA"
+#### Se utiliza CV K-fold(5)
+#### Train: Se estandarizan los datos con "scale=TRUE"
 
+
+```{r}
+set.seed(123)
+training_samples<-dataset$Rate_Mort_Child %>%
+  createDataPartition(p=0.8,list=FALSE)
+train_data<-dataset[training_samples,]
+test_data<-dataset[-training_samples,]
+
+lambda<-10^seq(-3,3,length=100)
+set.seed(123)
+model_ridge<- train(
+  Rate_Mort_Child~.,data=train_data,method="glmnet",
+  trControl=trainControl("cv",number=5),
+  scale=TRUE,
+  tuneGrid=expand.grid(alpha=0,lambda=lambda)
+)
+coef(model_ridge$finalModel,model_ridge$bestTune$lambda)
+```
+
+#### Métricas resultado "Cross-Validation k-fold" para "Cresta"
+```{r}
+Metricas_train_ridge<-data.frame("metrics_train_ridge",Median_RMSE=median(model_ridge$resample$RMSE),
+Median_MAE=median(model_ridge$resample$MAE),
+Median_RSquared=median(model_ridge$resample$Rsquared)) 
+
+Metricas_train_ridge
+```
+
+#### Métricas de las predicciones para test.
+```{r}
+
+predictions_ridge<-model_ridge %>% predict(test_data)
+Metricas_ridge_test<-data.frame("metrics_test_ridge",
+  RMSE=RMSE(predictions_ridge,test_data$Rate_Mort_Child),
+  MAE=MAE(predictions_ridge,test_data$Rate_Mort_Child),
+  Rsquare=caret::R2(predictions_ridge,test_data$Rate_Mort_Child)
+)
+Metricas_ridge_test
+```
+
+
+#### REGRESION PENALIZADA "LASSO"
+#### Se utiliza CV K-fold(5)
+#### Train: Se estandarizan los datos con "scale=TRUE"
+
+```{r}
+lambda<-10^seq(-3,3,length=100)
+set.seed(123)
+model_lasso<- train(
+  Rate_Mort_Child~.,data=train_data,method="glmnet",
+  trControl=trainControl("cv",number=5),
+  scale=TRUE,
+  tuneGrid=expand.grid(alpha=1,lambda=lambda)
+)
+coef(model_lasso$finalModel,model_lasso$bestTune$lambda)
+```
+
+#### Métricas resultado "Cross-Validation k-fold" para "Lasso"
+```{r}
+Metricas_train_lasso<-data.frame("metrics_train_lasso",Median_RMSE=median(model_lasso$resample$RMSE),
+Median_MAE=median(model_lasso$resample$MAE),
+Median_RSquared=median(model_lasso$resample$Rsquared)) 
+
+Metricas_train_lasso
+```
+
+
+
+#### Métricas de las predicciones para test.
+```{r}
+predictions_lasso<-model_lasso %>% predict(test_data)
+Metricas_lasso_test<-data.frame("metrics_test_lasso",
+  RMSE=RMSE(predictions_lasso,test_data$Rate_Mort_Child),
+  MAE=MAE(predictions_lasso,test_data$Rate_Mort_Child),
+  Rsquare=caret::R2(predictions_lasso,test_data$Rate_Mort_Child)
+)
+Metricas_lasso_test
+```
+
+
+#### REGRESION PENALIZADA "NET ELASTIC"
+#### Se utiliza CV K-fold(5)
+#### Train: Se estandarizan los datos con "scale=TRUE"
+
+```{r}
+lambda<-10^seq(-3,3,length=100)
+set.seed(123)
+model_elastic<- train(
+  Rate_Mort_Child~.,data=train_data,method="glmnet",
+  trControl=trainControl("cv",number=5),
+  scale=TRUE,
+  tuneLength=10
+)
+coef(model_elastic$finalModel,model_elastic$bestTune$lambda)
+```
+
+#### Métricas resultado "Cross-Validation k-fold" para "Net Elastic"
+```{r}
+Metricas_train_elastic<-data.frame("metrics_train_elastic",Median_RMSE=median(model_elastic$resample$RMSE),
+Median_MAE=median(model_elastic$resample$MAE),
+Median_RSquared=median(model_elastic$resample$Rsquared)) 
+
+Metricas_train_elastic
+```
+
+
+
+#### Métricas de las predicciones para test.
+```{r}
+predictions_elastic<-model_elastic %>% predict(test_data)
+Metricas_elastic_test<-data.frame("metrics_test_elastic",
+  RMSE=RMSE(predictions_elastic,test_data$Rate_Mort_Child),
+  MAE=MAE(predictions_elastic,test_data$Rate_Mort_Child),
+  Rsquare=caret::R2(predictions_elastic,test_data$Rate_Mort_Child)
+)
+Metricas_elastic_test
+```
+
+
+
+#### COMPARATIVA RENDIMIENTO DEL MODELO "MEDIANA DE LAS MÉTRICAS" en "Cross validation k-fold"(train/validation)
+
+```{r}
+models<-list(model_ridge=model_ridge,model_lasso=model_lasso,model_elastic=model_elastic)
+
+Metricas_train_model<-resamples(models) %>% summary(perfNames="")
+
+met_train<-data.frame(cbind(Median_RMSE=((Metricas_train_model$statistics$RMSE)[,3]),
+                     Median_MAE=((Metricas_train_model$statistics$MAE)[,3]),
+                     Median_Rsquared=((Metricas_train_model$statistics$Rsquared)[,3])))
+
+type_model<-rownames(met_train)
+met_train<-data.frame(type_model,Median_RMSE=round(met_train$Median_RMSE,4),
+                      Median_MAE=round(met_train$Median_MAE,4),
+                      Median_Rsquared=round(met_train$Median_Rsquared,4))
+met_train
+met_longer <- met_train%>%
+  pivot_longer(cols=`Median_RMSE`:"Median_Rsquared",
+               names_to="nom_met",
+               values_to = "valor_met")
+
+ggplot(data=met_longer,aes(x=nom_met,y=valor_met,fill=type_model))+
+  geom_bar(stat="identity",position=position_dodge())+
+  xlab("Métricas")+
+  ylab("valores")+
+  geom_text(aes(label=valor_met), position=position_dodge(width=0.9), vjust=2,size=2)
+
+```
+
+
+#### COMPARATIVA MÉTRICAS "MODEL PREDICTION PERFORMANCE" (TEST)
+
+```{r}
+met_test<-data.frame(rbind(Ridge_test=round(Metricas_ridge_test[,2:4],4),
+                 Lasso_test=round(Metricas_lasso_test[,2:4],4),
+                 Elastic_test=round(Metricas_elastic_test[,2:4],4)
+                 ))
+
+met_test
+type_model<-rownames(met_test)
+met_test<-data.frame(type_model,RMSE=met_test$RMSE,
+                     MAE=met_test$MAE,
+                     RSquare=met_test$Rsquare)
+
+met_longer <- met_test %>%
+  pivot_longer(cols=`RMSE`:`RSquare`,
+               names_to="nom_met",
+               values_to = "valor_met")
+
+ggplot(data=met_longer,aes(x=nom_met,y=valor_met,fill=type_model))+
+  geom_bar(stat="identity",position=position_dodge())+
+  xlab("Métricas")+
+  ylab("valores")+
+  geom_text(aes(label=valor_met), position=position_dodge(width=0.9), vjust=2,size=2)
+```
+
+
+
+
+
+```{r}
+lm_model_lasso<-lm(Rate_Mort_Child~Mort_Congenital_rate + Mort_Diarrhoeal_rate+
+     Mort_Meningitis_rate+Mort_Other_rate+
+     Mort_Respiratory_rate+Life_expectancy_at_birth, data=train_data)
+summary(lm_model_lasso)  
+
+par(mar=c(2,2,2,2))
+plot(lm_model_lasso,1)
+plot(lm_model_lasso,2)
+plot(lm_model_lasso,3)
+plot(lm_model_lasso,4)
+
+```
+
+
+
+#### STEPWISE-leapBackward 
+
+```{r}
+set.seed(123)
+train_control<-trainControl(method = "cv",number=10)
+step_model_Back<-train(Rate_Mort_Child~.,data=train_data,
+                  method="leapBackward",
+                  tuneGrid=data.frame(nvmax=1:10),
+                  trControl=train_control,
+                  scale=TRUE)
+
+warnings()
+step_model_Back$results
+step_model_Back$bestTune
+coef(step_model_Back$finalModel,10)
+step_model_Back %>% predict(test_data)
+
+```
+
+
+#### STEPWISE-leapForward 
+
+```{r}
+set.seed(123)
+train_control<-trainControl(method = "cv",number=10)
+step_model_Forward<-train(Rate_Mort_Child~.,data=train_data,
+                  method="leapForward",
+                  tuneGrid=data.frame(nvmax=1:10),
+                  trControl=train_control,
+                  scale=TRUE)
+warnings()
+step_model_Forward$results
+View(step_model_Forward)
+step_model_Forward$bestTune
+coef(step_model_Forward$finalModel,5)
+```
+
+
+
+#### STEPWISE-leapSeq 
+
+```{r}
+set.seed(123)
+train_control<-trainControl(method = "cv",number=10)
+step_model_Seq<-train(Rate_Mort_Child~.,data=train_data,
+                  method="leapSeq",
+                  tuneGrid=data.frame(nvmax=1:10),
+                  trControl=train_control,
+                  scale=TRUE)
+step_model_Seq$results
+step_model_Seq$bestTune
+coef(step_model_Seq$finalModel,5)
+```
 
 ## R Markdown
 
