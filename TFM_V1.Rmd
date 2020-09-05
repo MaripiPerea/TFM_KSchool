@@ -40,16 +40,20 @@ stat_wide
 
 ```{r}
 ggplot(data=Rate_Child,aes(x=Who_Region,y=Rate_Mort_Child))+
- geom_boxplot(aes(fill=Who_Region)) +
-  ggtitle("Mortality Rate Child(Under Five years) per 1000 live births")+
+  geom_boxplot(aes(fill=Who_Region)) +
+  ggtitle("Under-five mortality rate 
+          (probability of dying by age 5 per 1000 live births)")+
   theme(plot.title = element_text(hjust = 0.5))+
-  theme(axis.text.x=element_text(angle=60, hjust=1))
+  theme(axis.text.x=element_text(angle=90, hjust=1))+
+  ylab("per 1000 live births")
 
 
 
 ggplot(data=Rate_Child,aes(x=year,y=Rate_Mort_Child))+
   geom_point(aes(col=Who_Region))+
-  ggtitle("Mortality Rate Child(Under Five years) per 1000 live births")
+  ggtitle("Under-five mortality rate 
+          (probability of dying by age 5 per 1000 live births)")+
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 
 
@@ -1301,8 +1305,27 @@ ggplot(data=met_longer,aes(x=nom_met,y=valor_met,fill=type_model))+
 
 
 
+#### Análisis de los supuestos de Regresión lineal con "lm" para las variables identificadas por Lasso
+**** 1.-Linealidad de los datos-> Gráfica Residual vs Fitted-> 
 
+Se utiliza para verificar los supuestos de relación lineal.Una línea horizontal sin patrones distintos, es una indicación de una relación lineal. En nuestro caso,prácticamente se mueve entorno a 0, es decir, asumimos linealidad entre predictores y variable resultado.
 
+**** 2.-Normalidad de los residuos-> Gráfica Normal Q-Q-> 
+  
+Se utiliza para examinar si los residuos se distribuyen normalmente. Es bueno si los puntos residuales siguen la linea recta discontinua.En nuestro caso la mayoría siguen la línea, excepto los valores atípicos y algunos puntuales.
+  
+**** 3.-Homogeneidad de la varianza residual(homocedasticidad)-> Gráfica Scale-Location-> 
+La línea horizontal con puntos igualmente extendidos es una buena indicación de              homocedasticidad.En nuestros caso el comportamiento es de poca variación (entorno 0.5),       por tanto, asumimos "homocedasticidad"
+
+**** 4.-Independencia de los términos de error de residuos. -> Gráfica        Scale-Location->  
+**** 5.-Gráfico Residuals vs Leverage-> Se utiliza para identificar casos influyentes. 
+
+    Valores atípicos-> Las observaciones cuyos residuos estandarizados son mayores que 3 en  valor absoluto son posibles valores atípicos.
+En nuestro caso resaltan 3 puntos más extremos(#1,#9,#34),con resdiduos estandarizados por debajo de 3, excepto el#9 (4.09)
+      
+    Puntos de apalacamiento-> Se puede detectar examinando la estadistica de ".hat". Un valor superior a 2(p+1)/n indicaría una observación con alto apalancamiento.En nuestro caso 2(43+1)/40=1.15. No supera ningún valor el 0,45.
+      
+      Valores influyentes-> Es un valor cuya inclusión o exclusión altera los resultados del análisis de regresión. No todos los valores atípicos influyen en el análisis de regresión. La "distancia de Cook" determina la influencia de un valor. Esta métrica define la influencia como una combinación de apalancamiento y tamaño residual. En nuestro caso ningun punto es influyente, porque están dentro de los límites marcados por la distancia de Cook.
 ```{r}
 lm_model_lasso<-lm(Rate_Mort_Child~Mort_Congenital_rate + Mort_Diarrhoeal_rate+
      Mort_Meningitis_rate+Mort_Other_rate+
@@ -1314,27 +1337,70 @@ plot(lm_model_lasso,1)
 plot(lm_model_lasso,2)
 plot(lm_model_lasso,3)
 plot(lm_model_lasso,4)
+plot(lm_model_lasso,5)
+
+
 
 ```
 
 
 
+
+#### Se decide excluir el registro #9 (valor atípico para ver el comportamiento del "lineal model"), también quitamos la variable "Mort_Meningitis_Rate" por ser poco significativa, y veremos el comportamiento:
+```{r}
+#### Tabla con las métricas del diagnóstico
+model_diag_metrics<-augment(lm_model_lasso)
+model_diag_metrics
+
+#### Identificando los tres valores extremos
+top_3_cook<-model_diag_metrics %>%
+  top_n(3,wt=.cooksd)
+top_3_cook
+
+#train_data[which(rownames(train_data)==1),]
+#Excluyendo los valores extremos del dataset train_data
+train_data_exc<-train_data %>% filter(Rate_Mort_Child!=19.4)
+glimpse(train_data_exc)
+
+#### Aplicando "lm"
+lm_model_lasso_exc<-lm(Rate_Mort_Child~Mort_Congenital_rate + Mort_Diarrhoeal_rate+
+                Mort_Other_rate+
+                Mort_Respiratory_rate+Life_expectancy_at_birth, data=train_data_exc)
+summary(lm_model_lasso_exc)  
+
+par(mar=c(2,2,2,2))
+plot(lm_model_lasso_exc,1)
+plot(lm_model_lasso_exc,2)
+plot(lm_model_lasso_exc,3)
+plot(lm_model_lasso_exc,4)
+plot(lm_model_lasso_exc,5)
+```
+
 #### STEPWISE-leapBackward 
 
 ```{r}
 set.seed(123)
-train_control<-trainControl(method = "cv",number=10)
+train_control<-trainControl(method = "cv",number=5)
 step_model_Back<-train(Rate_Mort_Child~.,data=train_data,
                   method="leapBackward",
-                  tuneGrid=data.frame(nvmax=1:10),
+                  tuneGrid=data.frame(nvmax=1:5),
                   trControl=train_control,
                   scale=TRUE)
 
 warnings()
 step_model_Back$results
 step_model_Back$bestTune
-coef(step_model_Back$finalModel,10)
-step_model_Back %>% predict(test_data)
+coef_step_Back<-coef(step_model_Back$finalModel,5)
+data.frame(round(coef_step_Back,3))
+
+predictions_leap_Back<-step_model_Back %>% predict(test_data)
+
+Metricas_leap_Back<-data.frame(Metrics="metrics_test_leap_Back",
+RMSE=RMSE(predictions_leap_Back,test_data$Rate_Mort_Child),
+MAE=MAE(predictions_leap_Back,test_data$Rate_Mort_Child),
+RSquared=caret::R2(predictions_leap_Back,test_data$Rate_Mort_Child))
+  
+Metricas_leap_Back
 
 ```
 
@@ -1343,17 +1409,27 @@ step_model_Back %>% predict(test_data)
 
 ```{r}
 set.seed(123)
-train_control<-trainControl(method = "cv",number=10)
+train_control<-trainControl(method = "cv",number=5)
 step_model_Forward<-train(Rate_Mort_Child~.,data=train_data,
                   method="leapForward",
-                  tuneGrid=data.frame(nvmax=1:10),
+                  tuneGrid=data.frame(nvmax=1:5),
                   trControl=train_control,
                   scale=TRUE)
-warnings()
+
 step_model_Forward$results
-View(step_model_Forward)
 step_model_Forward$bestTune
-coef(step_model_Forward$finalModel,5)
+coef_leap_Forward<-coef(step_model_Forward$finalModel,5)
+data.frame(round(coef_leap_Forward,3))
+
+predictions_leap_Forward<-step_model_Forward %>% predict(test_data)
+
+Metricas_leap_Forward<-data.frame(Metrics="metrics_test_leap_Forward",
+RMSE=RMSE(predictions_leap_Forward,test_data$Rate_Mort_Child),
+MAE=MAE(predictions_leap_Forward,test_data$Rate_Mort_Child),
+RSquared=caret::R2(predictions_leap_Forward,test_data$Rate_Mort_Child))
+  
+Metricas_leap_Forward
+
 ```
 
 
@@ -1361,17 +1437,55 @@ coef(step_model_Forward$finalModel,5)
 #### STEPWISE-leapSeq 
 
 ```{r}
-set.seed(123)
-train_control<-trainControl(method = "cv",number=10)
+set.seed(345)
+train_control<-trainControl(method = "cv",number=5)
 step_model_Seq<-train(Rate_Mort_Child~.,data=train_data,
                   method="leapSeq",
-                  tuneGrid=data.frame(nvmax=1:10),
+                  tuneGrid=data.frame(nvmax=1:5),
                   trControl=train_control,
                   scale=TRUE)
 step_model_Seq$results
 step_model_Seq$bestTune
-coef(step_model_Seq$finalModel,5)
+
+coef_Leap_Seq<-coef(step_model_Seq$finalModel,4)
+data.frame(round(coef_Leap_Seq,3))
+
+
+predictions_leap_Seq<-step_model_Seq %>% predict(test_data)
+
+Metricas_leap_Seq<-data.frame(Metrics="metrics_test_leap_seq",
+  RMSE=RMSE(predictions_leap_Seq,test_data$Rate_Mort_Child),
+  MAE=MAE(predictions_leap_Seq,test_data$Rate_Mort_Child),
+  RSquared=caret::R2(predictions_leap_Seq,test_data$Rate_Mort_Child)
+)
+Metricas_leap_Seq
 ```
+
+
+```{r}
+rbind(Train_Step_Backward=step_model_Back$results[5,c(2,4,3)],
+Train_Step_Forward=step_model_Forward$results[5,c(2,4,3)],
+Train_Step_Seq=step_model_Seq$results[5,c(2,4,3)])
+
+```
+
+
+```{r}
+rbind(Metricas_leap_Back,
+      Metricas_leap_Forward,
+      Metricas_leap_Seq)
+
+
+```
+
+```{r}
+lm_model_Forward<-lm(Rate_Mort_Child~Response+Mort_Congenital_rate+
+     Mort_Diarrhoeal_rate+Mort_Other_rate+Inm_PCV3_coverage, data=train_data)
+summary(lm_model_Forward)
+plot(lm_model_Forward)
+```
+
+
 
 ## R Markdown
 
