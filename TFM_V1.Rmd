@@ -1486,6 +1486,37 @@ plot(lm_model_Forward)
 ```
 
 
+#### REGRESIÓN DE COMPONENTES PRINCIPALES (PCR)
+```{r}
+set.seed(234)
+model_pcr<-train(Rate_Mort_Child~., data=train_data,
+                 method="pcr",
+                 scale=TRUE,
+                 trControl=trainControl("cv",number=5),
+                 tuneLength=9)
+plot(model_pcr)
+
+model_pcr$bestTune
+
+summary(model_pcr)
+
+predic_model_pcr<-model_pcr %>% predict(test_data)
+
+data_frame(RMSE=caret::RMSE(predic_model_pcr,test_data$Rate_Mort_Child),
+           MAE= caret::MAE(predic_model_pcr,test_data$Rate_Mort_Child),
+           RSquare=caret::R2(predic_model_pcr,test_data$Rate_Mort_Child))
+
+
+plot(varImp(model_pcr),15,main="PCR")
+
+```
+
+
+#### REGRESIÓN DE MÍNIMOS CUADRADOS PARCIALES (PLS)
+
+```{r}
+
+```
 
 ## R Markdown
 
