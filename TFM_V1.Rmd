@@ -4,6 +4,54 @@ author: "María Perea"
 date: "9 de julio de 2020"
 output: html_document
 ---
+`
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+```
+
+
+
+```{r}
+library(tidyverse)
+library(dslabs)
+library(rvest)
+library(devtools)  #OK
+library(xlsx)    #OK
+library(tidyverse)
+library(dplyr)    #OK
+library(ggplot2)   #OK
+###################
+library(readr)    
+##################
+library(purrr)  #ok
+####################
+library(tibble)   #OK
+library(dslabs)    #OK
+library(rvest)   #ok
+library(RMySQL)   #ok
+##################
+library(WDI)
+#######################
+library(RMariaDB)   #ERRROOOOOORRRR
+library(tidyr)   #ERRROOOOOORRRR
+library(data.table)   ####ERRORRRRRRRRRR
+library(pastecs)
+library(VIM)
+library(Amelia)
+library(pryr)
+library(janitor)
+library(ggrepel)
+library(caret)
+library(broom)
+library(mgcv)
+library(glmnet)
+library(leaps)
+library(pls)
+library(randomForest)
+
+```
+
 
 #### Importando fichero "Mortality_rate_Newborn_Child.csv"
 ****IMPORTANDO fichero con el indicador: Selección y cambio de nombre en columnas, creando tabla de Wide a Longer.
@@ -1486,7 +1534,8 @@ plot(lm_model_Forward)
 ```
 
 
-#### REGRESIÓN DE COMPONENTES PRINCIPALES (PCR)
+#### REGRESIÓN DE **COMPONENTES** PRINCIPALES (PCR)
+
 ```{r}
 set.seed(234)
 model_pcr<-train(Rate_Mort_Child~., data=train_data,
@@ -1515,7 +1564,26 @@ plot(varImp(model_pcr),15,main="PCR")
 #### REGRESIÓN DE MÍNIMOS CUADRADOS PARCIALES (PLS)
 
 ```{r}
+set.seed(123)
+model_pls<-train(Rate_Mort_Child~., data=train_data,
+                 method="pls",
+                 scale=TRUE,
+                 trControl=trainControl("cv",number=5),
+                 tuneLength=10)
+plot(model_pls)
+model_pls$bestTune
+summary(model_pls$finalModel)
 
+predic_model_pls<-model_pls %>% predict(test_data)
+
+data_frame(RMSE=caret::RMSE(predic_model_pls,test_data$Rate_Mort_Child),
+           MAE= caret::MAE(predic_model_pls,test_data$Rate_Mort_Child),
+           RSquare=caret::R2(predic_model_pls,test_data$Rate_Mort_Child))
+
+
+plot(coef(model_pls$finalModel))
+plot(model_pls$finalModel)
+plot(varImp(model_pls),15,main="PLS")
 ```
 
 ## R Markdown
