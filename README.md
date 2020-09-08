@@ -7,5 +7,5 @@
 ## KFKKFK
 **____**
 
-![GitHub Logo](/images/logo.png)
+![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Metrics_Diagram.png?raw=true)
 Format: ![Alt Text](url)
