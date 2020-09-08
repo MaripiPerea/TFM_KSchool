@@ -6,3 +6,6 @@
 (https://github.com/MaripiPerea/TFM_KSchool/blob/master/Metrics_Diagram.png?raw=true)
 ## KFKKFK
 **____**
+
+![GitHub Logo](/images/logo.png)
+Format: ![Alt Text](url)
