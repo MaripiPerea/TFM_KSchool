@@ -14,47 +14,22 @@ knitr::opts_chunk$set(error = TRUE)
 
 ```{r}
 library(tidyverse)
-library(dslabs)
-library(rvest)
-library(devtools)  #OK
-library(xlsx)    #OK
-library(tidyverse)
-library(dplyr)    #OK
-library(ggplot2)   #OK
-###################
-library(readr)    
-##################
-library(purrr)  #ok
-####################
-library(tibble)   #OK
-library(dslabs)    #OK
-library(rvest)   #ok
-library(RMySQL)   #ok
-##################
-library(WDI)
-#######################
-library(RMariaDB)   #ERRROOOOOORRRR
-library(tidyr)   #ERRROOOOOORRRR
-library(data.table)   ####ERRORRRRRRRRRR
+library(devtools)
+library(dplyr)    
+library(ggplot2)   
+library(readr)
 library(pastecs)
-library(VIM)
-library(Amelia)
-library(pryr)
-library(janitor)
-library(ggrepel)
+library(tidyr)   
 library(caret)
-library(broom)
-library(mgcv)
-library(glmnet)
-library(leaps)
-library(pls)
-library(randomForest)
 
 ```
 
 
-#### Importando fichero "Mortality_rate_Newborn_Child.csv"
-****IMPORTANDO fichero con el indicador: Selección y cambio de nombre en columnas, creando tabla de Wide a Longer.
+#### Importando fichero __"Mortality_rate_Newborn_Child.csv"__
+1. Se importa fichero con el indicador a estimar. 
+2. Selección y cambio de nombre en columnas.
+3. Creando tabla de Wide a Longer.
+4. Verificando con *glimpse* la importación correcta y con *unique* los valores únicos del fichero.
 ```{r}
 Rate_Child_all<-read.csv("Mortality_rate_Newborn_Child.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 2)
 Rate_Child<-Rate_Child_all[ ,c(1,31:59)]
@@ -71,8 +46,8 @@ unique(Rate_Child$year)
 ```
 
 #### Análisis indicador Rate_Mort_Child
-****Pivotando tabla de Longer a Wide (Regiones en columnas)
-
+1. Pivotando tabla de Longer a Wide (Regiones en columnas)
+2. Se aplica función *stat.desc* para obtener métricas descriptiva de la tabla por **Who_Región**
 ```{r}
 Rate_Child_wide <- Rate_Child %>%
   pivot_wider(names_from=Who_Region, 
@@ -84,7 +59,9 @@ stat_wide
 
 ```
 
-###### Gráficos
+#### Gráficos __"Rate_Mort_Child"__
+1. Gráfico de cajas por "Who_Región"
+2. Evolutivo por "Who_Región"
 
 ```{r}
 ggplot(data=Rate_Child,aes(x=Who_Region,y=Rate_Mort_Child))+
@@ -105,11 +82,10 @@ ggplot(data=Rate_Child,aes(x=year,y=Rate_Mort_Child))+
 ```
 
 
-#### Importando fichero "International_Health_Regulations.csv""
-**** Contiene 13 indicadores de la Regulación Internacional de Salud(Encuestas)
-**** Se importa el fichero seleccionando las columnas de cada indicador
-**** Pivotando cada tabla de Wide a Longer
-
+#### Importando fichero __"International_Health_Regulations.csv""__
+1. Contiene 13 indicadores de la Regulación Internacional de Salud(Encuestas)
+2. Se importa el fichero seleccionando las columnas de cada indicador
+3. Pivotando cada tabla de Wide a Longer
 
 ```{r}
 
@@ -227,7 +203,8 @@ Int_Health_Regulat_Radionuclear<- Int_Health_Regulat_Radionuclear %>%
                names_ptypes = list(year=integer()))
 ```
 
-#### Fusionando con merge los 13 indicadores. Análisis de la fusión con glimpse, unique and stat.desc
+#### Fusionando con *merge* los 13 indicadores. 
+1. Análisis de la tabla con *glimpse*, *unique* and *stat.desc*
 
 ```{r}
 m1<-Reduce(function(...) merge(..., all=T), list(Int_Health_Regulat_Legislation,
@@ -255,9 +232,9 @@ stat_m1
 
 ```
 
-#### Fusionando indicador principal con indicadores International_Health_Regulation 
-**** Se decide excluir "Global" del indicador principal, porque en el resto de indicadores sólo está para dos años
-**** Por tanto, nos quedaríamos con 7 años de evolutivo (2010-2017)
+#### Fusionando "indicador principal" con indicadores "International_Health_Regulation" 
+1. Se decide excluir "Global" del indicador principal, porque en el resto de indicadores sólo hay datos para dos años
+2. Por tanto, nos quedaríamos con 7 años de evolutivo (2010-2017)
 ```{r}
 Rate_Child_new<-Rate_Child %>% filter(Who_Region != "Global")
 m2<-Reduce(function(...) merge (..., all=F), list(Rate_Child_new,m1))
@@ -265,11 +242,10 @@ glimpse(m2)
 unique(m2$Who_Region)
 unique(m2$year)
 ```
-
-#### Importando 12 ficheros con los Ratios de Mortalidad por causa (variable: <5 años)
-**** Sólo nos interesa la variable (0-4 years)
-**** Se homogeiniza valores de "Who_Region"
-
+#### Importando 12 ficheros con los "Ratios de Mortalidad por CAUSA (<5 años)"
+1. Sólo nos interesa la variable (0-4 years)
+2. Se homogeiniza valores de "Who_Region"
+3. Verificando con *glimpse* y *unique* la importación correcta
 ```{r}
 #### Asphyxia
 Mort_Asphyxia_rate<-read.csv("MORT_Asphyxia_rate.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 2)
@@ -467,7 +443,8 @@ unique(Mort_Tetanos_rate$Who_Region)
 
 
 
-#### Fusionando los 12 indicadores de las causas de Mortalidad Infantil(Rate)
+#### Fusionando con *merge* los 12 indicadores de  "Causas de Mortalidad Infantil(Rate)"
+1. Análisis de la tabla con *glimpse*, *unique* and *stat.desc*
 
 ```{r}
 m3<-Reduce(function(...) merge(..., all=T), list(Mort_Asphyxia_rate,
@@ -493,8 +470,8 @@ stat_m3
 ```
 
 
-#### Fusionando tabla principal acumulado con la tabla indicadores "Mort_Cause_Rate""
-
+#### Fusionando "tabla principal acumulado" con la tabla de indicadores "Mort_Cause_Rate"
+1. Comprobando resultados con *glimpse* y *unique*
 ```{r}
 m4<-Reduce(function(...) merge (..., all=F), list(m2,m3))
 glimpse(m4)
@@ -505,8 +482,8 @@ unique(m4$year)
 
 
 #### Importando ficheros con los indicadores "Immunization coverage"
-**** Se pivota de wide a longer
-**** Son nueve en total
+1. Se pivota de wide a longer
+2. Son nueve indicadores en total. 
 ```{r}
 #### Inm_BCG.csv
 Inm_BCG<-read.csv("Inm_BCG.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 1)
@@ -669,21 +646,18 @@ stat_m5
 ```
 
 #### Merge de la tabla principal con la tabla "Inm_Cause_Rate"
-**** Total con 37 variables y 48 registros
 
 ```{r}
 m6<-Reduce(function(...) merge (..., all=F), list(m4,m5))
 glimpse(m6)
 unique(m6$Who_Region)
 unique(m6$year)
-m6
 ```
 
 
-#### Importando ficheros con los indicadores "Child Malnutrition"
-**** Son dos indicadores, las variables contienen el valor y el intervalo de confianza, es de tipo carácter, se extrae el valor y se convierte a numérico
-**** En el indicador "ANAEMIA_Children5" se tiene que pivotar la tabla de wide a longer
-
+#### Importando ficheros con los indicadores __"Child Malnutrition"__
+1. Son dos indicadores, las variables contienen el valor y el intervalo de confianza, es de tipo carácter, se extrae el valor y se convierte a numérico
+2. En el indicador "ANAEMIA_Children5" se tiene que pivotar la tabla de wide a longer
 
 ```{r}
 #### Weight_Low_birth
@@ -715,15 +689,17 @@ unique(ANAEMIA_Children5$Who_Region)
 unique(ANAEMIA_Children5$year)
 ```
 
-#### Para el indicador "ANAEMIA_Children5" falta el año 2017, se estima por regresión lineal para cada Who_Region.
-**** Se genera un ggplot para ver evolutivo
+#### Para el indicador "ANAEMIA_Children5" falta el año 2017, 
+1. Se genera un ggplot para ver evolutivo.
+2. Se estima por regresión lineal "lm" para cada Who_Region.
 ```{r}
 ggplot(data=ANAEMIA_Children5,aes(x=year,y=ANAEMIA_Children5))+
   geom_point(aes(col=Who_Region))
 ```
 
 #### Se genera un "Lineal model" para cada Who_Region para el indicador "ANAEMIA_Children5"
-**** Todos los "lm" superan de R2 un 0.9, excepto Europa y América que están entorno al 0.7
+1. Todos los "lm" superan de un 0.96 de R2, excepto Europa y América que están entorno al 0.7.
+2. Se generan las predicciones con los modelos lineales.
 ```{r}
 Anaemia_Africa<-ANAEMIA_Children5 %>% filter(Who_Region== 'Africa')
 Anaemia_Americas<-ANAEMIA_Children5 %>% filter(Who_Region== 'Americas')
@@ -766,16 +742,17 @@ unique(ANAEMIA_Children5$year)
 
 ```
 
-#### Para el indicador "Weight_Low_birth" falta el año 2016&2017, se estima por regresión lineal para cada Who_Region.
-**** Se genera un ggplot para ver evolutivo
+#### Para el indicador __"Weight_Low_birth"__ falta el año **2016&2017**
+1. Se genera un ggplot para ver evolutivo
+2. Se estima por regresión lineal para cada Who_Region.
 
 ```{r}
 ggplot(data=A_Weight_Low_birth,aes(x=year,y=Low_birth_weight))+
   geom_point(aes(col=Who_Region))
 ```
 
-#### Se genera un "Lineal model" para cada Who_Region
-**** Todos los "lm" superan de R2 un 0.9, excepto América que tiene un R2 muy bajo "0.01", porque sus valores tienen poca variabilidad. La estimación que hace es buena porque los valores son muy constantes.
+#### Se genera un "Lineal model" para cada Who_Region, con la predicción.
+1. Todos los "lm" superan de R2 un 0.95, excepto América que tiene un R2 muy bajo "0.01", porque sus valores tienen poca variabilidad. La estimación que hace es buena porque los valores son muy constantes.
 
 ```{r}
 Low_birth_weight_Africa<-A_Weight_Low_birth %>% filter(Who_Region== 'Africa')
@@ -816,11 +793,10 @@ pred_2016_17_Low_birth_weight$Who_Region<-as.character(pred_2016_17_Low_birth_we
 glimpse(pred_2016_17_Low_birth_weight)
 
 A_Weight_Low_birth<-rbind(A_Weight_Low_birth,pred_2016_17_Low_birth_weight)
-A_Weight_Low_birth
 ```
 
 
-#### Se actualizan al dataset las estimaciones de estos indicadores
+#### Se actualizan al dataset las estimaciones de estos indicadores.
 ```{r}
 m7<-Reduce(function(...) merge (..., all.x=TRUE), list(m6,ANAEMIA_Children5,A_Weight_Low_birth))
 glimpse(m7)
@@ -832,19 +808,23 @@ unique(m7$year)
 
 
 #### Analizando valores nulos y NAs del dataset "m7" montado hasta ahora.
-
+1. Con la función *stat.desc* y las métricas **nbr.null** y **nbr.na**
+2. Se identifican NAs en los siguientes indicadores: **Inm_PCV3_coverage** & **Inm_ROTAC_coverage**.
+3. Y valores nulos en Mort_HIVAIDS_dis_rate, Mort_Malaria_rate,Mort_Measles_rate y Mort_Tetanos_rate
 ```{r}
 m7_num<-select_if(m7,is.numeric)
 stat_m7<-stat.desc(m7_num)
 stat_m7<-round(stat_m7,1)
 
-stat_m7[,(stat_m7["nbr.null",]>0)] #### nos indica las variables con valores Nulls
-stat_m7[,(stat_m7["nbr.na",]>0)] #### nos indica las variables con valores NAs
+stat_m7[,(stat_m7["nbr.null",]>0)] 
+stat_m7[,(stat_m7["nbr.na",]>0)] 
 
 ```
 
-#### Se identifican NAs en los siguientes indicadores: Inm_PCV3_coverage & Inm_ROTAC_coverage
-#### Identificando las regiones dónde están los NAs y "Analizando" cuál es la mejor estimación.
+#### Analizando los NAs en **Inm_PCV3_coverage** & **Inm_ROTAC_coverage**
+1. Se identifican las  regiones dónde están los NAs y se analiza cuál es la mejor estimación.
+2. Después de visualizar gráfico con evolutivo, se va a estimar 2010 a 2014 por regresión lineal para South_East_Asia, pero el valor va a ser negativo. Para 2014 sale 0, se ponen todos los NAs a 0.
+3. Analizando "Eastern Mediterranean" y "South-East Asia" para el indicador "Inm_ROTAC", ocurre lo mismo que en el anterior, por tanto, se ponen los NAs a 0 también.
 
 ```{r}
 m7$Who_Region[which(is.na(m7$Inm_PCV3_coverage))]
@@ -855,20 +835,20 @@ Inm_PCV3_South_East_Asia<-Inm_PCV3 %>% filter(Inm_PCV3$Who_Region=="South-East A
 ggplot(data=Inm_PCV3_South_East_Asia,aes(x=year,y=Inm_PCV3_coverage))+
   geom_point()  
 
-### Hay que estimar del 2010 a 2014 por regresión lineal para South_East_Asia (se visualiza gráfico con evolutivo)
 
 model_3<-lm(Inm_PCV3_coverage~year, data =Inm_PCV3_South_East_Asia )
 summary(model_3)
 new_data<-data.frame(year=c(2010,2011,2012,2013,2014))
 model_3 %>% predict(new_data) 
-#### Cómo el resultado de 2014 ya sale 0, se ponen todos los NAs a 0.
+model_3
 
-#### Analizando "Eastern Mediterranean" "South-East Asia" para el indicador "Inm_ROTAC", ocurre lo mismo que en el anterior,por tanto, se ponen los NAs a 0 también.
 
 ```
 
 
 #### Cambiando los valores NAs por 0.
+1. Se comprueba que los NAs han pasado a "nulls"
+2. Y que ya no hay NAs
 
 ```{r}
 m7[is.na(m7)]<-0
@@ -878,18 +858,16 @@ stat_m7<-stat.desc(m7_num)
 stat_m7<-round(stat_m7,1)
 
 
-stat_m7[,(stat_m7["nbr.null",]>0)] #### Se comprueba que los NAs han pasado a "nulls"
-stat_m7[,(stat_m7["nbr.na",]>0)] #### Y que en los NAs no sale ninguno ya.
+stat_m7[,(stat_m7["nbr.null",]>0)] 
+stat_m7[,(stat_m7["nbr.na",]>0)] 
 
 ```
 
-#### Se importan indicadores de "Woman an health"
-**** Son dos indicadores: 
-**** ANAEMIA_RW<-Prevalence of anaemia in women of reproductive age (%)
-**** ANAEMIA_PW<- Prevalence of anaemia in pregnant women (%), 
-**** Las variables contienen el valor y el intervalo de confianza, es de tipo carácter, se extrae el valor y se convierte a numérico.
-**** Se tienen que pivotar las tablas de wide a longer
-
+#### Se importan dos indicadores de __"Woman an health"__
+1. ANAEMIA_RW<-Prevalence of anaemia in women of reproductive age (%)
+2. ANAEMIA_PW<- Prevalence of anaemia in pregnant women (%), 
+3. Las variables contienen el valor y el intervalo de confianza, es de tipo carácter, se extrae el valor y se convierte a numérico.
+4. Se tienen que pivotar las tablas de wide a longer
 
 ```{r}
 ANAEMIA_RW<-read.csv("ANAEMIA_RW.csv", header=TRUE,sep = ",",stringsAsFactors = FALSE, skip=1)
@@ -926,9 +904,8 @@ unique(ANAEMIA_PW$Who_Region)
 unique(ANAEMIA_PW$year)
 ```
 
-#### Se importa indicador:
-#### Maternal_mortality<-Maternal mortality ratio (per 100 000 live births)
-**** La variable contiene el valor y el intervalo de confianza, es de tipo carácter, se extrae el valor y se convierte a numérico.
+#### Se importa indicador __"Maternal_mortality"__
+1. La variable contiene el valor y el intervalo de confianza, es de tipo carácter, se extrae el valor y se convierte a numérico.
 
 ```{r}
 Maternal_Mort_Rate<-read.csv("Maternal_mortality.csv",header=TRUE,stringsAsFactors = FALSE)
@@ -955,11 +932,11 @@ unique(Life_expectancy_birth$Who_Region)
 ```
 
 
-#### Se añaden al dataset estos indicadores
-ANAEMIA_RW
-ANAEMIA_PW
-Maternal_Mort_Rate
-Life_expectancy_birth
+#### Se añaden al dataset los siguientes indicadores:
+- ANAEMIA_RW
+- ANAEMIA_PW
+- Maternal_Mort_Rate
+- Life_expectancy_birth
 
 ```{r}
 
@@ -970,20 +947,20 @@ unique(dataset$year)
 ```
 
 #### Analizando valores NULOS y NAS del nuevo dataset(ya definitivo, porque no se van a incluir más variables)
-**** Se identifican de la variable "Life_Expectancy_at_birth" 30 valores NAs
-**** Y de las variables "ANAEMIA_RW" and "ANAEMIA_PW" 6 valores NAs para cada variable
+1. Se identifican de la variable "Life_Expectancy_at_birth" 30 valores NAs
+2. Y de las variables "ANAEMIA_RW" and "ANAEMIA_PW" 6 valores NAs para cada variable
 
 ```{r}
 dataset_num<-select_if(dataset,is.numeric)
 stat_dataset<-stat.desc(dataset_num)
 stat_dataset<-round(stat_dataset,1)
 
-stat_dataset[,(stat_dataset["nbr.null",]>0)] #### nos indica las variables con valores Nulls
-stat_dataset[,(stat_dataset["nbr.na",]>0)] #### nos indica las variables con valores NAs
+stat_dataset[,(stat_dataset["nbr.null",]>0)] 
+stat_dataset[,(stat_dataset["nbr.na",]>0)] 
 ```
 
 
-#### Gráfico del indicador "Life_Expectancy_at_birth" para ver su evolución
+#### Gráfico del indicador __"Life_Expectancy_at_birth"__ para ver su evolución
 
 ```{r}
 dataset_Life<-dataset %>% select("Who_Region", year, Life_expectancy_at_birth)
@@ -992,7 +969,9 @@ ggplot(data=dataset_Life, aes(x=year, y=Life_expectancy_at_birth))+
 ```
 
 
-#### Se decide hacer las estimaciones por regresión lineal
+#### Se decide hacer las estimaciones por **Regresión Lineal**
+1. Todas los modelos tienen un R2 superior a 0.98
+2. Se obtiene las predicciones con *predict*
 
 ```{r}
 Life_Africa<-dataset_Life%>% filter(Who_Region=="Africa")
@@ -1040,23 +1019,28 @@ Life_expectancy_birth<-rbind(Life_expectancy_birth,pred_Life_all)
 glimpse(Life_expectancy_birth)
 ```
 
-####Observando los gráficos se decide estimar 2017 por "regresión lineal" desde el 2013,  
-####porque el evolutivo en algunas regiones (en años anteriores) no se comporta de forma lineal
+#### Analizando NAs para las variables __ANAEMIA_PW__ y __ANAEMIA_RW__
+1. Observando los gráficos se decide estimar 2017 por "regresión lineal" desde el 2013, porque el evolutivo en algunas regiones (en años anteriores) no se comporta de forma lineal.
 
 ```{r}
 dataset_Anaemia<-dataset %>% select(Who_Region,year,ANAEMIA_PW,ANAEMIA_RW)
 
 ggplot(dataset_Anaemia,aes(x=year,y=ANAEMIA_PW))+
-  geom_point(aes(col=Who_Region))
+  geom_point(aes(col=Who_Region))+
+  ggtitle("Evolution ANAEMIA_PW_Rate")+
+  theme(plot.title = element_text(hjust = 0.5))
 
 ggplot(dataset_Anaemia,aes(x=year,y=ANAEMIA_RW))+
-  geom_point(aes(col=Who_Region))
+  geom_point(aes(col=Who_Region))+
+  ggtitle("Evolution ANAEMIA_RW_Rate")+
+  theme(plot.title = element_text(hjust = 0.5))
 
 
 ```
 
 #### Estimación por "lm" para el indicador "ANAEMIA_PW"
-
+1. Todas los modelos obtienen un R2 superior a 0.83.
+2. Se calculan las predicciones con *predict*
 ```{r}
 dataset_Anaemia<-dataset %>% select(Who_Region,year,ANAEMIA_PW,ANAEMIA_RW) %>% filter (year >= "2013")
 
@@ -1108,7 +1092,7 @@ glimpse(ANAEMIA_PW)
 
 
 #### Estimación por "lm" para el indicador "ANAEMIA_RW"
-**** Todas las Regiones superan el R2 de 0.92, excepto "Africa" que obtiene un R2 muy bajo (0.16), pero se observa que la estimación que realiza no es mala, porque los valores no tienen mucha variablidad, por tanto, se utiliza ésta.
+1. Todas las Regiones superan un R2 de 0.92, excepto "Africa" que obtiene un R2 muy bajo (0.16), pero se observa que los valores no tienen mucha variablidad, por tanto, se utiliza ésta.
 
 ```{r}
 model_Africa<-lm(ANAEMIA_RW~year,data=Anaemia_Africa)
@@ -1160,21 +1144,24 @@ unique(dataset$Who_Region)
 unique(dataset$year)
 ```
 
-#### Verificando estadísticas del dataset y los valores Nulls & NAs
+#### Verificando estadísticas del dataset y los valores Nulls & NAs.
+1. Ya no tenemos más valores NAs que estimar, el indicador sale a 0.
 ```{r}
 dataset_num<-select_if(dataset,is.numeric)
 stat_dataset<-stat.desc(dataset_num)
 stat_dataset<-round(stat_dataset,1)
 stat_dataset
 
-stat_dataset[,(stat_dataset["nbr.null",]>0)] #### nos indica las variables con valores Nulls
-stat_dataset[,(stat_dataset["nbr.na",]>0)] #### nos indica las variables con valores NAs
+stat_dataset[,(stat_dataset["nbr.null",]>0)] 
+stat_dataset[,(stat_dataset["nbr.na",]>0)] 
 ```
 
-#### REGRESION PENALIZADA "CRESTA"
-#### Se utiliza CV K-fold(5)
-#### Train: Se estandarizan los datos con "scale=TRUE"
-
+#### SELECCIÓN DE MODELOS: __REGRESION PENALIZADA "CRESTA"__
+1. Se va a aplicar para validar el modelo **"Cross Validation K-fold(5)"**
+2. Se utilizará la función *train* del paquete **caret** con la selección **alpha=0** para el modelo **Cresta**
+3. Se estandarizan los datos con "scale=TRUE" 
+4. La regresión de cresta reduce los coeficientes de regresión, de modo que las variables, con una contribución menor al resultado, tienen sus coeficientes cercanos a cero. La penalización se ajusta utilizando una constante lambda.
+5. Una desventaja es que incluirá todos los coeficientes en el modelo final.
 
 ```{r}
 set.seed(123)
@@ -1195,10 +1182,11 @@ coef(model_ridge$finalModel,model_ridge$bestTune$lambda)
 ```
 
 #### Métricas resultado "Cross-Validation k-fold" para "Cresta"
+1. 
 ```{r}
 Metricas_train_ridge<-data.frame("metrics_train_ridge",Median_RMSE=median(model_ridge$resample$RMSE),
 Median_MAE=median(model_ridge$resample$MAE),
-Median_RSquared=median(model_ridge$resample$Rsquared)) 
+Median_RSquared=median(model_ridge$resample$Rsquared))
 
 Metricas_train_ridge
 ```
