@@ -1334,7 +1334,8 @@ ggplot(data=metricas_train_longer,aes(x=names,y=value, fill=metrics_train))+
   xlab("Métrics")+
   ylab("values")+
   geom_text(aes(label=value),position=position_dodge(width=0.9), vjust=2,size=2)+
-  ggtitle("Comparativa *Métricas* en Cross Validation")+
+  ggtitle("Comparativa *Métricas* en *Cross Validation*
+ para modelos de *Regresión Penalizada*")+
   theme(plot.title = element_text(hjust = 0.5))
 
 ```
@@ -1359,33 +1360,24 @@ ggplot(data=metricas_test_longer,aes(x=names,y=value, fill=metrics_test))+
   xlab("Métrics")+
   ylab("values")+
   geom_text(aes(label=value),position=position_dodge(width=0.9), vjust=2,size=2)+
-  ggtitle("Comparativa *Métricas de Rendimiento* en TEST")+
+  ggtitle("Comparativa *Métricas de Rendimiento* en TEST 
+para modelos de *Regresión Penalizada*")+
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
 
 
-#### Análisis de los supuestos de Regresión lineal con "lm" para las variables identificadas por Lasso
-**** 1.-Linealidad de los datos-> Gráfica Residual vs Fitted-> 
+#### Análisis de los supuestos de Regresión lineal con __"lm"__ para las variables identificadas por Lasso.
+Comentar que el modelo lineal tiene un R2=0.9998 muy bueno, y que tanto el intercept cómo los coeficientes de las variables predictoras varían respecto al "CV k-fold", cómo es lógico. 
 
-Se utiliza para verificar los supuestos de relación lineal.Una línea horizontal sin patrones distintos, es una indicación de una relación lineal. En nuestro caso,prácticamente se mueve entorno a 0, es decir, asumimos linealidad entre predictores y variable resultado.
-
-**** 2.-Normalidad de los residuos-> Gráfica Normal Q-Q-> 
-  
+1. **Linealidad de los datos**-> Gráfica Residual vs Fitted-> 
+Se utiliza para verificar los supuestos de relación lineal.Una línea horizontal sin patrones distintos, es una indicación de una relación lineal. En nuestro caso, prácticamente se mueve entorno a 0, es decir, asumimos linealidad entre predictores y variable resultado.
+2. **Normalidad de los residuos**-> Gráfica Normal Q-Q-> 
 Se utiliza para examinar si los residuos se distribuyen normalmente. Es bueno si los puntos residuales siguen la linea recta discontinua.En nuestro caso la mayoría siguen la línea, excepto los valores atípicos y algunos puntuales.
-  
-**** 3.-Homogeneidad de la varianza residual(homocedasticidad)-> Gráfica Scale-Location-> 
+3. **Homogeneidad de la varianza residual(homocedasticidad)**-> Gráfica Scale-Location-> 
 La línea horizontal con puntos igualmente extendidos es una buena indicación de              homocedasticidad.En nuestros caso el comportamiento es de poca variación (entorno 0.5),       por tanto, asumimos "homocedasticidad"
+4. **Independencia de los términos de error de residuos**. -> Gráfica Scale-Location  
 
-**** 4.-Independencia de los términos de error de residuos. -> Gráfica        Scale-Location->  
-**** 5.-Gráfico Residuals vs Leverage-> Se utiliza para identificar casos influyentes. 
-
-    Valores atípicos-> Las observaciones cuyos residuos estandarizados son mayores que 3 en  valor absoluto son posibles valores atípicos.
-En nuestro caso resaltan 3 puntos más extremos(#1,#9,#34),con resdiduos estandarizados por debajo de 3, excepto el#9 (4.09)
-      
-    Puntos de apalacamiento-> Se puede detectar examinando la estadistica de ".hat". Un valor superior a 2(p+1)/n indicaría una observación con alto apalancamiento.En nuestro caso 2(43+1)/40=1.15. No supera ningún valor el 0,45.
-      
-      Valores influyentes-> Es un valor cuya inclusión o exclusión altera los resultados del análisis de regresión. No todos los valores atípicos influyen en el análisis de regresión. La "distancia de Cook" determina la influencia de un valor. Esta métrica define la influencia como una combinación de apalancamiento y tamaño residual. En nuestro caso ningun punto es influyente, porque están dentro de los límites marcados por la distancia de Cook.
 ```{r}
 lm_model_lasso<-lm(Rate_Mort_Child~Mort_Congenital_rate + Mort_Diarrhoeal_rate+
      Mort_Meningitis_rate+Mort_Other_rate+
@@ -1396,18 +1388,18 @@ par(mar=c(2,2,2,2))
 plot(lm_model_lasso,1)
 plot(lm_model_lasso,2)
 plot(lm_model_lasso,3)
-plot(lm_model_lasso,4)
-plot(lm_model_lasso,5)
-
-
 
 ```
 
 
+#### Análisis de __Valores Influyentes__:
+**Gráfico Residuals vs Leverage**-> Se utiliza para identificar casos influyentes. 
+1. **Valores atípicos**-> Las observaciones cuyos residuos estandarizados son mayores que 3 en  valor absoluto son posibles valores atípicos.En nuestro caso resaltan 3 puntos más extremos(#1,#9,#34),con resdiduos estandarizados por debajo de 3, excepto el#9 (4.09)
+2. **Puntos de apalacamiento**-> Se puede detectar examinando la estadistica de ".hat". Un valor superior a 2(p+1)/n indicaría una observación con alto apalancamiento. En nuestro caso 2(43+1)/40=1.15. No supera ningún valor el 0,45.
+3. **Valores influyentes**-> Es un valor cuya inclusión o exclusión altera los resultados del análisis de regresión. No todos los valores atípicos influyen en el análisis de regresión. La "distancia de Cook" determina la influencia de un valor. Esta métrica define la influencia como una combinación de apalancamiento y tamaño residual. En nuestro caso ningun punto es influyente, porque están dentro de los límites marcados por la distancia de Cook [4/(n-p-1)= 4/(48-43-1) = 1]
 
-
-#### Se decide excluir el registro #9 (valor atípico para ver el comportamiento del "lineal model"), también quitamos la variable "Mort_Meningitis_Rate" por ser poco significativa, y veremos el comportamiento:
 ```{r}
+
 #### Tabla con las métricas del diagnóstico
 model_diag_metrics<-augment(lm_model_lasso)
 model_diag_metrics
@@ -1417,6 +1409,17 @@ top_3_cook<-model_diag_metrics %>%
   top_n(3,wt=.cooksd)
 top_3_cook
 
+par(mar=c(2,2,2,2))
+plot(lm_model_lasso,4)
+plot(lm_model_lasso,5)
+
+```
+
+
+
+#### Se decide excluir el registro #9 (valor atípico) para ver el comportamiento del "lineal model":
+1. Mejora el R2, no hay mucha variación en los coeficientes,los residuos se ajustan bien en la gráfico Normal Q-Q, y el resto de gráficas son similares.
+```{r}
 #train_data[which(rownames(train_data)==1),]
 #Excluyendo los valores extremos del dataset train_data
 train_data_exc<-train_data %>% filter(Rate_Mort_Child!=19.4)
@@ -1424,8 +1427,8 @@ glimpse(train_data_exc)
 
 #### Aplicando "lm"
 lm_model_lasso_exc<-lm(Rate_Mort_Child~Mort_Congenital_rate + Mort_Diarrhoeal_rate+
-                Mort_Other_rate+
-                Mort_Respiratory_rate+Life_expectancy_at_birth, data=train_data_exc)
+     Mort_Meningitis_rate+Mort_Other_rate+
+     Mort_Respiratory_rate+Life_expectancy_at_birth, data=train_data_exc)
 summary(lm_model_lasso_exc)  
 
 par(mar=c(2,2,2,2))
@@ -1436,144 +1439,281 @@ plot(lm_model_lasso_exc,4)
 plot(lm_model_lasso_exc,5)
 ```
 
-#### STEPWISE-leapBackward 
-
-```{r}
-set.seed(123)
-train_control<-trainControl(method = "cv",number=5)
-step_model_Back<-train(Rate_Mort_Child~.,data=train_data,
-                  method="leapBackward",
-                  tuneGrid=data.frame(nvmax=1:5),
-                  trControl=train_control,
-                  scale=TRUE)
-
-warnings()
-step_model_Back$results
-step_model_Back$bestTune
-coef_step_Back<-coef(step_model_Back$finalModel,5)
-data.frame(round(coef_step_Back,3))
-
-predictions_leap_Back<-step_model_Back %>% predict(test_data)
-
-Metricas_leap_Back<-data.frame(Metrics="metrics_test_leap_Back",
-RMSE=RMSE(predictions_leap_Back,test_data$Rate_Mort_Child),
-MAE=MAE(predictions_leap_Back,test_data$Rate_Mort_Child),
-RSquared=caret::R2(predictions_leap_Back,test_data$Rate_Mort_Child))
-  
-Metricas_leap_Back
-
-```
-
-
-#### STEPWISE-leapForward 
-
-```{r}
-set.seed(123)
-train_control<-trainControl(method = "cv",number=5)
-step_model_Forward<-train(Rate_Mort_Child~.,data=train_data,
-                  method="leapForward",
-                  tuneGrid=data.frame(nvmax=1:5),
-                  trControl=train_control,
-                  scale=TRUE)
-
-step_model_Forward$results
-step_model_Forward$bestTune
-coef_leap_Forward<-coef(step_model_Forward$finalModel,5)
-data.frame(round(coef_leap_Forward,3))
-
-predictions_leap_Forward<-step_model_Forward %>% predict(test_data)
-
-Metricas_leap_Forward<-data.frame(Metrics="metrics_test_leap_Forward",
-RMSE=RMSE(predictions_leap_Forward,test_data$Rate_Mort_Child),
-MAE=MAE(predictions_leap_Forward,test_data$Rate_Mort_Child),
-RSquared=caret::R2(predictions_leap_Forward,test_data$Rate_Mort_Child))
-  
-Metricas_leap_Forward
-
-```
-
-
-
-#### STEPWISE-leapSeq 
-
-```{r}
-set.seed(345)
-train_control<-trainControl(method = "cv",number=5)
-step_model_Seq<-train(Rate_Mort_Child~.,data=train_data,
-                  method="leapSeq",
-                  tuneGrid=data.frame(nvmax=1:5),
-                  trControl=train_control,
-                  scale=TRUE)
-step_model_Seq$results
-step_model_Seq$bestTune
-
-coef_Leap_Seq<-coef(step_model_Seq$finalModel,4)
-data.frame(round(coef_Leap_Seq,3))
-
-
-predictions_leap_Seq<-step_model_Seq %>% predict(test_data)
-
-Metricas_leap_Seq<-data.frame(Metrics="metrics_test_leap_seq",
-  RMSE=RMSE(predictions_leap_Seq,test_data$Rate_Mort_Child),
-  MAE=MAE(predictions_leap_Seq,test_data$Rate_Mort_Child),
-  RSquared=caret::R2(predictions_leap_Seq,test_data$Rate_Mort_Child)
-)
-Metricas_leap_Seq
-```
-
-
-```{r}
-rbind(Train_Step_Backward=step_model_Back$results[5,c(2,4,3)],
-Train_Step_Forward=step_model_Forward$results[5,c(2,4,3)],
-Train_Step_Seq=step_model_Seq$results[5,c(2,4,3)])
-
-```
-
-
-```{r}
-rbind(Metricas_leap_Back,
-      Metricas_leap_Forward,
-      Metricas_leap_Seq)
-
-
-```
-
-```{r}
-lm_model_Forward<-lm(Rate_Mort_Child~Response+Mort_Congenital_rate+
-     Mort_Diarrhoeal_rate+Mort_Other_rate+Inm_PCV3_coverage, data=train_data)
-summary(lm_model_Forward)
-plot(lm_model_Forward)
-```
-
-
-#### REGRESIÓN DE **COMPONENTES** PRINCIPALES (PCR)
+#### SELECCIÓN DE MODELOS: __STEPWISE "leapBackward"__
+1. Comienza con todos los predictores en el modelo, y elimina de forma iterativa los predictores menos contributivos, se detiene cuando tiene un modelo dónde todos los predictores son estadísticamente significativos. 
+2. Se debe especificar el número máximo de predictores que se incorporaran al modelo (nvmax=10).
+3. Se utilizará la validación cruzada 5 veces para estimar el error de predicción promedio (RMSE)
+4. Se estandariza las variables con *scale=TRUE*
 
 ```{r}
 set.seed(234)
+train_control<-trainControl(method = "cv",number=5)
+step_model_Back<-train(Rate_Mort_Child~.,data=train_data,
+                       method="leapBackward",
+                       tuneGrid=data.frame(nvmax=1:10),
+                       trControl=train_control,
+                       scale=TRUE)
+
+step_model_Back
+step_model_Back$bestTune
+coef_step_Back<-coef(step_model_Back$finalModel,9)
+data.frame(round(coef_step_Back,3))
+metrics_train<-step_model_Back$results[9,2:4]
+Metricas_train_leapBackward<-data.frame("metrics_train"="metrics_train_leapBackward",
+           Mean_RMSE=metrics_train$RMSE,
+           Mean_MAE=metrics_train$MAE,
+           Mean_RSquared=metrics_train$Rsquared, 
+           Tasa_Error_Train=metrics_train$RMSE/mean(train_data$Rate_Mort_Child))
+
+Metricas_train_leapBackward
+predictions_leap_Back<-step_model_Back %>% predict(test_data)
+Metricas_leapBack_test<-data.frame("metrics_test"="metrics_test_leapBack",
+                               RMSE=RMSE(predictions_leap_Back,test_data$Rate_Mort_Child),
+                               MAE=MAE(predictions_leap_Back,test_data$Rate_Mort_Child),
+                               RSquared=caret::R2(predictions_leap_Back,test_data$Rate_Mort_Child),
+                               Tasa_Error_Test=RMSE(predictions_leap_Back,test_data$Rate_Mort_Child)/mean(test_data$Rate_Mort_Child))
+
+Metricas_leapBack_test
+
+```
+
+
+#### SELECCIÓN DE MODELOS: __STEPWISE "leapForward"__
+1. Comienza sin predictores en el modelo, agregra iterativamente los predictores más contributivos y se detiene cuando la mejora ya no es estadisticamente significativa.
+2. Se debe especificar el número máximo de predictores que se incorporaran al modelo (nvmax=10).
+3. Se utilizará la validación cruzada 5 veces para estimar el error de predicción promedio (RMSE)
+4. Se estandariza las variables con *scale=TRUE*
+
+```{r}
+set.seed(234)
+train_control<-trainControl(method = "cv",number=5)
+step_model_Forward<-train(Rate_Mort_Child~.,data=train_data,
+                       method="leapForward",
+                       tuneGrid=data.frame(nvmax=1:10),
+                       trControl=train_control,
+                       scale=TRUE)
+
+step_model_Forward
+step_model_Forward$bestTune
+coef_step_Forward<-coef(step_model_Forward$finalModel,8)
+data.frame(round(coef_step_Forward,3))
+metrics_train<-step_model_Forward$results[9,2:4]
+Metricas_train_leapForward<-data.frame("metrics_train"="metrics_train_leapForward",
+                                       Mean_RMSE=metrics_train$RMSE,
+                                       Mean_MAE=metrics_train$MAE,
+                                       Mean_RSquared=metrics_train$Rsquared, 
+                                       Tasa_Error_Train=metrics_train$RMSE/mean(train_data$Rate_Mort_Child))
+
+Metricas_train_leapForward
+predictions_leap_Forward<-step_model_Forward %>% predict(test_data)
+Metricas_leapForward_test<-data.frame("metrics_test"="metrics_test_leapForward",
+                                   RMSE=RMSE(predictions_leap_Forward,test_data$Rate_Mort_Child),
+                                   MAE=MAE(predictions_leap_Forward,test_data$Rate_Mort_Child),
+                                   RSquared=caret::R2(predictions_leap_Forward,test_data$Rate_Mort_Child),
+                                   Tasa_Error_Test=RMSE(predictions_leap_Forward,test_data$Rate_Mort_Child)/mean(test_data$Rate_Mort_Child))
+
+Metricas_leapForward_test
+
+```
+
+
+
+#### SELECCIÓN DE MODELOS: __ STEPWISE "leapSeq""__
+1. Es una combinación entre "leapBackward" y "leapForward".Comienza sin predictores y luego agrega secuencialmente los predictores más contribuyentes. Después de agregar cada nueva variable, elimina cualquier variable que ya no proporciona una mejora en el ajuste del modelo.
+2. Se debe especificar el número máximo de predictores que se incorporaran al modelo (nvmax=10).
+3. Se utilizará la validación cruzada 5 veces para estimar el error de predicción promedio (RMSE)
+4. Se estandariza las variables con *scale=TRUE*
+```{r}
+set.seed(345)
+train_control<-trainControl(method = "cv",number=5)
+step_model_leapSeq<-train(Rate_Mort_Child~.,data=train_data,
+                          method="leapSeq",
+                          tuneGrid=data.frame(nvmax=1:10),
+                          trControl=train_control,
+                          scale=TRUE)
+
+step_model_leapSeq
+step_model_leapSeq$bestTune
+coef_step_leapSeq<-coef(step_model_leapSeq$finalModel,7)
+data.frame(round(coef_step_leapSeq,3))
+metrics_train<-step_model_leapSeq$results[9,2:4]
+Metricas_train_leapSeq<-data.frame("metrics_train"="metrics_train_leapSeq",
+                                       Mean_RMSE=metrics_train$RMSE,
+                                       Mean_MAE=metrics_train$MAE,
+                                       Mean_RSquared=metrics_train$Rsquared,                                Tasa_Error_Train=metrics_train$RMSE/mean(train_data$Rate_Mort_Child))
+
+Metricas_train_leapSeq
+predictions_leap_Seq<-step_model_leapSeq %>% predict(test_data)
+Metricas_leapSeq_test<-data.frame("metrics_test"="metrics_test_leapSeq",
+                                      RMSE=RMSE(predictions_leap_Seq,test_data$Rate_Mort_Child),
+                                      MAE=MAE(predictions_leap_Seq,test_data$Rate_Mort_Child),                                RSquared=caret::R2(predictions_leap_Seq,test_data$Rate_Mort_Child),                            Tasa_Error_Test=RMSE(predictions_leap_Seq,test_data$Rate_Mort_Child)/mean(test_data$Rate_Mort_Child))
+
+Metricas_leapSeq_test
+```
+
+
+#### Comparativa **Métricas** en CROSS VALIDATION, para modelos *STEPWISE*
+```{r}
+metricas_train_wide<-data.frame(rbind(Metricas_train_leapBackward,Metricas_train_leapForward,Metricas_train_leapSeq))
+
+metricas_train_wide[,-1]<-round(metricas_train_wide[,-1],4)
+
+metricas_train_wide
+
+metricas_train_longer <- metricas_train_wide %>%
+  pivot_longer(cols="Mean_RMSE":"Tasa_Error_Train",
+               names_to="names",
+               values_to = "value")
+
+ggplot(data=metricas_train_longer,aes(x=names,y=value, fill=metrics_train))+
+  geom_bar(stat="identity",position=position_dodge())+
+  xlab("Métrics")+
+  ylab("values")+
+  geom_text(aes(label=value),position=position_dodge(width=0.9), vjust=2,size=2)+
+  ggtitle("Comparativa *Métricas* en *Cross Validation*
+ para modelos *StepWise*")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+
+#### Comparativa **Métricas de Rendimiento** en TEST, para modelos *STEPWISE*
+```{r}
+metricas_test_wide<-data.frame(rbind(Metricas_leapBack_test,Metricas_leapForward_test,Metricas_leapSeq_test))
+
+metricas_test_wide[,-1]<-round(metricas_test_wide[,-1],4)
+
+metricas_test_wide
+
+metricas_test_longer <- metricas_test_wide %>%
+  pivot_longer(cols="RMSE":"Tasa_Error_Test",
+               names_to="names",
+               values_to = "value")
+
+ggplot(data=metricas_test_longer,aes(x=names,y=value, fill=metrics_test))+
+  geom_bar(stat="identity",position=position_dodge())+
+  xlab("Métrics")+
+  ylab("values")+
+  geom_text(aes(label=value),position=position_dodge(width=0.9), vjust=2,size=2)+
+  ggtitle("Comparativa *Métricas de Rendimiento* en TEST 
+para modelos *STEPWISE*")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+
+```
+
+
+#### GRÁFICO COMPARATIVA TRAIN VS TEST, MODELOS STEPWISE
+
+```{r}
+metricas_train_wide<-data.frame(rbind(Metricas_train_leapBackward,Metricas_train_leapForward,Metricas_train_leapSeq))
+metricas_test_wide<-data.frame(rbind(Metricas_leapBack_test,Metricas_leapForward_test,Metricas_leapSeq_test))
+
+metricas_train_wide
+metricas_test_wide
+```
+
+
+
+#### Análisis de los supuestos de Regresión lineal con __"lm"__ para las variables identificadas por el modelo **Setpwise leapForward**
+```{r}
+lm_model_Forward<-lm(Rate_Mort_Child~Response+Mort_Congenital_rate+
+                       Mort_Diarrhoeal_rate+Mort_Other_rate+
+                       Mort_Respiratory_rate+Inm_DTP3_coverage+
+                       Inm_Hep3_coverage+Inm_PCV3_coverage, data=train_data)
+summary(lm_model_Forward)
+par(mar=c(2,2,2,2))
+plot(lm_model_Forward,1)
+plot(lm_model_Forward,2)
+plot(lm_model_Forward,3)
+plot(lm_model_Forward,4)
+plot(lm_model_Forward,5)
+```
+
+
+#### Transformación logarítmica de la variable objetivo para corregir la gráfica Normal Q-Q
+```{r}
+lm_model_Forward<-lm(log(Rate_Mort_Child)~Response+Mort_Congenital_rate+
+                      Mort_Diarrhoeal_rate+Mort_Other_rate+
+                      Mort_Respiratory_rate+Inm_DTP3_coverage+
+                      Inm_Hep3_coverage+Inm_PCV3_coverage, data=train_data)
+summary(lm_model_Forward)
+par(mar=c(2,2,2,2))
+plot(lm_model_Forward,1)
+plot(lm_model_Forward,2)
+plot(lm_model_Forward,3)
+plot(lm_model_Forward,4)
+plot(lm_model_Forward,5)
+```
+
+
+
+
+#### SELECCIÓN DE MODELOS: REGRESIÓN DE __**COMPONENTES PRINCIPALES**__ (PCR)
+1. La regresión de componentes principales primero aplica el "Ánalisis de componentes principales" en el conjunto de datos para resumir las variables predictoras originales en pocas variables nuevas, también conocidas como componenetes principales (PC), que son una combinación lineal de los datos originales.
+2. Un inconveniente de la PCR es que no tenemos garantía de que las componentes principales seleccionados estén asociados con el resultado. La selección de componentes principales para incorporar en el modelo no está supervisada por la variable resultado.
+3. Se utiliza *Cross Validation* para identificar automáticamente el número óptimo de componentes principales **ncomp**
+4. Con la opción *tuneLength* probaremos 9 valores diferentes del parámetro de ajuste *ncomp*.
+5. La opción *scale=TRUE* para estandarizar las variables
+6. Nuestro análisis prueba que al elegir 10 componentes principales (ncomp=10) se obtiene el menor error de predicción RMSE. El 97,99% de la variación contenida en los predictores son capturados por 10 componentes principales. Además captura el 99,87% de la información de la variable resultado.
+7. Se muestra gráfico con el % de Importancia de las variables.Si endo las variables por encima de un 98% las siguientes:
+>.- Mort_Diarrhoeal_rate
+>.- Mort_Asphyxia_rate
+>.- Mort_Respiratory_rate
+>.- Mort_Other_rate
+>.- Life_expectancy_at_birth
+>.- Who_Región
+>.- ANAEMIA_Children5
+
+```{r}
+set.seed(278)
 model_pcr<-train(Rate_Mort_Child~., data=train_data,
                  method="pcr",
                  scale=TRUE,
                  trControl=trainControl("cv",number=5),
-                 tuneLength=9)
-plot(model_pcr)
+                 tuneLength=10)
+plot(model_pcr,main="Componentes vs RMSE")
 
 model_pcr$bestTune
-
 summary(model_pcr)
+model_pcr$results
+coef(model_pcr$finalModel,10)
+metrics_train<-model_pcr$results[9,2:4]
+Metricas_train_PCR<-data.frame("metrics_train"="metrics_train_PCR",
+                               Mean_RMSE=metrics_train$RMSE,
+                               Mean_MAE=metrics_train$MAE,
+                               Mean_RSquared=metrics_train$Rsquared,
+                               Tasa_Error_Train=metrics_train$RMSE/mean(train_data$Rate_Mort_Child))
 
-predic_model_pcr<-model_pcr %>% predict(test_data)
+predictions_PCR<-model_pcr%>% predict(test_data)
+Metricas_PCR_test<-data.frame("metrics_test"="metrics_test_PCR",
+                                  RMSE=RMSE(predictions_PCR,test_data$Rate_Mort_Child),
+                                  MAE=MAE(predictions_PCR,test_data$Rate_Mort_Child),
+                                  RSquared=caret::R2(predictions_PCR,test_data$Rate_Mort_Child), 
+                                  Tasa_Error_Test=RMSE(predictions_PCR,test_data$Rate_Mort_Child)/mean(test_data$Rate_Mort_Child))
+Metricas_PCR_test
 
-data_frame(RMSE=caret::RMSE(predic_model_pcr,test_data$Rate_Mort_Child),
-           MAE= caret::MAE(predic_model_pcr,test_data$Rate_Mort_Child),
-           RSquare=caret::R2(predic_model_pcr,test_data$Rate_Mort_Child))
 
-
-plot(varImp(model_pcr),15,main="PCR")
+plot(varImp(model_pcr),15,main="% Importancia Variables")
 
 ```
 
 
-#### REGRESIÓN DE MÍNIMOS CUADRADOS PARCIALES (PLS)
+#### SELECCIÓN DE MODELOS: REGRESIÓN DE MÍNIMOS CUADRADOS PARCIALES (PLS)
+1. La regresión de componentes principales primero aplica el "Ánalisis de componentes principales" en el conjunto de datos para resumir las variables predictoras originales en pocas variables nuevas, también conocidas como componenetes principales (PC), que son una combinación lineal de los datos originales.
+2. Un inconveniente de la PCR es que no tenemos garantía de que las componentes principales seleccionados estén asociados con el resultado. La selección de componentes principales para incorporar en el modelo no está supervisada por la variable resultado.
+3. Se utiliza *Cross Validation* para identificar automáticamente el número óptimo de componentes principales **ncomp**
+4. Con la opción *tuneLength* probaremos 9 valores diferentes del parámetro de ajuste *ncomp*.
+5. La opción *scale=TRUE* para estandarizar las variables
+6. Nuestro análisis prueba que al elegir 10 componentes principales (ncomp=10) se obtiene el menor error de predicción RMSE. El 97,99% de la variación contenida en los predictores son capturados por 10 componentes principales. Además captura el 99,87% de la información de la variable resultado.
+7. Se muestra gráfico con el % de Importancia de las variables.Si endo las variables por encima de un 98% las siguientes:
+>.- Mort_Diarrhoeal_rate
+>.- Mort_Asphyxia_rate
+>.- Mort_Respiratory_rate
+>.- Mort_Other_rate
+>.- Life_expectancy_at_birth
+>.- Who_Región
+>.- ANAEMIA_Children5
 
 ```{r}
 set.seed(123)
