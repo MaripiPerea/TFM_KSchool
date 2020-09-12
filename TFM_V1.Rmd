@@ -1170,7 +1170,7 @@ training_samples<-dataset$Rate_Mort_Child %>%
 train_data<-dataset[training_samples,]
 test_data<-dataset[-training_samples,]
 
-lambda<-10^seq(-3,3,length=100)
+lambda<-seq(-3,3,length=100)
 set.seed(123)
 model_ridge<- train(
   Rate_Mort_Child~.,data=train_data,method="glmnet",
@@ -1178,38 +1178,49 @@ model_ridge<- train(
   scale=TRUE,
   tuneGrid=expand.grid(alpha=0,lambda=lambda)
 )
+
+data.frame("best_lambda", value=model_ridge$bestTune$lambda)
 coef(model_ridge$finalModel,model_ridge$bestTune$lambda)
 ```
 
 #### Métricas resultado "Cross-Validation k-fold" para "Cresta"
-1. 
+1. Se observa que el R2 es bueno (0.98), pero el RMSE y el MAE, son muy altos, obteniendo una Tasa de Error en Train del 23%.
 ```{r}
-Metricas_train_ridge<-data.frame("metrics_train_ridge",Median_RMSE=median(model_ridge$resample$RMSE),
-Median_MAE=median(model_ridge$resample$MAE),
-Median_RSquared=median(model_ridge$resample$Rsquared))
+Metricas_train_ridge<-data.frame("metrics_train"="metrics_train_ridge",Mean_RMSE=mean(model_ridge$resample$RMSE),
+Mean_MAE=mean(model_ridge$resample$MAE),
+Mean_RSquared=mean(model_ridge$resample$Rsquared),
+Tasa_Error_Train=mean(model_ridge$resample$RMSE)/mean(train_data$Rate_Mort_Child))
+
 
 Metricas_train_ridge
 ```
 
-#### Métricas de las predicciones para test.
+#### Métricas de las predicciones para test en Regression "Cresta"
+1. Tasa de Error para test, muy elevada casi 26%. Con RMSE y MAE, también muy altos. Y R2 bueno.
+2. Comparando train y test, observamos que no hay overfitting.
 ```{r}
 
 predictions_ridge<-model_ridge %>% predict(test_data)
-Metricas_ridge_test<-data.frame("metrics_test_ridge",
+Metricas_ridge_test<-data.frame("metrics_test"="metrics_test_ridge",
   RMSE=RMSE(predictions_ridge,test_data$Rate_Mort_Child),
   MAE=MAE(predictions_ridge,test_data$Rate_Mort_Child),
-  Rsquare=caret::R2(predictions_ridge,test_data$Rate_Mort_Child)
+  Rsquare=caret::R2(predictions_ridge,test_data$Rate_Mort_Child),
+  Tasa_Error_Test=RMSE(predictions_ridge,test_data$Rate_Mort_Child)/mean(test_data$Rate_Mort_Child)
 )
 Metricas_ridge_test
 ```
 
 
-#### REGRESION PENALIZADA "LASSO"
-#### Se utiliza CV K-fold(5)
-#### Train: Se estandarizan los datos con "scale=TRUE"
+#### SELECCIÓN DE MODELOS: __REGRESION PENALIZADA "LASSO"__
+1. Se va a aplicar para validar el modelo **"Cross Validation K-fold(5)"**
+2. Se utilizará la función *train* del paquete **caret** con la selección **alpha=1** para el modelo **Lasso**
+3. Se estandarizan los datos con "scale=TRUE" 
+4. La regresión de Lasso tiene el efecto de forzar que algunas estimaciones de coeficientes de contribución menor, sean exactamente iguales a 0.
+5. La ventaja es que producirá modelos más simples e interpretables que la regresión de cresta.
+6. El modelo incluiría estas variables: **Mort_Congenital_rate + Mort_Diarrhoeal_rate + Mort_Meningitis_rate + Mort_Other_rate + Mort_Respiratory_rate + Life_expectancy_at_birth**
 
 ```{r}
-lambda<-10^seq(-3,3,length=100)
+lambda<-seq(-3,3,length=100)
 set.seed(123)
 model_lasso<- train(
   Rate_Mort_Child~.,data=train_data,method="glmnet",
@@ -1217,38 +1228,50 @@ model_lasso<- train(
   scale=TRUE,
   tuneGrid=expand.grid(alpha=1,lambda=lambda)
 )
+
+data.frame("best_lambda", value=model_lasso$bestTune$lambda)
+
 coef(model_lasso$finalModel,model_lasso$bestTune$lambda)
+
 ```
 
 #### Métricas resultado "Cross-Validation k-fold" para "Lasso"
+1. Valores mucho mejores que para la regresión con Cresta, la tasa de Error no supera el 2.5%, con un R2 de 99.95%, y unos valores de RMSE y MAE no superiores a 1.
 ```{r}
-Metricas_train_lasso<-data.frame("metrics_train_lasso",Median_RMSE=median(model_lasso$resample$RMSE),
-Median_MAE=median(model_lasso$resample$MAE),
-Median_RSquared=median(model_lasso$resample$Rsquared)) 
+Metricas_train_lasso<-data.frame("metrics_train"="metrics_train_lasso",Mean_RMSE=mean(model_lasso$resample$RMSE),Mean_MAE=mean(model_lasso$resample$MAE),
+Mean_RSquared=mean(model_lasso$resample$Rsquared),
+Tasa_Error_Train=mean(model_lasso$resample$RMSE)/mean(train_data$Rate_Mort_Child)) 
 
 Metricas_train_lasso
 ```
 
 
 
-#### Métricas de las predicciones para test.
+#### Métricas de las predicciones para test "Lasso"
+1. Valores muy similares a los de train, lo que quieres decir que no tenemos overfitting.
 ```{r}
 predictions_lasso<-model_lasso %>% predict(test_data)
-Metricas_lasso_test<-data.frame("metrics_test_lasso",
+Metricas_lasso_test<-data.frame("metrics_test"="metrics_test_lasso",
   RMSE=RMSE(predictions_lasso,test_data$Rate_Mort_Child),
   MAE=MAE(predictions_lasso,test_data$Rate_Mort_Child),
-  Rsquare=caret::R2(predictions_lasso,test_data$Rate_Mort_Child)
+  Rsquare=caret::R2(predictions_lasso,test_data$Rate_Mort_Child),
+  Tasa_Error_Test=RMSE(predictions_lasso,test_data$Rate_Mort_Child)/mean(test_data$Rate_Mort_Child)
 )
 Metricas_lasso_test
 ```
 
 
-#### REGRESION PENALIZADA "NET ELASTIC"
-#### Se utiliza CV K-fold(5)
-#### Train: Se estandarizan los datos con "scale=TRUE"
+#### SELECCIÓN DE MODELOS: __REGRESION PENALIZADA "NET ELASTIC"__
+1. Se va a aplicar para validar el modelo **"Cross Validation K-fold(5)"**
+2. Se utilizará la función *train* del paquete **caret** con **tuneLength=10** para el modelo **Net_Elastic**
+3. Se estandarizan los datos con "scale=TRUE" 
+4. Produce un modelo regresión penalizado tanto por la L1-Norma y L2-Norma, para reducir los coeficientes (como en la regresión de Cresta) y establecer algunos coeficientes a 0 (como en la regresión de Lasso)
+5. Con el paquete caret y la opción *tuneLength=10* se seleccionarán automáticamente los mejores parámetros de ajuste alpha y y lambda (combinaciones de 10 valores diferentes de alpha y lambda). Los mejores son los que minimizan el error de la validación cruzada.
+6. El warning **There were missing values in resampled performance measures** que sale es para la combinación de algunos parámetros de alpha y lambda(se muestra el data.frame con los NaN).
+7. Alpha=0.4 y lambda=1.28 son los parámetros que minimizan el error de validación cruzada.
+8. El modelo final incluiría no sólo variables de **"Mort_Rate_Cause"**, también del grupo **"International_Health_Regulations"**, del grupo **"Inmunization"**, **"Child_Malnutrition"** y ** "Life_Expectancy"**
 
 ```{r}
-lambda<-10^seq(-3,3,length=100)
 set.seed(123)
 model_elastic<- train(
   Rate_Mort_Child~.,data=train_data,method="glmnet",
@@ -1256,14 +1279,20 @@ model_elastic<- train(
   scale=TRUE,
   tuneLength=10
 )
+data.frame("best_parameter", model_elastic$bestTune)
+
 coef(model_elastic$finalModel,model_elastic$bestTune$lambda)
+
+elas_results<-model_elastic$results
+elas_results %>% filter(elas_results$Rsquared=="NaN")
 ```
 
 #### Métricas resultado "Cross-Validation k-fold" para "Net Elastic"
+1. Tasa de Error medio bastante buena (2.9%), algo superior a Lasso, cn un R2 algo inferior.
 ```{r}
-Metricas_train_elastic<-data.frame("metrics_train_elastic",Median_RMSE=median(model_elastic$resample$RMSE),
-Median_MAE=median(model_elastic$resample$MAE),
-Median_RSquared=median(model_elastic$resample$Rsquared)) 
+Metricas_train_elastic<-data.frame("metrics_train"="metrics_train_elastic",Mean_RMSE=mean(model_elastic$resample$RMSE),Mean_MAE=mean(model_elastic$resample$MAE),
+Mean_RSquared=mean(model_elastic$resample$Rsquared),
+Tasa_Error_Train=mean(model_elastic$resample$RMSE)/mean(train_data$Rate_Mort_Child)) 
 
 Metricas_train_elastic
 ```
@@ -1271,44 +1300,42 @@ Metricas_train_elastic
 
 
 #### Métricas de las predicciones para test.
+1. Valores muy similares a los de train, no tenemos overfitting.
 ```{r}
 predictions_elastic<-model_elastic %>% predict(test_data)
-Metricas_elastic_test<-data.frame("metrics_test_elastic",
+Metricas_elastic_test<-data.frame("metrics_test"="metrics_test_elastic",
   RMSE=RMSE(predictions_elastic,test_data$Rate_Mort_Child),
   MAE=MAE(predictions_elastic,test_data$Rate_Mort_Child),
-  Rsquare=caret::R2(predictions_elastic,test_data$Rate_Mort_Child)
+  Rsquare=caret::R2(predictions_elastic,test_data$Rate_Mort_Child),
+  Tasa_Error_Test=RMSE(predictions_elastic,test_data$Rate_Mort_Child)/mean(test_data$Rate_Mort_Child)
 )
 Metricas_elastic_test
 ```
 
 
 
-#### COMPARATIVA RENDIMIENTO DEL MODELO "MEDIANA DE LAS MÉTRICAS" en "Cross validation k-fold"(train/validation)
+#### COMPARATIVA RENDIMIENTO DEL MODELO "MEDIA DE LAS MÉTRICAS" en "Cross validation k-fold"
+1. La regresion penalizada de Lasso es la que mejores métricas tiene, muy seguida de "Net-Elastic" 
 
 ```{r}
-models<-list(model_ridge=model_ridge,model_lasso=model_lasso,model_elastic=model_elastic)
+metricas_train_wide<-data.frame(rbind(Metricas_train_ridge,Metricas_train_lasso,Metricas_train_elastic))
 
-Metricas_train_model<-resamples(models) %>% summary(perfNames="")
+metricas_train_wide[,-1]<-round(metricas_train_wide[,-1],4)
 
-met_train<-data.frame(cbind(Median_RMSE=((Metricas_train_model$statistics$RMSE)[,3]),
-                     Median_MAE=((Metricas_train_model$statistics$MAE)[,3]),
-                     Median_Rsquared=((Metricas_train_model$statistics$Rsquared)[,3])))
+metricas_train_wide
 
-type_model<-rownames(met_train)
-met_train<-data.frame(type_model,Median_RMSE=round(met_train$Median_RMSE,4),
-                      Median_MAE=round(met_train$Median_MAE,4),
-                      Median_Rsquared=round(met_train$Median_Rsquared,4))
-met_train
-met_longer <- met_train%>%
-  pivot_longer(cols=`Median_RMSE`:"Median_Rsquared",
-               names_to="nom_met",
-               values_to = "valor_met")
+metricas_train_longer <- metricas_train_wide %>%
+  pivot_longer(cols="Mean_RMSE":"Tasa_Error_Train",
+               names_to="names",
+               values_to = "value")
 
-ggplot(data=met_longer,aes(x=nom_met,y=valor_met,fill=type_model))+
+ggplot(data=metricas_train_longer,aes(x=names,y=value, fill=metrics_train))+
   geom_bar(stat="identity",position=position_dodge())+
-  xlab("Métricas")+
-  ylab("valores")+
-  geom_text(aes(label=valor_met), position=position_dodge(width=0.9), vjust=2,size=2)
+  xlab("Métrics")+
+  ylab("values")+
+  geom_text(aes(label=value),position=position_dodge(width=0.9), vjust=2,size=2)+
+  ggtitle("Comparativa *Métricas* en Cross Validation")+
+  theme(plot.title = element_text(hjust = 0.5))
 
 ```
 
@@ -1316,27 +1343,24 @@ ggplot(data=met_longer,aes(x=nom_met,y=valor_met,fill=type_model))+
 #### COMPARATIVA MÉTRICAS "MODEL PREDICTION PERFORMANCE" (TEST)
 
 ```{r}
-met_test<-data.frame(rbind(Ridge_test=round(Metricas_ridge_test[,2:4],4),
-                 Lasso_test=round(Metricas_lasso_test[,2:4],4),
-                 Elastic_test=round(Metricas_elastic_test[,2:4],4)
-                 ))
+metricas_test_wide<-data.frame(rbind(Metricas_ridge_test,Metricas_lasso_test,Metricas_elastic_test))
 
-met_test
-type_model<-rownames(met_test)
-met_test<-data.frame(type_model,RMSE=met_test$RMSE,
-                     MAE=met_test$MAE,
-                     RSquare=met_test$Rsquare)
+metricas_test_wide[,-1]<-round(metricas_test_wide[,-1],4)
 
-met_longer <- met_test %>%
-  pivot_longer(cols=`RMSE`:`RSquare`,
-               names_to="nom_met",
-               values_to = "valor_met")
+metricas_test_wide
 
-ggplot(data=met_longer,aes(x=nom_met,y=valor_met,fill=type_model))+
+metricas_test_longer <- metricas_test_wide %>%
+  pivot_longer(cols="RMSE":"Tasa_Error_Test",
+               names_to="names",
+               values_to = "value")
+
+ggplot(data=metricas_test_longer,aes(x=names,y=value, fill=metrics_test))+
   geom_bar(stat="identity",position=position_dodge())+
-  xlab("Métricas")+
-  ylab("valores")+
-  geom_text(aes(label=valor_met), position=position_dodge(width=0.9), vjust=2,size=2)
+  xlab("Métrics")+
+  ylab("values")+
+  geom_text(aes(label=value),position=position_dodge(width=0.9), vjust=2,size=2)+
+  ggtitle("Comparativa *Métricas de Rendimiento* en TEST")+
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 
 
