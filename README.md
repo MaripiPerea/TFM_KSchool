@@ -1,6 +1,8 @@
 # __*CHILD MORTALITY RATE*__
 # 1.- INTRODUCCIÓN
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Foto_Presentaci%C3%B3n.png?raw=true)
+![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/1Rplot_CM_Region.png?raw=true)
+
 # 2.- OBJETIVO
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Diagrama_M%C3%A9tricas.png?raw=true)
 
