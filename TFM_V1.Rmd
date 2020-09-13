@@ -1394,6 +1394,7 @@ plot(lm_model_lasso,3)
 
 #### Análisis de __Valores Influyentes__:
 **Gráfico Residuals vs Leverage**-> Se utiliza para identificar casos influyentes. 
+
 1. **Valores atípicos**-> Las observaciones cuyos residuos estandarizados son mayores que 3 en  valor absoluto son posibles valores atípicos.En nuestro caso resaltan 3 puntos más extremos(#1,#9,#34),con resdiduos estandarizados por debajo de 3, excepto el#9 (4.09)
 2. **Puntos de apalacamiento**-> Se puede detectar examinando la estadistica de ".hat". Un valor superior a 2(p+1)/n indicaría una observación con alto apalancamiento. En nuestro caso 2(43+1)/40=1.15. No supera ningún valor el 0,45.
 3. **Valores influyentes**-> Es un valor cuya inclusión o exclusión altera los resultados del análisis de regresión. No todos los valores atípicos influyen en el análisis de regresión. La "distancia de Cook" determina la influencia de un valor. Esta métrica define la influencia como una combinación de apalancamiento y tamaño residual. En nuestro caso ningun punto es influyente, porque están dentro de los límites marcados por la distancia de Cook [4/(n-p-1)= 4/(48-43-1) = 1]
@@ -1519,10 +1520,12 @@ Metricas_leapForward_test
 
 
 #### SELECCIÓN DE MODELOS: __ STEPWISE "leapSeq""__
+
 1. Es una combinación entre "leapBackward" y "leapForward".Comienza sin predictores y luego agrega secuencialmente los predictores más contribuyentes. Después de agregar cada nueva variable, elimina cualquier variable que ya no proporciona una mejora en el ajuste del modelo.
 2. Se debe especificar el número máximo de predictores que se incorporaran al modelo (nvmax=10).
 3. Se utilizará la validación cruzada 5 veces para estimar el error de predicción promedio (RMSE)
 4. Se estandariza las variables con *scale=TRUE*
+
 ```{r}
 set.seed(345)
 train_control<-trainControl(method = "cv",number=5)
@@ -1647,6 +1650,118 @@ plot(lm_model_Forward,5)
 ```
 
 
+#### SELECCIÓN DE MODELOS: __**REGSUBSETS**__
+
+```{r}
+models_reg<- regsubsets(Rate_Mort_Child~.,data=train_data,nvmax=10)
+res_sum<-summary(models_reg)
+data.frame(
+  Adj.R2=which.max(res_sum$adjr2),
+  CP=which.min(res_sum$cp),
+  BIC=which.min(res_sum$bic)
+)
+coef(models_reg,10)
+
+#### Función para acceder a la fórmula de cualquier modelo "regsubsets"
+get_model_formula<-function(id,object,outcome){
+  models<-summary(object)$which[id,-1]
+  predictors<-names(which(models==TRUE))
+  predictors<-paste(predictors,collapse="+")
+  as.formula(paste0(outcome,"~",predictors))
+}
+model_formula=get_model_formula(10,models_reg,"Rate_Mort_Child")
+model_formula
+```
+
+#### __**REGSUBSETS**__ aplicando **CROSS VALIDATION K-FOLD** 
+```{r}
+
+#### Función para obtener el error RMSE de validación cruzada (CV)
+get_cv_error_RMSE<-function(model_formula,data){
+  set.seed(1)
+  train_control<-trainControl(method="cv",
+                              number = 5)
+  cv<-train(model_formula,data=train_data,method="lm",
+                trControl=train_control)
+  cv$results$RMSE
+}
+#### Compute cross-validation error RMSE
+model_ids<-1:10
+cv_errors_RMSE<-map(model_ids,get_model_formula,models_reg,"Rate_Mort_Child") %>%
+  map(get_cv_error_RMSE,data=train_data) %>%
+  unlist()
+
+#### Función para obtener el error MAE de validación cruzada (CV)
+get_cv_error_MAE<-function(model_formula,data){
+  set.seed(1)
+  train_control<-trainControl(method="cv",
+                              number = 5)
+  cv<-train(model_formula,data=train_data,method="lm",
+            trControl=train_control)
+  cv$results$MAE
+}
+#### Compute cross-validation error MAE
+model_ids<-1:10
+cv_errors_MAE<-map(model_ids,get_model_formula,models_reg,"Rate_Mort_Child") %>%
+  map(get_cv_error_MAE,data=train_data) %>%
+  unlist()
+#### Función para obtener el R2 de validación cruzada (CV)
+get_cv_error_R2<-function(model_formula,data){
+  set.seed(1)
+  train_control<-trainControl(method="cv",
+                              number = 5)
+  cv<-train(model_formula,data=train_data,method="lm",
+            trControl=train_control)
+  cv$results$Rsquared
+} 
+#### Compute cross-validation R2
+model_ids<-1:10
+cv_errors_R2<-map(model_ids,get_model_formula,models_reg,"Rate_Mort_Child") %>%
+  map(get_cv_error_R2,data=train_data) %>%
+  unlist()
+
+model_best_regsubsets<-lm(Rate_Mort_Child ~ Surveillance + Mort_Congenital_rate + Mort_Diarrhoeal_rate + 
+     Mort_HIVAIDS_dis_rate + Mort_Malaria_rate + Mort_Other_rate + 
+     Mort_Prematurity_rate + Inm_PCV3_coverage + Maternal_Mort_Rate + 
+     ANAEMIA_PW, data=train_data)
+
+
+Metricas_train_best_regsubsets<-data.frame("metrics_train"="metrics_train_best_regsubsets",
+                                        Mean_RMSE=cv_errors_RMSE[which.min(cv_errors_RMSE)],
+                                        Mean_MAE=cv_errors_MAE[which.min(cv_errors_MAE)],
+                                        Mean_RSquared=cv_errors_R2[which.max(cv_errors_R2)], 
+                                        Tasa_Error_Train=cv_errors_RMSE[which.min(cv_errors_RMSE)]/mean(train_data$Rate_Mort_Child))
+
+Metricas_train_best_regsubsets
+
+predictions_best_regsubsets<-model_best_regsubsets %>% predict(test_data)
+
+Metricas_best_regsubsets_test<-data.frame("metrics_test"="metrics_test_regsubsets",
+                                   RMSE=RMSE(predictions_best_regsubsets,test_data$Rate_Mort_Child),
+                                   MAE=MAE(predictions_best_regsubsets,test_data$Rate_Mort_Child),
+                                   RSquared=caret::R2(predictions_best_regsubsets,test_data$Rate_Mort_Child),
+                                   Tasa_Error_Test=RMSE(predictions_best_regsubsets,test_data$Rate_Mort_Child)/mean(test_data$Rate_Mort_Child))
+
+Metricas_best_regsubsets_test
+
+```
+
+
+```{r}
+model_best_regsubsets
+summary(model_best_regsubsets)
+
+par(mar=c(2,2,2,2))
+plot(model_best_regsubsets,1)
+plot(model_best_regsubsets,2)
+plot(model_best_regsubsets,3)
+plot(model_best_regsubsets,4)
+plot(model_best_regsubsets,5)
+
+```
+
+
+
 
 
 #### SELECCIÓN DE MODELOS: REGRESIÓN DE __**COMPONENTES PRINCIPALES**__ (PCR)
@@ -1684,7 +1799,7 @@ Metricas_train_PCR<-data.frame("metrics_train"="metrics_train_PCR",
                                Mean_MAE=metrics_train$MAE,
                                Mean_RSquared=metrics_train$Rsquared,
                                Tasa_Error_Train=metrics_train$RMSE/mean(train_data$Rate_Mort_Child))
-
+Metricas_train_PCR
 predictions_PCR<-model_pcr%>% predict(test_data)
 Metricas_PCR_test<-data.frame("metrics_test"="metrics_test_PCR",
                                   RMSE=RMSE(predictions_PCR,test_data$Rate_Mort_Child),
@@ -1699,21 +1814,24 @@ plot(varImp(model_pcr),15,main="% Importancia Variables")
 ```
 
 
-#### SELECCIÓN DE MODELOS: REGRESIÓN DE MÍNIMOS CUADRADOS PARCIALES (PLS)
+#### SELECCIÓN DE MODELOS: REGRESIÓN DE __**MÍNIMOS CUADRADOS PARCIALES**__ (PLS)
 1. La regresión de componentes principales primero aplica el "Ánalisis de componentes principales" en el conjunto de datos para resumir las variables predictoras originales en pocas variables nuevas, también conocidas como componenetes principales (PC), que son una combinación lineal de los datos originales.
 2. Un inconveniente de la PCR es que no tenemos garantía de que las componentes principales seleccionados estén asociados con el resultado. La selección de componentes principales para incorporar en el modelo no está supervisada por la variable resultado.
 3. Se utiliza *Cross Validation* para identificar automáticamente el número óptimo de componentes principales **ncomp**
 4. Con la opción *tuneLength* probaremos 9 valores diferentes del parámetro de ajuste *ncomp*.
 5. La opción *scale=TRUE* para estandarizar las variables
 6. Nuestro análisis prueba que al elegir 10 componentes principales (ncomp=10) se obtiene el menor error de predicción RMSE. El 97,99% de la variación contenida en los predictores son capturados por 10 componentes principales. Además captura el 99,87% de la información de la variable resultado.
-7. Se muestra gráfico con el % de Importancia de las variables.Si endo las variables por encima de un 98% las siguientes:
+7. Se muestra gráfico con el % de Importancia de las variables.Si endo las variables por encima de un 96% las siguientes:
 >.- Mort_Diarrhoeal_rate
->.- Mort_Asphyxia_rate
 >.- Mort_Respiratory_rate
 >.- Mort_Other_rate
 >.- Life_expectancy_at_birth
->.- Who_Región
->.- ANAEMIA_Children5
+>.- Mort_Asphyxia_rate
+>.- Mort_Meningitis_Rate
+>.- Inm_MCV1_1st_coverage
+>.- Inm_DTP3_coverage
+>.- Maternal_Mort_Rate
+>.- Inm_Pol3_coverage
 
 ```{r}
 set.seed(123)
@@ -1722,28 +1840,99 @@ model_pls<-train(Rate_Mort_Child~., data=train_data,
                  scale=TRUE,
                  trControl=trainControl("cv",number=5),
                  tuneLength=10)
-plot(model_pls)
+plot(model_pls,main="Componentes vs RMSE")
+
 model_pls$bestTune
-summary(model_pls$finalModel)
+summary(model_pls)
+model_pls$results
+coef(model_pls$finalModel,10)
+metrics_train<-model_pls$results[10,2:4]
+Metricas_train_PLS<-data.frame("metrics_train"="metrics_train_PLS",
+                               Mean_RMSE=metrics_train$RMSE,
+                               Mean_MAE=metrics_train$MAE,
+                               Mean_RSquared=metrics_train$Rsquared,
+                               Tasa_Error_Train=metrics_train$RMSE/mean(train_data$Rate_Mort_Child))
+Metricas_train_PLS
+predictions_PLS<-model_pls%>% predict(test_data)
+Metricas_PLS_test<-data.frame("metrics_test"="metrics_test_PLS",
+                              RMSE=RMSE(predictions_PLS,test_data$Rate_Mort_Child),
+                              MAE=MAE(predictions_PLS,test_data$Rate_Mort_Child),
+                              RSquared=caret::R2(predictions_PLS,test_data$Rate_Mort_Child), 
+                            Tasa_Error_Test=RMSE(predictions_PLS,test_data$Rate_Mort_Child)/mean(test_data$Rate_Mort_Child))
+Metricas_PLS_test
 
-predic_model_pls<-model_pls %>% predict(test_data)
 
-data_frame(RMSE=caret::RMSE(predic_model_pls,test_data$Rate_Mort_Child),
-           MAE= caret::MAE(predic_model_pls,test_data$Rate_Mort_Child),
-           RSquare=caret::R2(predic_model_pls,test_data$Rate_Mort_Child))
-
-
-plot(coef(model_pls$finalModel))
-plot(model_pls$finalModel)
-plot(varImp(model_pls),15,main="PLS")
+plot(varImp(model_pls),15,main="% Importancia Variables")
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+#### MACHINE LEARNING: __**K-Nearest Neighbors**__ **KNN**
+
+```{r}
+set.seed(123)
+model_KNN<-train(Rate_Mort_Child~.,data=train_data,
+             method="knn",
+             trControl=trainControl("cv",number = 5),
+             preProcess=c("center","scale"),
+             metric=c("RMSE"),
+             tuneLength=10)
+plot(model_KNN,main="KNN vs RMSE")
+model_KNN$bestTune
+metrics_train<-model_KNN$results[1,2:4]
+Metricas_train_KNN<-data.frame("metrics_train"="metrics_train_KNN",
+                               Mean_RMSE=metrics_train$RMSE,
+                               Mean_MAE=metrics_train$MAE,
+                               Mean_RSquared=metrics_train$Rsquared,
+                               Tasa_Error_Train=metrics_train$RMSE/mean(train_data$Rate_Mort_Child))
+Metricas_train_KNN
+
+predictions_KNN<-model_KNN %>% predict(test_data)
+Metricas_KNN_test<-data.frame("metrics_test"="metrics_test_KNN",
+                              RMSE=RMSE(predictions_KNN,test_data$Rate_Mort_Child),
+                              MAE=MAE(predictions_KNN,test_data$Rate_Mort_Child),
+                              RSquared=caret::R2(predictions_KNN,test_data$Rate_Mort_Child), 
+                              Tasa_Error_Test=RMSE(predictions_KNN,test_data$Rate_Mort_Child)/mean(test_data$Rate_Mort_Child))
+Metricas_KNN_test
+
+ggplot(varImp(model_KNN))
+
+
+
+```
+
+#### MACHINE LEARNING: __**RAMDOM FOREST**__ **RF**
+
+```{r}
+set.seed(123)
+model_random_forest<-train(Rate_Mort_Child~.,
+                           data=train_data,
+                           method="rf",
+                           trControl=trainControl("cv",number=5),
+                           importance=TRUE)
+model_random_forest$bestTune
+model_random_forest$results
+model_random_forest$finalModel
+
+predictions_random_forest<-model_random_forest %>%
+  predict(test_data)
+RMSE(predictions_random_forest,test_data$Rate_Mort_Child)
+MAE(predictions_random_forest,test_data$Rate_Mort_Child)
+caret::R2(predictions_random_forest,test_data$Rate_Mort_Child)
+
+
+par(mar=c(1,1,1,1))
+importance(model_random_forest$finalModel)
+varImpPlot(model_random_forest$finalModel,type=1) #disminución media de la precisión
+varImpPlot(model_random_forest$finalModel,type=2) #disminución media de la impureza del nodo
+
+plot(varImp(model_random_forest))
+```
+
+
+
+
+
