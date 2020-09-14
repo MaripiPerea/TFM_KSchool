@@ -1,7 +1,7 @@
 ---
-title: "TFM_v1"
+title: "CHILD MORTALITY RATE"
 author: "María Perea"
-date: "9 de julio de 2020"
+date: "Septiembre/2020"
 output: html_document
 ---
 `
@@ -16,11 +16,14 @@ knitr::opts_chunk$set(error = TRUE)
 library(tidyverse)
 library(devtools)
 library(dplyr)    
-library(ggplot2)   
+library(ggplot2)
+library(broom)
 library(readr)
 library(pastecs)
 library(tidyr)   
 library(caret)
+library(leaps)
+library(randomForest)
 
 ```
 
@@ -516,20 +519,20 @@ unique(Inm_DTP3$Who_Region)
 unique(Inm_DTP3$year)
 
 
-#### Inm_Hep3.csv
-Inm_Hep3<-read.csv("Inm_Hep3.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 1)
-Inm_Hep3<-Inm_Hep3[ ,c(1:10)]
-colnames(Inm_Hep3)<-c("Who_Region","2018","2017","2016","2015","2014","2013","2012","2011","2010")
+#### Inm_Hib3.csv
+Inm_Hib3<-read.csv("Inm_Hib3.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 1)
+Inm_Hib3<-Inm_Hib3[ ,c(1:10)]
+colnames(Inm_Hib3)<-c("Who_Region","2018","2017","2016","2015","2014","2013","2012","2011","2010")
 
-Inm_Hep3<- Inm_Hep3 %>%
+Inm_Hib3<- Inm_Hib3 %>%
   pivot_longer(cols=`2018`:`2010`,
                names_to="year",
-               values_to = "Inm_Hep3_coverage",
+               values_to = "Inm_Hib3_coverage",
                names_ptypes = list(year=integer()))
 
-glimpse(Inm_Hep3)
-unique(Inm_Hep3$Who_Region)
-unique(Inm_Hep3$year)
+glimpse(Inm_Hib3)
+unique(Inm_Hib3$Who_Region)
+unique(Inm_Hib3$year)
 
 #### Inm_HepB3.csv
 Inm_HepB3<-read.csv("Inm_HepB3.csv",sep=",",header = TRUE,stringsAsFactors = FALSE,skip = 1)
@@ -628,7 +631,7 @@ unique(Inm_ROTAC$year)
 ```{r}
 m5<-Reduce(function(...) merge(..., all=T), list(Inm_BCG,
                                                  Inm_DTP3,
-                                                 Inm_Hep3,
+                                                 Inm_Hib3,
                                                  Inm_HepB3,
                                                  Inm_MCV1_1st,
                                                  Inm_MCV2_2nd,
@@ -1623,7 +1626,7 @@ metricas_test_wide
 lm_model_Forward<-lm(Rate_Mort_Child~Response+Mort_Congenital_rate+
                        Mort_Diarrhoeal_rate+Mort_Other_rate+
                        Mort_Respiratory_rate+Inm_DTP3_coverage+
-                       Inm_Hep3_coverage+Inm_PCV3_coverage, data=train_data)
+                       Inm_Hib3_coverage+Inm_PCV3_coverage, data=train_data)
 summary(lm_model_Forward)
 par(mar=c(2,2,2,2))
 plot(lm_model_Forward,1)
@@ -1639,7 +1642,7 @@ plot(lm_model_Forward,5)
 lm_model_Forward<-lm(log(Rate_Mort_Child)~Response+Mort_Congenital_rate+
                       Mort_Diarrhoeal_rate+Mort_Other_rate+
                       Mort_Respiratory_rate+Inm_DTP3_coverage+
-                      Inm_Hep3_coverage+Inm_PCV3_coverage, data=train_data)
+                      Inm_Hib3_coverage+Inm_PCV3_coverage, data=train_data)
 summary(lm_model_Forward)
 par(mar=c(2,2,2,2))
 plot(lm_model_Forward,1)
