@@ -39,13 +39,35 @@
 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo8_Graficas_Inm.png?raw=true)
 
+#4.- ESTIMACIÓN DE NAs
 
+#5.- MÉTODOS de REGRESIÓN APLICADOS BASADOS EN LA "SELECCIÓN DE MODELOS"
+> Permiten seleccionar automáticamente la mejor combinación de variables predictoras para construir un modelo predictivo óptimo.
 
-![GitHub Logo]()
-![GitHub Logo]()
+## 5.1- REGRESIÓN PENALIZADA.
+Modelos aplicados:
+### .- CRESTA
+### .- LASSO
+### .- NET ELASTIC
 
+![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Analisis_Reg_Penalizada1.png?raw=true)
+![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Analisis_Reg_Penalizada2.png?raw=true)
 
-![Diagrama con las Métricas] (https://github.com/MaripiPerea/TFM_KSchool/blob/master/Metrics_Diagram.png)
+## 5.2- REGRESIÓN STEPWISE
+Modelos aplicados:
+### .- LeapBackward(Selección hacia atrás)
+### .- LeapForward(Selección hacia delante)
+### .- LeapSeq(Selección por pasos)
+
+## 5.3- REGRESIÓN basada en COMPONENTES PRINCIPALES:
+Modelos aplicados:
+### .- PCR(Regresión de componentes principales)
+### .- PLS(Regresión de Mínimos cuadrados parciales)
+
+## 5.4- REGRESIÓN "REGSUBSETS":
+Modelos aplicados:
+### .- Regsubsets (Subconjuntos)
+
 
 
 
