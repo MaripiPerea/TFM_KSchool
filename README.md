@@ -8,6 +8,7 @@
 
 ![Enlace Indicadores "Who_Rate_Mortality_Child"] (https://apps.who.int/gho/data/view.main.CM1300R?lang=en)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo3_Def_M%C3%A9trica_Child_Mortality.png?raw=true)
+![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo15_Graficas_Rate_Mort_Child_2010-2017.png?raw=true)
 
 # 3.- DEFINICIÓN MÉTRICAS PREDICTORAS
 
@@ -39,7 +40,7 @@
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo8_Graficas_Inm.png?raw=true)
 
 
-![GitHub Logo]()
+
 ![GitHub Logo]()
 ![GitHub Logo]()
 
