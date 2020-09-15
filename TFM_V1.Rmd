@@ -70,8 +70,9 @@ stat_wide
 ggplot(data=Rate_Child,aes(x=Who_Region,y=Rate_Mort_Child))+
   geom_boxplot(aes(fill=Who_Region)) +
   ggtitle("Under-five mortality rate 
+*years: 1990-2017*
           (probability of dying by age 5 per 1000 live births)")+
-  theme(plot.title = element_text(hjust = 0.5))+
+  theme(plot.title = element_text(hjust = 0.5,face="bold.italic"))+
   theme(axis.text.x=element_text(angle=90, hjust=1))+
   ylab("per 1000 live births")
 
@@ -79,9 +80,10 @@ ggplot(data=Rate_Child,aes(x=Who_Region,y=Rate_Mort_Child))+
 
 ggplot(data=Rate_Child,aes(x=year,y=Rate_Mort_Child))+
   geom_point(aes(col=Who_Region))+
-  ggtitle("Under-five mortality rate 
-          (probability of dying by age 5 per 1000 live births)")+
-  theme(plot.title = element_text(hjust = 0.5))
+  ggtitle("Evolution *Under-five mortality rate*
+          (probability of dying by age 5 per 1000 live births)
+*1990-2017*")+
+  theme(plot.title = element_text(hjust = 0.5,face="bold.italic"))
 ```
 
 
@@ -1337,9 +1339,10 @@ ggplot(data=metricas_train_longer,aes(x=names,y=value, fill=metrics_train))+
   xlab("Métrics")+
   ylab("values")+
   geom_text(aes(label=value),position=position_dodge(width=0.9), vjust=2,size=2)+
-  ggtitle("Comparativa *Métricas* en *Cross Validation*
- para modelos de *Regresión Penalizada*")+
-  theme(plot.title = element_text(hjust = 0.5))
+  ggtitle("Comparativa *Métricas en Cross Validation*
+          para modelos de *Regresión PENALIZADA*")+
+  theme(plot.title = element_text(hjust = 0.5,face="bold.italic",color="grey"))+
+  scale_fill_brewer( palette="Blues")
 
 ```
 
@@ -1364,8 +1367,9 @@ ggplot(data=metricas_test_longer,aes(x=names,y=value, fill=metrics_test))+
   ylab("values")+
   geom_text(aes(label=value),position=position_dodge(width=0.9), vjust=2,size=2)+
   ggtitle("Comparativa *Métricas de Rendimiento* en TEST 
-para modelos de *Regresión Penalizada*")+
-  theme(plot.title = element_text(hjust = 0.5))
+para modelos de *Regresión PENALIZADA*")+
+  theme(plot.title = element_text(hjust = 0.5,face="bold.italic",color="grey"))+
+ scale_fill_brewer( palette="Reds") 
 ```
 
 
@@ -1398,10 +1402,9 @@ plot(lm_model_lasso,3)
 #### Análisis de __Valores Influyentes__:
 **Gráfico Residuals vs Leverage**-> Se utiliza para identificar casos influyentes. 
 
-1. **Valores atípicos**-> Las observaciones cuyos residuos estandarizados son mayores que 3 en  valor absoluto son posibles valores atípicos.En nuestro caso resaltan 3 puntos más extremos(#1,#9,#34),con resdiduos estandarizados por debajo de 3, excepto el#9 (4.09)
-2. **Puntos de apalacamiento**-> Se puede detectar examinando la estadistica de ".hat". Un valor superior a 2(p+1)/n indicaría una observación con alto apalancamiento. En nuestro caso 2(43+1)/40=1.15. No supera ningún valor el 0,45.
-3. **Valores influyentes**-> Es un valor cuya inclusión o exclusión altera los resultados del análisis de regresión. No todos los valores atípicos influyen en el análisis de regresión. La "distancia de Cook" determina la influencia de un valor. Esta métrica define la influencia como una combinación de apalancamiento y tamaño residual. En nuestro caso ningun punto es influyente, porque están dentro de los límites marcados por la distancia de Cook [4/(n-p-1)= 4/(48-43-1) = 1]
-
+1. **Valores atípicos**-> Las observaciones cuyos residuos estandarizados son mayores que 3 en  valor absoluto son posibles valores atípicos.En nuestro caso resaltan 3 puntos más extremos(#1,#9,#34),con resdiduos estandarizados por debajo de 3, excepto el#9 (4.06)
+2. **Puntos de apalacamiento**-> Se puede detectar examinando la estadistica de ".hat". Un valor superior a 2(p+1)/n indicaría una observación con alto apalancamiento. En nuestro caso 2(42+1)/40=2.15. Ninguno supera el 0.45
+3. **Valores influyentes**-> Es un valor cuya inclusión o exclusión altera los resultados del análisis de regresión. No todos los valores atípicos influyen en el análisis de regresión. La "distancia de Cook" determina la influencia de un valor. Esta métrica define la influencia como una combinación de apalancamiento y tamaño residual. En nuestro caso ningun punto es influyente, porque están dentro de los límites marcados por la distancia de Cook 4/(n-p-1) = 4/(40-42-1)=-1,33
 ```{r}
 
 #### Tabla con las métricas del diagnóstico
@@ -1422,7 +1425,7 @@ plot(lm_model_lasso,5)
 
 
 #### Se decide excluir el registro #9 (valor atípico) para ver el comportamiento del "lineal model":
-1. Mejora el R2, no hay mucha variación en los coeficientes,los residuos se ajustan bien en la gráfico Normal Q-Q, y el resto de gráficas son similares.
+1. Mejora el R2, sin mucha variación en los coeficientes,los residuos se ajustan bien en la gráfico Normal Q-Q, y el resto de gráficas son similares.
 ```{r}
 #train_data[which(rownames(train_data)==1),]
 #Excluyendo los valores extremos del dataset train_data
@@ -1576,9 +1579,10 @@ ggplot(data=metricas_train_longer,aes(x=names,y=value, fill=metrics_train))+
   xlab("Métrics")+
   ylab("values")+
   geom_text(aes(label=value),position=position_dodge(width=0.9), vjust=2,size=2)+
-  ggtitle("Comparativa *Métricas* en *Cross Validation*
- para modelos *StepWise*")+
-  theme(plot.title = element_text(hjust = 0.5))
+  ggtitle("Comparativa *Métricas en Cross Validation*
+ para modelos *STEPWISE*")+
+  theme(plot.title = element_text(hjust = 0.5,face="bold.italic",color="grey"))+
+  scale_fill_brewer( palette=11)
 
 ```
 
@@ -1603,31 +1607,42 @@ ggplot(data=metricas_test_longer,aes(x=names,y=value, fill=metrics_test))+
   geom_text(aes(label=value),position=position_dodge(width=0.9), vjust=2,size=2)+
   ggtitle("Comparativa *Métricas de Rendimiento* en TEST 
 para modelos *STEPWISE*")+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5,face="bold.italic",color="grey"))+
+  scale_fill_brewer( palette=5)
 
 
 ```
 
-
-#### GRÁFICO COMPARATIVA TRAIN VS TEST, MODELOS STEPWISE
-
-```{r}
-metricas_train_wide<-data.frame(rbind(Metricas_train_leapBackward,Metricas_train_leapForward,Metricas_train_leapSeq))
-metricas_test_wide<-data.frame(rbind(Metricas_leapBack_test,Metricas_leapForward_test,Metricas_leapSeq_test))
-
-metricas_train_wide
-metricas_test_wide
-```
 
 
 
 #### Análisis de los supuestos de Regresión lineal con __"lm"__ para las variables identificadas por el modelo **Setpwise leapForward**
+Comentar que el modelo lineal tiene un excelente R2=0.9999 , y que tanto el intercept cómo los coeficientes de las variables predictoras son muy similares respecto al "CV k-fold", cómo es lógico por el propio algoritmo del modelo de ir incluyendo variables.
+
+1. **Linealidad de los datos**-> Gráfica Residual vs Fitted-> 
+Se utiliza para verificar los supuestos de relación lineal.Una línea horizontal sin patrones distintos, es una indicación de una relación lineal. En nuestro caso, prácticamente se mueve entorno a 0, es decir, asumimos linealidad entre predictores y variable resultado.
+2. **Normalidad de los residuos**-> Gráfica Normal Q-Q-> 
+Se utiliza para examinar si los residuos se distribuyen normalmente. Es bueno si los puntos residuales siguen la linea recta discontinua.En nuestro caso hay ciertas irregularidades en los puntos, observando escalones entonor al 0, haremos una transformación logarítmica para ver si se corrige.
+3. **Homogeneidad de la varianza residual(homocedasticidad)**-> Gráfica Scale-Location-> 
+La línea horizontal con puntos igualmente extendidos es una buena indicación de              homocedasticidad. En nuestro caso el comportamiento es de poca variación pero entorno al 1, asumimos "homocedasticidad"
+4. **Independencia de los términos de error de residuos**. -> Gráfica Scale-Location. Idem al anterior.
+
+**Gráfico Residuals vs Leverage**-> Se utiliza para identificar casos influyentes. 
+
+1. **Valores atípicos**-> Las observaciones cuyos residuos estandarizados son mayores que 3 en  valor absoluto son posibles valores atípicos.En nuestro caso resaltan 3 puntos más extremos(#9,#32,#48),con residuos estandarizados por debajo de 3.
+2. **Puntos de apalacamiento**-> Se puede detectar examinando la estadistica de ".hat". Un valor superior a 2(p+1)/n indicaría una observación con alto apalancamiento. En nuestro caso 2(42+1)/40=2.15. No supera ningún valor el 0,61.
+3. **Valores influyentes**-> Es un valor cuya inclusión o exclusión altera los resultados del análisis de regresión. No todos los valores atípicos influyen en el análisis de regresión. La "distancia de Cook" determina la influencia de un valor. Esta métrica define la influencia como una combinación de apalancamiento y tamaño residual. En nuestro caso ningun punto es influyente, porque están dentro de los límites marcados por la distancia de Cook [4/(n-p-1)= 4/(40-42-1) = 1.33]
 ```{r}
 lm_model_Forward<-lm(Rate_Mort_Child~Response+Mort_Congenital_rate+
                        Mort_Diarrhoeal_rate+Mort_Other_rate+
                        Mort_Respiratory_rate+Inm_DTP3_coverage+
                        Inm_Hib3_coverage+Inm_PCV3_coverage, data=train_data)
 summary(lm_model_Forward)
+model_diag_Forward<-augment(lm_model_Forward)
+model_diag_Forward
+top_3_cook<-model_diag_Forward %>%
+  top_n(3,wt=.cooksd)
+top_3_cook
 par(mar=c(2,2,2,2))
 plot(lm_model_Forward,1)
 plot(lm_model_Forward,2)
@@ -1637,13 +1652,19 @@ plot(lm_model_Forward,5)
 ```
 
 
-#### Transformación logarítmica de la variable objetivo para corregir la gráfica Normal Q-Q
+#### Transformación logarítmica de la variable objetivo para corregir la gráfica Normal Q-Q.
+1. Ahora los puntos siguen más la línea recta, aunque en las colas están más dispersos.
 ```{r}
 lm_model_Forward<-lm(log(Rate_Mort_Child)~Response+Mort_Congenital_rate+
                       Mort_Diarrhoeal_rate+Mort_Other_rate+
                       Mort_Respiratory_rate+Inm_DTP3_coverage+
                       Inm_Hib3_coverage+Inm_PCV3_coverage, data=train_data)
 summary(lm_model_Forward)
+model_diag_Forward<-augment(lm_model_Forward)
+model_diag_Forward
+top_3_cook<-model_diag_Forward %>%
+  top_n(3,wt=.cooksd)
+top_3_cook
 par(mar=c(2,2,2,2))
 plot(lm_model_Forward,1)
 plot(lm_model_Forward,2)
