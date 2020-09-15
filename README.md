@@ -18,6 +18,8 @@
 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo5_Def_M%C3%A9trics_Internat_Health_Regulations.png?raw=true)
 
+![Enlace Who_Inmunization] (https://apps.who.int/gho/data/node.main.A824?lang=en)
+
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo4_Def_M%C3%A9trics_Immunization.png?raw=true)
 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo8_Graficas_Inm.png?raw=true)
