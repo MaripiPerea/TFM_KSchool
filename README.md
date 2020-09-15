@@ -20,6 +20,7 @@
 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo4_Def_M%C3%A9trics_Immunization.png?raw=true)
 
+![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo8_Graficas_Inm.png?raw=true)
 
 
 
