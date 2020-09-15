@@ -11,7 +11,7 @@
 
 # 3.- DEFINICIÓN MÉTRICAS PREDICTORAS
 
-![Enlace Indicadores "Who_Anaemia_Maternal"] (https://apps.who.int/gho/data/view.main.GSWCAH28REG)
+![Enlace Indicadores "Who_Anaemia_Woman"] (https://apps.who.int/gho/data/view.main.GSWCAH28REG)
 
 ![Enlace Indicadores "Who_Life_Expectancy"] (https://apps.who.int/gho/data/view.main.SDG2016LEXREGv?lang=en)
 
@@ -19,6 +19,7 @@
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo12_Graficas_Life_Expectancy.png?raw=true)
 
 ![Enlace Indicadores "Who_Low_Weigth_birth"] (https://apps.who.int/gho/data/view.main.LBWWHOREGIONv)
+
 ![Enlace Indicadores "Who_Anaemia_children"] (https://apps.who.int/gho/data/view.main.ANEMIACHILDRENREGv)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo6_Def_M%C3%A9trics_Child_Malnutrition.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo11_Graficas_Malnutrition_Maternal.png?raw=true)
