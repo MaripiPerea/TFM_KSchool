@@ -39,9 +39,9 @@
 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo8_Graficas_Inm.png?raw=true)
 
-#4.- ESTIMACIÓN DE NAs
+# 4.- ESTIMACIÓN DE NAs
 
-#5.- MÉTODOS de REGRESIÓN APLICADOS BASADOS EN LA "SELECCIÓN DE MODELOS"
+# 5.- MÉTODOS de REGRESIÓN APLICADOS BASADOS EN LA "SELECCIÓN DE MODELOS"
 > Permiten seleccionar automáticamente la mejor combinación de variables predictoras para construir un modelo predictivo óptimo.
 
 ## 5.1- REGRESIÓN PENALIZADA.
