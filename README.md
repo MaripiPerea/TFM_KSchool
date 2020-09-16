@@ -41,7 +41,7 @@
 
 # 4.- ESTIMACIÓN DE NAs
 
-# 5.- MÉTODOS de REGRESIÓN APLICADOS BASADOS EN LA "SELECCIÓN DE MODELOS"
+# 5.- MÉTODOS de REGRESIÓN APLICADOS basados en la "SELECCIÓN DE MODELOS"
 > Permiten seleccionar automáticamente la mejor combinación de variables predictoras para construir un modelo predictivo óptimo.
 
 ## 5.1- REGRESIÓN PENALIZADA.
@@ -76,4 +76,11 @@ Modelos aplicados:
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo3_Analisis_REGSUBSETS1.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo3_Analisis_REGSUBSETS2.png?raw=true)
 
+
+## 6.- MACHINE LEARNING Supervised:
+Algoritmos aplicados:
+###### .-K-Nearest Neighbors (KNN)
+###### .-Random Forest (RF)
+![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo5_Analisis_KNN.png?raw=true)
+![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo5_Analisis_Ramdom_Forest.png?raw=true)
 
