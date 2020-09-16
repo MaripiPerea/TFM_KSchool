@@ -1259,7 +1259,7 @@ predictions_lasso<-model_lasso %>% predict(test_data)
 Metricas_lasso_test<-data.frame("metrics_test"="metrics_test_lasso",
   RMSE=RMSE(predictions_lasso,test_data$Rate_Mort_Child),
   MAE=MAE(predictions_lasso,test_data$Rate_Mort_Child),
-  Rsquare=caret::R2(predictions_lasso,test_data$Rate_Mort_Child),
+  RSquared=caret::R2(predictions_lasso,test_data$Rate_Mort_Child),
   Tasa_Error_Test=RMSE(predictions_lasso,test_data$Rate_Mort_Child)/mean(test_data$Rate_Mort_Child)
 )
 Metricas_lasso_test
@@ -1675,13 +1675,14 @@ plot(lm_model_Forward,5)
 
 
 #### SELECCIÓN DE MODELOS: __**REGSUBSETS**__
-
+1. Es un enfoque de selección de modelo que consiste en probar todas las combinaciones posibles de las variables predictoras, para luego seleccionar el mejor modelo de acuerdo a algunos estadísticos.
+2. Se debe especificar la opción *nvmax* que representa el número máximo de predictores, en nuestro caso serán 10.
+3. Y el modelo que obtiene las mejores métricas es el de 10 variables.
 ```{r}
 models_reg<- regsubsets(Rate_Mort_Child~.,data=train_data,nvmax=10)
 res_sum<-summary(models_reg)
 data.frame(
   Adj.R2=which.max(res_sum$adjr2),
-  CP=which.min(res_sum$cp),
   BIC=which.min(res_sum$bic)
 )
 coef(models_reg,10)
@@ -1697,7 +1698,11 @@ model_formula=get_model_formula(10,models_reg,"Rate_Mort_Child")
 model_formula
 ```
 
-#### __**REGSUBSETS**__ aplicando **CROSS VALIDATION K-FOLD** 
+#### __**REGSUBSETS**__ aplicando **CROSS VALIDATION K-FOLD**.
+1. Un enfoque más riguroso es seleccionar un modelo basado en "Cross Validation", que es lo que aplicaremos ahora.
+2. El modelo de 10 variables es el que mejores métricas tiene en CV. 
+3. Pero presenta overfitting. El gráfico se muestra en el siguiente apartado.
+
 ```{r}
 
 #### Función para obtener el error RMSE de validación cruzada (CV)
@@ -1744,6 +1749,8 @@ cv_errors_R2<-map(model_ids,get_model_formula,models_reg,"Rate_Mort_Child") %>%
   map(get_cv_error_R2,data=train_data) %>%
   unlist()
 
+data.frame(cbind(model_id=c(1:10),cv_errors_RMSE,cv_errors_MAE,cv_errors_R2))
+
 model_best_regsubsets<-lm(Rate_Mort_Child ~ Surveillance + Mort_Congenital_rate + Mort_Diarrhoeal_rate + 
      Mort_HIVAIDS_dis_rate + Mort_Malaria_rate + Mort_Other_rate + 
      Mort_Prematurity_rate + Inm_PCV3_coverage + Maternal_Mort_Rate + 
@@ -1771,9 +1778,54 @@ Metricas_best_regsubsets_test
 ```
 
 
+#### GRÁFICO COMPARATIVA MÉTRICAS TRAIN/TEST PARA EL MEJOR MODELO REGSUBSETS.
+1. El mejor modelo de "10 variables" consi
+```{r}
+train<-data.frame("metrics"="metrics_train_regsubsets",
+                                           RMSE=cv_errors_RMSE[which.min(cv_errors_RMSE)],
+                                           MAE=cv_errors_MAE[which.min(cv_errors_MAE)],
+                                           RSquared=cv_errors_R2[which.max(cv_errors_R2)], 
+                                           Tasa_Error=cv_errors_RMSE[which.min(cv_errors_RMSE)]/mean(train_data$Rate_Mort_Child))
+test<-data.frame("metrics"="metrics_test_regsubsets",
+                                          RMSE=RMSE(predictions_best_regsubsets,test_data$Rate_Mort_Child),
+                                          MAE=MAE(predictions_best_regsubsets,test_data$Rate_Mort_Child),
+                                          RSquared=caret::R2(predictions_best_regsubsets,test_data$Rate_Mort_Child),
+                                          Tasa_Error=RMSE(predictions_best_regsubsets,test_data$Rate_Mort_Child)/mean(test_data$Rate_Mort_Child))
+
+metricas_reg<-data.frame(rbind(train,test))
+
+
+
+metrics_reg_longer <- metricas_reg %>%
+  pivot_longer(cols=`RMSE`:`Tasa_Error`,
+               names_to="name_metrics",
+               values_to = "values",
+               names_ptypes = list(year=integer()))
+
+metrics_reg_longer$values<-round(metrics_reg_longer$values,5)
+
+ggplot(data=metrics_reg_longer,aes(x=name_metrics,y=values, fill=metrics))+
+  geom_bar(stat="identity",position=position_dodge())+
+  xlab("Métrics")+
+  ylab("values")+
+  geom_text(aes(label=values),position=position_dodge(width=0.9), vjust=2,size=3)+
+  ggtitle("Comparativa Métricas *Train/Test*
+    para el mejor modelo *REGSUBSETS*")+
+  theme(plot.title = element_text(hjust = 0.5,face="bold.italic",color="grey"))+
+  scale_fill_brewer( palette=15) 
+```
+
+#### Verificando las hipótesis de regresión lineal.
+1.Comprobamos que cumple las hipótesis de linealidad
 ```{r}
 model_best_regsubsets
 summary(model_best_regsubsets)
+
+model_diag_Reg<-augment(model_best_regsubsets)
+model_diag_Reg
+top_3_cook<-model_diag_Reg %>%
+  top_n(3,wt=.cooksd)
+top_3_cook
 
 par(mar=c(2,2,2,2))
 plot(model_best_regsubsets,1)
@@ -1795,7 +1847,7 @@ plot(model_best_regsubsets,5)
 4. Con la opción *tuneLength* probaremos 9 valores diferentes del parámetro de ajuste *ncomp*.
 5. La opción *scale=TRUE* para estandarizar las variables
 6. Nuestro análisis prueba que al elegir 10 componentes principales (ncomp=10) se obtiene el menor error de predicción RMSE. El 97,99% de la variación contenida en los predictores son capturados por 10 componentes principales. Además captura el 99,87% de la información de la variable resultado.
-7. Se muestra gráfico con el % de Importancia de las variables.Si endo las variables por encima de un 98% las siguientes:
+7. Se muestra gráfico con el % de Importancia de las variables.Siendo las variables por encima de un 98% las siguientes:
 >.- Mort_Diarrhoeal_rate
 >.- Mort_Asphyxia_rate
 >.- Mort_Respiratory_rate
@@ -1844,7 +1896,7 @@ plot(varImp(model_pcr),15,main="% Importancia Variables")
 3. Se utiliza *Cross Validation* para identificar automáticamente el número óptimo de componentes principales **ncomp**
 4. Con la opción *tuneLength* probaremos 9 valores diferentes del parámetro de ajuste *ncomp*.
 5. La opción *scale=TRUE* para estandarizar las variables
-6. Nuestro análisis prueba que al elegir 10 componentes principales (ncomp=10) se obtiene el menor error de predicción RMSE. El 97,99% de la variación contenida en los predictores son capturados por 10 componentes principales. Además captura el 99,87% de la información de la variable resultado.
+6. Nuestro análisis prueba que al elegir 10 componentes principales (ncomp=10) se obtiene el menor error de predicción RMSE. El 97,29% de la variación contenida en los predictores son capturados por 10 componentes principales. Además captura el 99,99% de la información de la variable resultado.
 7. Se muestra gráfico con el % de Importancia de las variables.Si endo las variables por encima de un 96% las siguientes:
 >.- Mort_Diarrhoeal_rate
 >.- Mort_Respiratory_rate
@@ -1922,7 +1974,7 @@ Metricas_KNN_test<-data.frame("metrics_test"="metrics_test_KNN",
                               Tasa_Error_Test=RMSE(predictions_KNN,test_data$Rate_Mort_Child)/mean(test_data$Rate_Mort_Child))
 Metricas_KNN_test
 
-ggplot(varImp(model_KNN))
+ggplot(varImp(model_KNN),15,main="% Importancia Variables")
 
 
 
@@ -1954,9 +2006,56 @@ varImpPlot(model_random_forest$finalModel,type=1) #disminución media de la prec
 varImpPlot(model_random_forest$finalModel,type=2) #disminución media de la impureza del nodo
 
 plot(varImp(model_random_forest))
+
 ```
 
+#### COMPARATIVA MEJORES MODELOS en "CROSS VALIDATION".
+```{r}
+Metricas_train<-data.frame(rbind(Metricas_train_lasso,
+Metricas_train_leapForward,
+Metricas_train_best_regsubsets,
+Metricas_train_PLS))
+Metricas_train
 
+metricas_train_longer <- Metricas_train %>%
+  pivot_longer(cols="Mean_RMSE":"Tasa_Error_Train",
+               names_to="names",
+               values_to = "value")
+metricas_train_longer$value<-round(metricas_train_longer$value,4)
 
+ggplot(data=metricas_train_longer,aes(x=names,y=value, fill=metrics_train))+
+  geom_bar(stat="identity",position=position_dodge())+
+  xlab("Métrics")+
+  ylab("values")+
+  geom_text(aes(label=value),position=position_dodge(width=0.9), vjust=2,size=2)+
+  ggtitle("Comparativa *Métricas en Cross Validation*
+          para los mejores modelos")+
+  theme(plot.title = element_text(hjust = 0.5,face="bold.italic",color="grey"))+
+  scale_fill_brewer( palette=15)
+```
+#### COMPARATIVA MEJORES MODELOS en "TEST".
+```{r}
+Metricas_test<-data.frame(rbind(Metricas_lasso_test,
+Metricas_leapForward_test,
+Metricas_best_regsubsets_test,
+Metricas_PLS_test))
+Metricas_test
+
+metricas_test_longer <- Metricas_test %>%
+  pivot_longer(cols="RMSE":"Tasa_Error_Test",
+               names_to="names",
+               values_to = "value")
+metricas_test_longer$value<-round(metricas_test_longer$value,4)
+
+ggplot(data=metricas_test_longer,aes(x=names,y=value, fill=metrics_test))+
+  geom_bar(stat="identity",position=position_dodge())+
+  xlab("Métrics")+
+  ylab("values")+
+  geom_text(aes(label=value),position=position_dodge(width=0.9), vjust=2,size=2)+
+  ggtitle("Comparativa *Métricas en TEST*
+          para los mejores modelos")+
+  theme(plot.title = element_text(hjust = 0.5,face="bold.italic",color="grey"))+
+  scale_fill_brewer( palette=17)
+```
 
 
