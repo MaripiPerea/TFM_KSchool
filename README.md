@@ -39,38 +39,41 @@
 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo8_Graficas_Inm.png?raw=true)
 
-#4.- ESTIMACIÓN DE NAs
+# 4.- ESTIMACIÓN DE NAs
 
-#5.- MÉTODOS de REGRESIÓN APLICADOS BASADOS EN LA "SELECCIÓN DE MODELOS"
+# 5.- MÉTODOS de REGRESIÓN APLICADOS BASADOS EN LA "SELECCIÓN DE MODELOS"
 > Permiten seleccionar automáticamente la mejor combinación de variables predictoras para construir un modelo predictivo óptimo.
 
 ## 5.1- REGRESIÓN PENALIZADA.
 Modelos aplicados:
-#### .- CRESTA
-#### .- LASSO
-#### .- NET ELASTIC
+###### .- CRESTA
+###### .- LASSO
+###### .- NET ELASTIC
 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Analisis_Reg_Penalizada1.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Analisis_Reg_Penalizada2.png?raw=true)
 
 ## 5.2- REGRESIÓN STEPWISE
 Modelos aplicados:
-#### .- LeapBackward(Selección hacia atrás)
-#### .- LeapForward(Selección hacia delante)
-#### .- LeapSeq(Selección por pasos)
+###### .- LeapBackward(Selección hacia atrás)
+###### .- LeapForward(Selección hacia delante)
+###### .- LeapSeq(Selección por pasos)
 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo2_Analisis_Reg_STEPWISE1.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo2_Analisis_Reg_STEPWISE2.png?raw=true)
 
 ## 5.3- REGRESIÓN basada en COMPONENTES PRINCIPALES:
 Modelos aplicados:
-#### .- PCR(Regresión de componentes principales)
-#### .- PLS(Regresión de Mínimos cuadrados parciales)
+###### .- PCR(Regresión de componentes principales)
+###### .- PLS(Regresión de Mínimos cuadrados parciales)
+
+![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo4_Analisis_PCR.png?raw=true)
+![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo4_Analisis_PLS.png?raw=true)
 
 ## 5.4- REGRESIÓN "REGSUBSETS":
 Modelos aplicados:
-#### .- Regsubsets (Subconjuntos)
-
-
+###### .- Regsubsets (Subconjuntos)
+![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo3_Analisis_REGSUBSETS1.png?raw=true)
+![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo3_Analisis_REGSUBSETS2.png?raw=true)
 
 
