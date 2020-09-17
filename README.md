@@ -89,7 +89,13 @@ Enlace al repositorio Who:
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo%200_NAs1.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo%200_NAs2.png?raw=true)
 
-## __*5.- CORRELACIÓN"*__
+## __*5.- Distribución NORMAL y CORRELACIÓN"*__
+
+![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo%200_Encabezado%20Normal.png)
+![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo%200_Distribuci%C3%B3n%20Normal.png)
+![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo%200_CORRELACCI%C3%93N.png
+)
+
 
 ## __*6.- CROSS VALIDATION K-fold"*__
 > Se ha utilizado para todos los modelos la "Validación Cruzada K-fold(5)". 
