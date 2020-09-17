@@ -1,6 +1,6 @@
 # __*CHILD MORTALITY RATE (probability of dying by age 5 per 1000 live births)*__
 ## __*1.- INTRODUCCIÓN*__
-Desde 2000, las muertes infantiles se han reducido en casi la mitad y las muertes maternas en más de un tercio, debido principalmente a un mejor acceso a "servicios de salud" asequibles y de calidad, las mujeres y los bebés sobreviven y prosperan. Este es el poder de la **"cobertura sanitaria universal"**.
+Desde el año 2000, las muertes infantiles se han reducido en casi la mitad y las muertes maternas en más de un tercio, debido principalmente a un mejor acceso a "servicios de salud" asequibles y de calidad, las mujeres y los bebés sobreviven y prosperan. Este es el poder de la **"cobertura sanitaria universal"**.
 
 >__**"En todo el mundo, el nacimiento es una ocasión alegre. Sin embargo, cada 11 segundos, un nacimiento es una tragedia familiar"**__
 
@@ -42,7 +42,7 @@ Hay que tener en cuenta que el objetivo inicial era predecir la tasa con datos d
 
 ## __*3.- DEFINICIÓN MÉTRICAS PREDICTORAS*__
 
-###  __*3.1 METRICS WOMEN HEALTH & LIFE EXPECTANCY AT BIRTH"__*
+###  __*3.1 METRICS WOMEN HEALTH & LIFE EXPECTANCY AT BIRTH*__
 Enlaces al repositorio Who:
 ![Enlace Indicadores "Who_Anaemia_Woman"] (https://apps.who.int/gho/data/view.main.GSWCAH28REG)
 
@@ -51,7 +51,7 @@ Enlaces al repositorio Who:
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo7_Def_M%C3%A9trics_Women_Health_%20Life_Expectancy.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo12_Graficas_Life_Expectancy.png?raw=true)
 
-###  __*3.2 METRICS CHILDREN & WOMAN MALNUTRITION "__*
+###  __*3.2 METRICS CHILDREN & WOMAN MALNUTRITION *__
 Enlaces al repositorio Who:
 ![Enlace Indicadores "Who_Low_Weigth_birth"] (https://apps.who.int/gho/data/view.main.LBWWHOREGIONv)
 
@@ -59,20 +59,20 @@ Enlaces al repositorio Who:
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo6_Def_M%C3%A9trics_Child_Malnutrition.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo11_Graficas_Malnutrition_Maternal.png?raw=true)
 
-###  __*3.3 METRICS RATE CHILD CAUSES"__*
+###  __*3.3 METRICS RATE CHILD CAUSES*__
 Enlace al repositorio Who:
 ![Enlace Indicadores "Who_Mort_Children_Causes"] (https://apps.who.int/gho/data/node.main.ChildMortREG2002015?lang=en)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo6_Def_M%C3%A9trics_Causes_Child_Death.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo9_Graficas_Causes.png?raw=true)
 
-###  __*3.4 METRICS INTERNATIONAL HEALTH REGULATIONS"__*
+###  __*3.4 METRICS INTERNATIONAL HEALTH REGULATIONS*__
 Enlace al repositorio Who:
 ![Enlace Indicadores "Who_Internat_Health_Regulations"] (https://apps.who.int/gho/data/view.main.IHRREGALLv?lang=en)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo5_Def_M%C3%A9trics_Internat_Health_Regulations.png?raw=true)
 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo10_Graficas_Regulations.png?raw=true)
 
-###  __*3.5 METRICS INMUNIZATION COVERAGE"__*
+###  __*3.5 METRICS INMUNIZATION COVERAGE*__
 Enlace al repositorio Who:
 ![Enlace Indicadores "Who_Inmunization"] (https://apps.who.int/gho/data/node.main.A824?lang=en)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo4_Def_M%C3%A9trics_Immunization.png?raw=true)
