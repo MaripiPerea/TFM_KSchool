@@ -14,11 +14,13 @@ La meta de los ODS(Objetivos de Desarrollo Sostenible) para poner fin a las muer
 
 >__**.- Entre los 74 restantes, 53 países tendrán que acelerar los progresos para alcanzar la meta de los ODS en materia de supervivencia infantil para 2030.**__
 
-Se puede observar en las gráficas que las regiones mundiales que **han cumplido** el objetivo(desde el 2005) son: __**Europe, Americas y Western Pacific**__. 
+Se puede observar en la gráfica evolutiva que las regiones mundiales que **han cumplido** el objetivo(desde el 2005) son: __**Europe, Americas y Western Pacific**__. 
 Mientras que __**"South-East Asia"**__ está aproximándose, **"Eastern Mediterranean"** lo está casi duplicando. Y si hablamos de __**"África"**__ está todavía muy lejos de alcanzarlo, porque lo triplica.
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo15_Graficas_Rate_Mort_Child.png?raw=true)
 
-## __*2.- OBJETIVO*__
+## __*2.- OBJETIVO del ESTUDIO*__"
+El objetivo principal del estudio es encontrar el mejor modelo para predecir la "Tasa de Mortalidad Infantil" en base a indicadores de "Cobertura de Inmunización", del "Reglamento de Salud Internacional", "Ratio de Mortalidad por Causas", indicadores de "Malnutrición Infantil" relacionado con la "Anemia" y el "Bajo peso al nacer"
+
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Diagrama_M%C3%A9tricas.png?raw=true)
 
 ![Enlace Indicadores "Who_Rate_Mortality_Child"] (https://apps.who.int/gho/data/view.main.CM1300R?lang=en)
