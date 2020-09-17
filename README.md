@@ -1,5 +1,4 @@
-# __*CHILD MORTALITY RATE*__ 
-##__*(probability of dying by age 5 per 1000 live births)*__
+# __*CHILD MORTALITY RATE*__ ##__*(probability of dying by age 5 per 1000 live births)*__
 ## __*1.- INTRODUCCIÓN*__
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Foto_Presentaci%C3%B3n.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo15_Graficas_Rate_Mort_Child.png?raw=true)
@@ -42,7 +41,7 @@
 
 ## __*4.- ESTIMACIÓN DE VALORES "NAs"*__
 
-## __*5.- MÉTODOS de REGRESIÓN APLICADOS basados en la "SELECCIÓN DE MODELOS"
+## __*5.- MÉTODOS de REGRESIÓN APLICADOS basados en la "SELECCIÓN DE MODELOS"*__
 > Permiten seleccionar automáticamente la mejor combinación de variables predictoras para construir un modelo predictivo óptimo.
 
 ### __*5.1- REGRESIÓN PENALIZADA*__
