@@ -1,16 +1,17 @@
-# __*CHILD MORTALITY RATE*__ *(probability of dying by age 5 per 1000 live births)*
-## 1.- INTRODUCCIÓN
+# __*CHILD MORTALITY RATE*__ 
+##__*(probability of dying by age 5 per 1000 live births)*__
+## __*1.- INTRODUCCIÓN*__
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Foto_Presentaci%C3%B3n.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo15_Graficas_Rate_Mort_Child.png?raw=true)
 
-## 2.- OBJETIVO
+## __*2.- OBJETIVO*__
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Diagrama_M%C3%A9tricas.png?raw=true)
 
 ![Enlace Indicadores "Who_Rate_Mortality_Child"] (https://apps.who.int/gho/data/view.main.CM1300R?lang=en)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo3_Def_M%C3%A9trica_Child_Mortality.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo15_Graficas_Rate_Mort_Child_2010-2017.png?raw=true)
 
-## 3.- DEFINICIÓN MÉTRICAS PREDICTORAS
+## __*3.- DEFINICIÓN MÉTRICAS PREDICTORAS*__
 
 ![Enlace Indicadores "Who_Anaemia_Woman"] (https://apps.who.int/gho/data/view.main.GSWCAH28REG)
 
@@ -39,12 +40,12 @@
 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo8_Graficas_Inm.png?raw=true)
 
-## 4.- ESTIMACIÓN DE NAs
+## __*4.- ESTIMACIÓN DE VALORES "NAs"*__
 
-## 5.- MÉTODOS de REGRESIÓN APLICADOS basados en la "SELECCIÓN DE MODELOS"
+## __*5.- MÉTODOS de REGRESIÓN APLICADOS basados en la "SELECCIÓN DE MODELOS"
 > Permiten seleccionar automáticamente la mejor combinación de variables predictoras para construir un modelo predictivo óptimo.
 
-### 5.1- REGRESIÓN PENALIZADA.
+### __*5.1- REGRESIÓN PENALIZADA*__
 Modelos aplicados:
 ###### .- CRESTA
 ###### .- LASSO
@@ -53,7 +54,7 @@ Modelos aplicados:
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Analisis_Reg_Penalizada1.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Analisis_Reg_Penalizada2.png?raw=true)
 
-### 5.2- REGRESIÓN STEPWISE
+### __*5.2- REGRESIÓN STEPWISE*__
 Modelos aplicados:
 ###### .- LeapBackward(Selección hacia atrás)
 ###### .- LeapForward(Selección hacia delante)
@@ -62,7 +63,7 @@ Modelos aplicados:
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo2_Analisis_Reg_STEPWISE1.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo2_Analisis_Reg_STEPWISE2.png?raw=true)
 
-### 5.3- REGRESIÓN basada en COMPONENTES PRINCIPALES:
+### __*5.3- REGRESIÓN basada en COMPONENTES PRINCIPALES*__
 Modelos aplicados:
 ###### .- PCR(Regresión de componentes principales)
 ###### .- PLS(Regresión de Mínimos cuadrados parciales)
@@ -70,14 +71,14 @@ Modelos aplicados:
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo4_Analisis_PCR.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo4_Analisis_PLS.png?raw=true)
 
-### 5.4- REGRESIÓN "REGSUBSETS":
+### __*5.4- REGRESIÓN "REGSUBSETS"*__
 Modelos aplicados:
 ###### .- Regsubsets (Subconjuntos)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo3_Analisis_REGSUBSETS1.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo3_Analisis_REGSUBSETS2.png?raw=true)
 
 
-### 6.- MACHINE LEARNING Supervised:
+### __*6.- MACHINE LEARNING Supervised*__
 Algoritmos aplicados:
 ###### .-K-Nearest Neighbors (KNN)
 ###### .-Random Forest (RF)
