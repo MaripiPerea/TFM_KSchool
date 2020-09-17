@@ -32,13 +32,17 @@ Se han aplicado también algoritmos de "Machine Learning Supervised": Decision T
 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Diagrama_M%C3%A9tricas.png?raw=true)
 
-Hay que tener en cuenta que el objetivo inicial era predecir la tasa con datos desde "1990 a 2017", pero una gran mayoría de las "variables predictoras" no disponían de un evolutivo tan amplio(ni siquiera en la API de WHO), por eso el periodo se ha tenido que reducir de 2010 a 2017.
+Enlace al repositorio Who:
 ![Enlace Indicadores "Who_Rate_Mortality_Child"] (https://apps.who.int/gho/data/view.main.CM1300R?lang=en)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo3_Def_M%C3%A9trica_Child_Mortality.png?raw=true)
+
+Hay que tener en cuenta que el objetivo inicial era predecir la tasa con datos desde "1990 a 2017", pero una gran mayoría de las "variables predictoras" no disponían de un evolutivo tan amplio(ni siquiera en la API de WHO), por eso el periodo se ha tenido que reducir de 2010 a 2017.
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo15_Graficas_Rate_Mort_Child_2010-2017.png?raw=true)
 
 ## __*3.- DEFINICIÓN MÉTRICAS PREDICTORAS*__
 
+### __*3.1 METRICS WOMEN HEALTH & LIFE EXPECTANCY AT BIRTH"__*
+Enlaces al repositorio Who:
 ![Enlace Indicadores "Who_Anaemia_Woman"] (https://apps.who.int/gho/data/view.main.GSWCAH28REG)
 
 ![Enlace Indicadores "Who_Life_Expectancy"] (https://apps.who.int/gho/data/view.main.SDG2016LEXREGv?lang=en)
@@ -46,16 +50,22 @@ Hay que tener en cuenta que el objetivo inicial era predecir la tasa con datos d
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo7_Def_M%C3%A9trics_Women_Health_%20Life_Expectancy.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo12_Graficas_Life_Expectancy.png?raw=true)
 
+### __*3.1 METRICS WOMEN HEALTH & LIFE EXPECTANCY AT BIRTH"__*
+Enlaces al repositorio Who:
 ![Enlace Indicadores "Who_Low_Weigth_birth"] (https://apps.who.int/gho/data/view.main.LBWWHOREGIONv)
 
 ![Enlace Indicadores "Who_Anaemia_children"] (https://apps.who.int/gho/data/view.main.ANEMIACHILDRENREGv)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo6_Def_M%C3%A9trics_Child_Malnutrition.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo11_Graficas_Malnutrition_Maternal.png?raw=true)
 
+### __*3.2 METRICS RATE CHILD CAUSES"__*
+Enlace al repositorio Who:
 ![Enlace Indicadores "Who_Mort_Children_Causes"] (https://apps.who.int/gho/data/node.main.ChildMortREG2002015?lang=en)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo6_Def_M%C3%A9trics_Causes_Child_Death.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo9_Graficas_Causes.png?raw=true)
 
+### __*3.2 METRICS RATE CHILD CAUSES"__*
+Enlace al repositorio Who:
 ![Enlace Indicadores "Who_Internat_Health_Regulations"] (https://apps.who.int/gho/data/view.main.IHRREGALLv?lang=en)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo5_Def_M%C3%A9trics_Internat_Health_Regulations.png?raw=true)
 
