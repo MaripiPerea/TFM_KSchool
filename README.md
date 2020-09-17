@@ -23,7 +23,7 @@ El objetivo principal del estudio es encontrar el mejor modelo para predecir la 
 
 Es muy importante destacar que el indicador "Tasa de Mortalidad Infantil" es una probabilidad de muerte derivada de una tabla de vida y expresada cómo una tasa por 1000. Es decir, que no es una tasa estrictamente (número de muertes / población de riesgo), ni se obtiene de las "Tasas de Mortalidad infantil por Causas".
 
-Debido a
+Otro objetivo importante del estudio es identificar los principales indicadores que realmente están condicionando positiva o negativamente en el movimiento de la tasa. Esto se consigue con los "Modelos de Selección" de variables cómo la "Regresión Penalizada", "Regresión por Pasos (Stepwise)" o "RegSubsets", dónde claramente podemos obtener información muy útil de las variables predictoras que minimizan el "Error de predicción"
 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Diagrama_M%C3%A9tricas.png?raw=true)
 
