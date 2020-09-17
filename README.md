@@ -1,14 +1,21 @@
 # __*CHILD MORTALITY RATE (probability of dying by age 5 per 1000 live births)*__
 ## __*1.- INTRODUCCIÓN*__
 Desde 2000, las muertes infantiles se han reducido en casi la mitad y las muertes maternas en más de un tercio, debido principalmente a un mejor acceso a "servicios de salud" asequibles y de calidad, las mujeres y los bebés sobreviven y prosperan. Este es el poder de la **"cobertura sanitaria universal"**.
-__**"En todo el mundo, el nacimiento es una ocasión alegre. Sin embargo, cada 11 segundos, un nacimiento es una tragedia familiar"**__
-__**"Un par de manos especializadas para ayudar a las madres y a los recién nacidos alrededor del momento del nacimiento, junto con agua limpia, nutrición adecuada, medicamentos básicos y vacunas, puede marcar la diferencia entre la vida y la muerte. Debemos hacer todo lo necesario para invertir en la cobertura sanitaria universal para salvar estas preciosas vidas"**__
+
+>__**"En todo el mundo, el nacimiento es una ocasión alegre. Sin embargo, cada 11 segundos, un nacimiento es una tragedia familiar"**__
+
+>__**"Un par de manos especializadas para ayudar a las madres y a los recién nacidos alrededor del momento del nacimiento, junto con agua limpia, nutrición adecuada, medicamentos básicos y vacunas, puede marcar la diferencia entre la vida y la muerte. Debemos hacer todo lo necesario para invertir en la cobertura sanitaria universal para salvar estas preciosas vidas"**__
+
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Foto_Presentaci%C3%B3n.png?raw=true)
 
 La meta de los ODS(Objetivos de Desarrollo Sostenible) para poner fin a las muertes prevenibles de recién nacidos y niños menores de 5 años es reducir la mortalidad neonatal a al menos 12 por cada 1000 nacidos vivos y la mortalidad de menores de 5 años a al menos 25 por cada 1000 nacidos vivos. 
-.- En 2018, 121 países ya habían alcanzado esta tasa de mortalidad de menores de cinco años. 
-.- Entre los 74 restantes, 53 países tendrán que acelerar los progresos para alcanzar la meta de los ODS en materia de supervivencia infantil para 2030.
-Se puede observar en las gráficas que las regiones mundiales que han cumplido el objetivo(desde el 2005) son: Europe, Americas y Western Pacific. Mientras que "South-East Asia" está aproximándose, "Eastern Mediterranean" lo está casi duplicando, y si hablamos de "África" este objetivo se triplica.
+
+>.- En 2018, 121 países ya habían alcanzado esta tasa de mortalidad de menores de cinco años. 
+
+>.- Entre los 74 restantes, 53 países tendrán que acelerar los progresos para alcanzar la meta de los ODS en materia de supervivencia infantil para 2030.
+
+Se puede observar en las gráficas que las regiones mundiales que han cumplido el objetivo(desde el 2005) son: Europe, Americas y Western Pacific. 
+Mientras que "South-East Asia" está aproximándose, "Eastern Mediterranean" lo está casi duplicando, y si hablamos de "África" este objetivo se triplica.
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo15_Graficas_Rate_Mort_Child.png?raw=true)
 
 ## __*2.- OBJETIVO*__
