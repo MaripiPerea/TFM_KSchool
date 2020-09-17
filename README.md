@@ -40,6 +40,7 @@ Hay que tener en cuenta que el objetivo inicial era predecir la tasa con datos d
 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo15_Graficas_Rate_Mort_Child_2010-2017.png?raw=true)
 
+
 ## __*3.- DEFINICIÓN MÉTRICAS PREDICTORAS*__
 
 ###  __*3.1.- METRICS "WOMEN MALNUTRITION" & "LIFE EXPECTANCY AT BIRTH"*__
@@ -70,6 +71,7 @@ Enlace al repositorio Who:
 ###  __*3.4.- METRICS "INTERNATIONAL HEALTH REGULATIONS"*__
 Enlace al repositorio Who:
 ![Enlace Indicadores "Who_Internat_Health_Regulations"] (https://apps.who.int/gho/data/view.main.IHRREGALLv?lang=en)
+
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo5_Def_M%C3%A9trics_Internat_Health_Regulations.png?raw=true)
 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo10_Graficas_Regulations.png?raw=true)
