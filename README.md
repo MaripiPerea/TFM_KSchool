@@ -19,7 +19,11 @@ Mientras que __**"South-East Asia"**__ está aproximándose, **"Eastern Mediterr
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo15_Graficas_Rate_Mort_Child.png?raw=true)
 
 ## __*2.- OBJETIVO del ESTUDIO*__"
-El objetivo principal del estudio es encontrar el mejor modelo para predecir la "Tasa de Mortalidad Infantil" en base a indicadores de "Cobertura de Inmunización", del "Reglamento de Salud Internacional", "Ratio de Mortalidad por Causas", indicadores de "Malnutrición Infantil" relacionado con la "Anemia" y el "Bajo peso al nacer"
+El objetivo principal del estudio es encontrar el mejor modelo para predecir la "Tasa de Mortalidad Infantil" por "Región Mundial", en base a indicadores de "Cobertura de Inmunización", del "Reglamento de Salud Internacional", "Ratio de Mortalidad por Causas", indicadores de "Malnutrición Infantil" relacionado con la "Anemia" y el "Bajo peso al nacer", así cómo también los relacionados con la "Salud Maternal" en edad reproductiva y en mujeres embarazadas, y con la "Mortalidad de las madres". Teniendo en cuenta también el indicador de la "Esperanza de vida al nacer" según el país de procedencia.
+
+Es muy importante destacar que el indicador "Tasa de Mortalidad Infantil" es una probabilidad de muerte derivada de una tabla de vida y expresada cómo una tasa por 1000. Es decir, que no es una tasa estrictamente (número de muertes / población de riesgo), ni se obtiene de las "Tasas de Mortalidad infantil por Causas".
+
+Debido a
 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Diagrama_M%C3%A9tricas.png?raw=true)
 
