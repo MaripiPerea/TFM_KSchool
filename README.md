@@ -86,10 +86,20 @@ Enlace al repositorio Who:
 
 ## __*4.- ESTIMACIÓN DE VALORES "NAs"*__
 
-## __*5.- MÉTODOS de REGRESIÓN APLICADOS basados en la "SELECCIÓN DE MODELOS"*__
+![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo%200_NAs1.png?raw=true)
+![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo%200_NAs2.png?raw=true)
+
+## __*5.- CORRELACIÓN"*__
+
+## __*6.- CROSS VALIDATION K-fold"*__
+> Se ha utilizado para todos los modelos la "Validación Cruzada K-fold(5)". 
+![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo%200_Cross%20Validation.png?raw=true)
+
+
+## __*7.- MÉTODOS de REGRESIÓN APLICADOS basados en la "SELECCIÓN DE MODELOS"*__
 > Permiten seleccionar automáticamente la mejor combinación de variables predictoras para construir un modelo predictivo óptimo.
 
-### __*5.1- REGRESIÓN PENALIZADA*__
+### __*7.1- REGRESIÓN PENALIZADA*__
 Modelos aplicados:
 ###### >.-> CRESTA
 ###### >.-> LASSO
@@ -98,7 +108,7 @@ Modelos aplicados:
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Analisis_Reg_Penalizada1.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Analisis_Reg_Penalizada2.png?raw=true)
 
-### __*5.2- REGRESIÓN STEPWISE*__
+### __*7.2- REGRESIÓN STEPWISE*__
 Modelos aplicados:
 ###### >.-> LeapBackward(Selección hacia atrás)
 ###### >.-> LeapForward(Selección hacia delante)
@@ -107,7 +117,7 @@ Modelos aplicados:
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo2_Analisis_Reg_STEPWISE1.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo2_Analisis_Reg_STEPWISE2.png?raw=true)
 
-### __*5.3- REGRESIÓN basada en COMPONENTES PRINCIPALES*__
+### __*7.3- REGRESIÓN basada en COMPONENTES PRINCIPALES*__
 Modelos aplicados:
 ###### >.-> PCR(Regresión de componentes principales)
 ###### >.-> PLS(Regresión de Mínimos cuadrados parciales)
@@ -115,21 +125,21 @@ Modelos aplicados:
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo4_Analisis_PCR.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo4_Analisis_PLS.png?raw=true)
 
-### __*5.4- REGRESIÓN "REGSUBSETS"*__
+### __*7.4- REGRESIÓN "REGSUBSETS"*__
 Modelos aplicados:
 ###### >.-> Regsubsets (Subconjuntos)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo3_Analisis_REGSUBSETS1.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo3_Analisis_REGSUBSETS2.png?raw=true)
 
 
-### __*6.- MACHINE LEARNING Supervised*__
+### __*8.- MACHINE LEARNING Supervised*__
 Algoritmos aplicados:
 ###### >.-> K-Nearest Neighbors (KNN)
 ###### >.-> Random Forest (RF)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo5_Analisis_KNN.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo5_Analisis_Ramdom_Forest.png?raw=true)
 
-### __*7.- CONCLUSIONES*__
+### __*9.- CONCLUSIONES*__
 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1-Conclusiones1.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1-Conclusiones2.png?raw=true)
