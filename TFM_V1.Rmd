@@ -1,5 +1,5 @@
 ---
-title: "CHILD MORTALITY RATE"
+title: "CHILD MORTALITY RATE (probability of dying by age 5 per 1000 live births)"
 author: "María Perea"
 date: "Septiembre/2020"
 output: html_document
@@ -11,7 +11,7 @@ knitr::opts_chunk$set(error = TRUE)
 ```
 
 
-
+#### LIBRERIAS NECESARIAS:
 ```{r}
 library(tidyverse)
 library(devtools)
@@ -24,6 +24,10 @@ library(tidyr)
 library(caret)
 library(leaps)
 library(randomForest)
+library(corrplot)
+library(PerformanceAnalytics)
+library("ggpubr")
+library(corrplot)
 
 ```
 
@@ -1843,9 +1847,8 @@ plot(model_best_regsubsets,5)
 
 
 #### SELECCIÓN DE MODELOS: REGRESIÓN DE __**COMPONENTES PRINCIPALES**__ (PCR)
-1. La regresión de componentes principales primero aplica el "Ánalisis de componentes principales" en el conjunto de datos para resumir las variables predictoras originales en pocas variables nuevas, también conocidas como componenetes principales (PC), que son una combinación lineal de los datos originales.
-2. Un inconveniente de la PCR es que no tenemos garantía de que las componentes principales seleccionados estén asociados con el resultado. La selección de componentes principales para incorporar en el modelo no está supervisada por la variable resultado.
-3. Se utiliza *Cross Validation* para identificar automáticamente el número óptimo de componentes principales **ncomp**
+1. Una alternativa a la PCR es la regresión de mínimos cuadrados parciales (PLS), que identifica nuevos componentes principales que no sólo resumen los predictores originales, sino que también están relacionados con el resultado. Estos componentes se utilizan para ajustar el modelo de regresión.
+2. Se utiliza *Cross Validation* para identificar automáticamente el número óptimo de componentes principales **ncomp**
 4. Con la opción *tuneLength* probaremos 9 valores diferentes del parámetro de ajuste *ncomp*.
 5. La opción *scale=TRUE* para estandarizar las variables
 6. Nuestro análisis prueba que al elegir 10 componentes principales (ncomp=10) se obtiene el menor error de predicción RMSE. El 97,99% de la variación contenida en los predictores son capturados por 10 componentes principales. Además captura el 99,87% de la información de la variable resultado.
@@ -1896,10 +1899,10 @@ plot(varImp(model_pcr),15,main="% Importancia Variables")
 1. La regresión de componentes principales primero aplica el "Ánalisis de componentes principales" en el conjunto de datos para resumir las variables predictoras originales en pocas variables nuevas, también conocidas como componenetes principales (PC), que son una combinación lineal de los datos originales.
 2. Un inconveniente de la PCR es que no tenemos garantía de que las componentes principales seleccionados estén asociados con el resultado. La selección de componentes principales para incorporar en el modelo no está supervisada por la variable resultado.
 3. Se utiliza *Cross Validation* para identificar automáticamente el número óptimo de componentes principales **ncomp**
-4. Con la opción *tuneLength* probaremos 9 valores diferentes del parámetro de ajuste *ncomp*.
+4. Con la opción *tuneLength* probaremos 10 valores diferentes del parámetro de ajuste *ncomp*.
 5. La opción *scale=TRUE* para estandarizar las variables
 6. Nuestro análisis prueba que al elegir 10 componentes principales (ncomp=10) se obtiene el menor error de predicción RMSE. El 97,29% de la variación contenida en los predictores son capturados por 10 componentes principales. Además captura el 99,99% de la información de la variable resultado.
-7. Se muestra gráfico con el % de Importancia de las variables.Si endo las variables por encima de un 96% las siguientes:
+7. Se muestra gráfico con el % de Importancia de las variables.Siendo las variables por encima de un 96% las siguientes:
 >.- Mort_Diarrhoeal_rate
 >.- Mort_Respiratory_rate
 >.- Mort_Other_rate
@@ -2064,6 +2067,65 @@ ggplot(data=metricas_test_longer,aes(x=names,y=value, fill=metrics_test))+
   scale_fill_brewer( palette=17)
 ```
 
+
+#### COMPROBANDO "DISTRIBUCIÓN DE NORMALIDAD"
+
+```{r}
+#### Gráfico de densidad para Rate_Mort_Child
+dataset_Rate_child<-dataset %>% select("Who_Region": "year",
+                                 "Rate_Mort_Child")
+
+dataset_Rate_child_longer <- dataset_Rate_child %>%
+  pivot_longer(cols="Rate_Mort_Child",
+               names_to="Indicador",
+               values_to = "values")
+
+ggplot(dataset_Rate_child,aes(x=Rate_Mort_Child))+
+  geom_density(alpha=.2)+
+  ggtitle("Distribution of density *Under-five mortality rate* 
+          *years: 2010-2017*")+
+  theme(plot.title = element_text(hjust = 0.5,face="bold.italic",color="grey"))+
+  theme(axis.text.x=element_text(angle=90, hjust=1))+
+  xlab("probability of dying by age 5 per 1000 live births")
+
+####GRÁFICO Q-Q PLOT
+ggqqplot(train_data$Rate_Mort_Child, ylab = "Rate_Child")+
+  ggtitle("Q-QPlot *Under-five mortality rate*")+
+  theme(plot.title = element_text(hjust = 0.5,face="bold.italic",color="grey"))
+
+#### Gráfico "Shapiro-Wilk" p-value
+dataset_num<-select_if(dataset,is.numeric)
+stat_dataset<-stat.desc(dataset_num,norm = TRUE)
+stat_dataset<-round(stat_dataset,1)
+test_p_Wil<-stat_dataset["normtest.p",]
+
+test_p_Wil_longer <- test_p_Wil %>%
+  pivot_longer(cols=`year`:`Life_expectancy_at_birth`,
+               names_to="Indicadores",
+               values_to = "p",
+               names_ptypes = list(year=integer()))
+
+ggplot(test_p_Wil_longer, aes(sample=p))+
+  stat_qq()+
+ggtitle("Shapiro-Wilk Normality test *p-value*
+        All metrics")+
+  theme(plot.title = element_text(hjust = 0.5,face="bold.italic",color="grey"))
+```
+
+
+
+#### CORRELACIÓN
+
+```{r}
+dataset_num<-dataset[,2:43]
+Cor_Spearman<-cor(dataset_num,method = "spearman")
+corrplot(Cor_Spearman, method="circle", type="low",tl.cex=0.6)
+```
+
+
+
+
+#### GRÁFICO "DISTRIBUCIÓN DE DENSIDAD" CHILD MORTALITY RATE:
 ```{r}
 dataset_Rate_child<-dataset %>% select("Who_Region": "year",
                                  "Rate_Mort_Child")
@@ -2084,4 +2146,227 @@ Under-five mortality rate
   theme(axis.text.x=element_text(angle=90, hjust=1))+
   xlab("probability of dying by age 5 per 1000 live births")
 ```
+
+
+
+#### GRÁFICO BOXPLOT "INMUNITATION" POR REGIÓN
+```{r}
+dataset_Inm<-dataset %>% select("Who_Region": "year",
+                                   "Inm_BCG_coverage":"Inm_ROTAC_coverage")
+dataset_Inm_longer <- dataset_Inm %>%
+  pivot_longer(cols="Inm_BCG_coverage":"Inm_ROTAC_coverage",
+               names_to="Inm_cover",
+               values_to = "cover_est")
+
+
+filter_bad_Inm<-dataset_Inm_longer %>% filter(Who_Region %in% c("Africa",
+                                                               "South-East Asia",
+                                                               "Eastern Mediterranean" ))
+
+filter_best_Inm<-dataset_Inm_longer %>% filter(Who_Region %in% c("Europe",
+                                                                "Americas",
+                                                                "Western Pacific" ))
+
+#Gráfico cajas "Africa, South East Asia, Eastern Mediterranean"
+ggplot(filter_bad_Inm,aes(x=Inm_cover,y=cover_est))+
+  geom_boxplot(aes(fill=Inm_cover))+
+  ggtitle("Inmunization coverage estimates %")+
+  ##facet_grid(.~Who_Region)+
+  facet_wrap(~ Who_Region)+
+  theme(plot.title = element_text(hjust = 0.5))+
+  theme(axis.text.x=element_text(angle=90, hjust=1,size=6))+
+  xlab("Inmunization coverage")+
+  ylab("%")
+
+#Gráfico cajas "Europe, America, Western Pacific"
+ggplot(filter_best_Inm,aes(x=Inm_cover,y=cover_est))+
+  geom_boxplot(aes(fill=Inm_cover))+
+  ggtitle("Inmunization coverage estimates %")+
+  ##facet_grid(.~Who_Region)+
+  facet_wrap(~ Who_Region)+
+  theme(plot.title = element_text(hjust = 0.5))+
+  theme(axis.text.x=element_text(angle=90, hjust=1,size=6))+
+  xlab("Inmunization coverage")+
+  ylab("%")
+```
+
+
+#### GRÁFICO BOXPLOT "REGULATION" POR REGIÓN
+```{r}
+dataset_Regulations<-dataset %>% select("Who_Region": "year",
+                                "Legislation":"Radionuclear")
+
+dataset_Regul_longer <- dataset_Regulations %>%
+  pivot_longer(cols="Legislation":"Radionuclear",
+               names_to="Ind_Regulation",
+               values_to = "cumplim")
+
+filter_bad_Regul<-dataset_Regul_longer %>% filter(Who_Region %in% c("Africa",
+                                                                "South-East Asia",
+                                                                "Eastern Mediterranean" ))
+
+filter_best_Regul<-dataset_Regul_longer %>% filter(Who_Region %in% c("Europe",
+                                                                 "Americas",
+                                                                 "Western Pacific" ))
+
+#Gráfico cajas "Africa, South East Asia, Eastern Mediterranean"
+ggplot(filter_bad_Regul,aes(x=Ind_Regulation,y=cumplim))+
+  geom_boxplot(aes(fill=Ind_Regulation))+
+  ggtitle("International Health Regulations %")+
+  ##facet_grid(.~Who_Region)+
+  facet_wrap(~ Who_Region)+
+  theme(plot.title = element_text(hjust = 0.5))+
+  theme(axis.text.x=element_text(angle=90, hjust=1,size=6))+
+  xlab("Measured Attributes")+
+  ylab("%")
+
+#Gráfico cajas "Europe, America, Western Pacific"
+ggplot(filter_best_Regul,aes(x=Ind_Regulation,y=cumplim))+
+  geom_boxplot(aes(fill=Ind_Regulation))+
+  ggtitle("International Health Regulations %")+
+  ##facet_grid(.~Who_Region)+
+  facet_wrap(~ Who_Region)+
+  theme(plot.title = element_text(hjust = 0.5))+
+  theme(axis.text.x=element_text(angle=90, hjust=1,size=6))+
+  xlab("Measured Attributes")+
+  ylab("%")
+```
+
+
+#### GRÁFICO BOXPLOT "MALNUTRITION" POR REGIÓN
+```{r}
+dataset_Anaemia<-dataset %>% select("Who_Region": "year",
+                                        "ANAEMIA_Children5":"Low_birth_weight", "ANAEMIA_RW":"ANAEMIA_PW")
+
+dataset_Anaemia_longer <- dataset_Anaemia %>%
+  pivot_longer(cols="ANAEMIA_Children5":"ANAEMIA_PW",
+               names_to="Indicadores",
+               values_to = "values")
+
+filter_bad_Anaemia<-dataset_Anaemia_longer %>% filter(Who_Region %in% c("Africa",
+                                                                    "South-East Asia",
+                                                                    "Eastern Mediterranean" ))
+
+filter_best_Anaemia<-dataset_Anaemia_longer %>% filter(Who_Region %in% c("Europe",
+                                                                     "Americas",
+                                                                     "Western Pacific" ))
+
+
+#Gráfico cajas "Africa, South East Asia, Eastern Mediterranean"
+ggplot(filter_bad_Anaemia,aes(x=Indicadores,y=values))+
+  geom_boxplot(aes(fill=Indicadores))+
+  ggtitle("Child Malnutrition & Maternal Health %")+
+  ##facet_grid(.~Who_Region)+
+  facet_wrap(~ Who_Region)+
+  theme(plot.title = element_text(hjust = 0.5))+
+  theme(axis.text.x=element_text(angle=90, hjust=1,size=6))+
+  xlab("Measured Attributes")+
+  ylab("%")
+
+#Gráfico cajas "Europe, America, Western Pacific"
+ggplot(filter_best_Anaemia,aes(x=Indicadores,y=values))+
+  geom_boxplot(aes(fill=Indicadores))+
+  ggtitle("Child Malnutrition & Maternal Health %")+
+  ##facet_grid(.~Who_Region)+
+  facet_wrap(~ Who_Region)+
+  theme(plot.title = element_text(hjust = 0.5))+
+  theme(axis.text.x=element_text(angle=90, hjust=1,size=6))+
+  xlab("Measured Attributes")+
+  ylab("%")
+```
+
+#### GRÁFICO BOXPLOT "LIFE EXPECTANCY" POR REGIÓN
+```{r}
+dataset_Life<-dataset %>% select("Who_Region": "year",
+                                    "Life_expectancy_at_birth")
+
+
+dataset_Life_longer <- dataset_Life %>%
+  pivot_longer(cols="Life_expectancy_at_birth",
+               names_to="Indicador",
+               values_to = "values")
+
+filter_bad_Life<-dataset_Life_longer %>% filter(Who_Region %in% c("Africa",
+                                                                          "South-East Asia",
+                                                                          "Eastern Mediterranean" ))
+
+filter_best_Life<-dataset_Life_longer %>% filter(Who_Region %in% c("Europe",
+                                                                           "Americas",
+                                                                           "Western Pacific" ))
+ggplot(filter_bad_Life,aes(x=Indicador,y=values))+
+  geom_boxplot(aes(fill=Indicador))+
+  ggtitle("Life Expectancy at birth")+
+  ##facet_grid(.~Who_Region)+
+  facet_wrap(~ Who_Region)+
+  theme(plot.title = element_text(hjust = 0.5))+
+  theme(axis.text.x=element_text(angle=90, hjust=1,size=6))+
+  xlab("Indicator")+
+  ylab("years")
+
+ggplot(filter_best_Life,aes(x=Indicador,y=values))+
+  geom_boxplot(aes(fill=Indicador))+
+  ggtitle("Life Expectancy at birth")+
+  ##facet_grid(.~Who_Region)+
+  facet_wrap(~ Who_Region)+
+  theme(plot.title = element_text(hjust = 0.5))+
+  theme(axis.text.x=element_text(angle=90, hjust=1,size=6))+
+  xlab("Indicator")+
+  ylab("years")
+```
+
+#### GRÁFICO BOXPLOT "RATE_MORTALITY PER CAUSES" POR REGIÓN
+
+```{r}
+dataset_causas<-dataset %>% select("Who_Region": "year",
+                                   "Mort_Asphyxia_rate":"Mort_Tetanos_rate")
+dataset_causas_longer <- dataset_causas %>%
+  pivot_longer(cols="Mort_Asphyxia_rate":"Mort_Tetanos_rate",
+               names_to="Mort_Cause",
+               values_to = "Rate_Mort")
+
+filter_bad_causes<-dataset_causas_longer %>% filter(Who_Region %in% c("Africa",
+                                                   "South-East Asia",
+                                                  "Eastern Mediterranean" ))
+
+filter_best_causes<-dataset_causas_longer %>% filter(Who_Region %in% c("Europe",
+                                                               "Americas",
+                                                               "Western Pacific" ))
+
+
+
+#Gráfico cajas "Africa, South East Asia, Eastern Mediterranean"
+ggplot(filter_bad_causes,aes(x=Mort_Cause,y=Rate_Mort))+
+  geom_boxplot(aes(fill=Mort_Cause))+
+  ggtitle("Deaths in children aged <5 years, by cause (Rate)")+
+  ##facet_grid(.~Who_Region)+
+  facet_wrap(~ Who_Region)+
+  theme(plot.title = element_text(hjust = 0.5))+
+  theme(axis.text.x=element_text(angle=90, hjust=1,size=6))+
+  xlab("Mortality_Causes_Rate")+
+  ylab("Deaths per 1 000 live births")
+
+#Gráfico cajas "Europe, America, Western Pacific"
+ggplot(filter_best_causes,aes(x=Mort_Cause,y=Rate_Mort))+
+  geom_boxplot(aes(fill=Mort_Cause))+
+  ggtitle("Deaths in children aged <5 years, by cause (Rate)")+
+  ##facet_grid(.~Who_Region)+
+  facet_wrap(~ Who_Region)+
+  theme(plot.title = element_text(hjust = 0.5))+
+  theme(axis.text.x=element_text(angle=90, hjust=1,size=6))+
+  xlab("Mortality_Causes_Rate")+
+  ylab("Deaths per 1 000 live births")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
