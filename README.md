@@ -150,6 +150,10 @@ Algoritmos aplicados:
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo5_Analisis_Ramdom_Forest.png?raw=true)
 
 ### __*9.- CONCLUSIONES*__
+> ###### - Cross Validation
+> ###### - Test
+> ###### - PLS (Mínimos Cuadrados Parciales)
+> ###### - StepWise "leapForward"
 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1-Conclusiones1.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1-Conclusiones2.png?raw=true)
