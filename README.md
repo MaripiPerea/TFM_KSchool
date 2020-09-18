@@ -17,6 +17,7 @@ La meta de los ODS(Objetivos de Desarrollo Sostenible) para poner fin a las muer
 Se puede observar en la gráfica evolutiva que las regiones mundiales que **han cumplido** el objetivo(desde el 2005) son: __**Europe, Americas y Western Pacific**__. 
 Mientras que __**"South-East Asia"**__ está aproximándose, **"Eastern Mediterranean"** lo está casi duplicando. Y si hablamos de __**"África"**__ está todavía muy lejos de alcanzarlo, porque lo triplica.
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo15_Graficas_Rate_Mort_Child.png?raw=true)
+![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo%200_Mapa%20Tableau.png)
 
 ## __*2.- OBJETIVOS del PROYECTO*__. *Modelos aplicados*.
 El objetivo principal del proyecto es encontrar el mejor modelo para predecir la __**"Tasa de Mortalidad Infantil"**__ por **"Región Mundial"**, en base a indicadores de la __*OMS*__ de **"Cobertura de Inmunización"**, del **"Reglamento de Salud Internacional"**, **"Ratio de Mortalidad por Causas"**, indicadores de **"Malnutrición Infantil"** relacionado con la **"Anemia"** y el **"Bajo peso al nacer"**, así cómo también los relacionados con la **"Salud Maternal"** en edad reproductiva y en mujeres embarazadas, y con la **"Mortalidad de las madres"**. Teniendo en cuenta también el indicador de la **"Esperanza de vida al nacer"** según el país de procedencia.
@@ -159,4 +160,9 @@ Algoritmos aplicados:
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1-Conclusiones2.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1-Conclusiones3.png)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1-Conclusiones4.png)
+
+### __*10.- ENLACES RStudio*__
+> ###### - RMarkDown -> ![Código RStudio] (https://github.com/MaripiPerea/TFM_KSchool/blob/master/TFM_V1.Rmd)
+> ###### - RMarkDown.html -> ![Código RStudio y resultados en html] (https://github.com/MaripiPerea/TFM_KSchool/blob/master/TFM_V1.html)
+
 
