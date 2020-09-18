@@ -139,8 +139,8 @@ Modelos aplicados:
 
 ### __*8.- MACHINE LEARNING Supervised*__
 Algoritmos aplicados:
-###### >.-> K-Nearest Neighbors (KNN)
-###### >.-> Random Forest (RF)
+> ###### K-Nearest Neighbors (KNN)
+> ###### Random Forest (RF)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo5_Analisis_KNN.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo5_Analisis_Ramdom_Forest.png?raw=true)
 
