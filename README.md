@@ -111,6 +111,7 @@ Modelos aplicados:
 > ###### - NET ELASTIC
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Encabezado.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Analisis_Reg_Penalizada1.png?raw=true)
+__*Comprobando "Suposiciones de Regresión":*__
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Analisis_Reg_Penalizada2.png?raw=true)
 
 ### __*7.2- REGRESIÓN STEPWISE*__
@@ -120,6 +121,8 @@ Modelos aplicados:
 > ###### - LeapSeq(Selección por pasos)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo2_Encabezado.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo2_Analisis_Reg_STEPWISE1.png?raw=true)
+
+__*Comprobando "Suposiciones de Regresión":*__
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo2_Analisis_Reg_STEPWISE2.png?raw=true)
 
 ### __*7.3- REGRESIÓN basada en COMPONENTES PRINCIPALES*__
@@ -134,6 +137,8 @@ Modelos aplicados:
 Modelos aplicados:
 > ###### - Regsubsets (Subconjuntos)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo3_Analisis_REGSUBSETS1.png?raw=true)
+
+__*Comprobando "Suposiciones de Regresión":*__
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo3_Analisis_REGSUBSETS2.png?raw=true)
 
 
