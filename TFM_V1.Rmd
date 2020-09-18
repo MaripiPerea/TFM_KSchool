@@ -65,7 +65,7 @@ stat_wide
 #### Gráficos __"Rate_Mort_Child"__
 1. Gráfico de cajas por "Who_Región"
 2. Evolutivo por "Who_Región"
-
+3. Gráfico de densidad por Región (2010-2017)
 ```{r}
 ggplot(data=Rate_Child,aes(x=Who_Region,y=Rate_Mort_Child))+
   geom_boxplot(aes(fill=Who_Region)) +
@@ -84,6 +84,8 @@ ggplot(data=Rate_Child,aes(x=year,y=Rate_Mort_Child))+
           (probability of dying by age 5 per 1000 live births)
 *1990-2017*")+
   theme(plot.title = element_text(hjust = 0.5,face="bold.italic"))
+
+
 ```
 
 
@@ -1209,7 +1211,7 @@ predictions_ridge<-model_ridge %>% predict(test_data)
 Metricas_ridge_test<-data.frame("metrics_test"="metrics_test_ridge",
   RMSE=RMSE(predictions_ridge,test_data$Rate_Mort_Child),
   MAE=MAE(predictions_ridge,test_data$Rate_Mort_Child),
-  Rsquare=caret::R2(predictions_ridge,test_data$Rate_Mort_Child),
+  RSquared=caret::R2(predictions_ridge,test_data$Rate_Mort_Child),
   Tasa_Error_Test=RMSE(predictions_ridge,test_data$Rate_Mort_Child)/mean(test_data$Rate_Mort_Child)
 )
 Metricas_ridge_test
@@ -1311,7 +1313,7 @@ predictions_elastic<-model_elastic %>% predict(test_data)
 Metricas_elastic_test<-data.frame("metrics_test"="metrics_test_elastic",
   RMSE=RMSE(predictions_elastic,test_data$Rate_Mort_Child),
   MAE=MAE(predictions_elastic,test_data$Rate_Mort_Child),
-  Rsquare=caret::R2(predictions_elastic,test_data$Rate_Mort_Child),
+  RSquared=caret::R2(predictions_elastic,test_data$Rate_Mort_Child),
   Tasa_Error_Test=RMSE(predictions_elastic,test_data$Rate_Mort_Child)/mean(test_data$Rate_Mort_Child)
 )
 Metricas_elastic_test
@@ -2012,9 +2014,11 @@ plot(varImp(model_random_forest))
 #### COMPARATIVA MEJORES MODELOS en "CROSS VALIDATION".
 ```{r}
 Metricas_train<-data.frame(rbind(Metricas_train_lasso,
-Metricas_train_leapForward,
-Metricas_train_best_regsubsets,
-Metricas_train_PLS))
+                                 Metricas_train_leapBackward,
+                                 Metricas_train_leapForward,
+                                 Metricas_train_leapSeq,
+                                 Metricas_train_best_regsubsets,
+                                 Metricas_train_PLS))
 Metricas_train
 
 metricas_train_longer <- Metricas_train %>%
@@ -2027,7 +2031,7 @@ ggplot(data=metricas_train_longer,aes(x=names,y=value, fill=metrics_train))+
   geom_bar(stat="identity",position=position_dodge())+
   xlab("Métrics")+
   ylab("values")+
-  geom_text(aes(label=value),position=position_dodge(width=0.9), vjust=2,size=2)+
+  #geom_text(aes(label=value),position=position_dodge(width=0.9), vjust=2,size=2)+
   ggtitle("Comparativa *Métricas en Cross Validation*
           para los mejores modelos")+
   theme(plot.title = element_text(hjust = 0.5,face="bold.italic",color="grey"))+
@@ -2036,9 +2040,11 @@ ggplot(data=metricas_train_longer,aes(x=names,y=value, fill=metrics_train))+
 #### COMPARATIVA MEJORES MODELOS en "TEST".
 ```{r}
 Metricas_test<-data.frame(rbind(Metricas_lasso_test,
-Metricas_leapForward_test,
-Metricas_best_regsubsets_test,
-Metricas_PLS_test))
+                                Metricas_leapBack_test,
+                                Metricas_leapForward_test,
+                                Metricas_leapSeq_test,
+                                Metricas_best_regsubsets_test,
+                                Metricas_PLS_test))
 Metricas_test
 
 metricas_test_longer <- Metricas_test %>%
@@ -2051,11 +2057,31 @@ ggplot(data=metricas_test_longer,aes(x=names,y=value, fill=metrics_test))+
   geom_bar(stat="identity",position=position_dodge())+
   xlab("Métrics")+
   ylab("values")+
-  geom_text(aes(label=value),position=position_dodge(width=0.9), vjust=2,size=2)+
+  #geom_text(aes(label=value),position=position_dodge(width=0.9), vjust=2,size=2)+
   ggtitle("Comparativa *Métricas en TEST*
           para los mejores modelos")+
   theme(plot.title = element_text(hjust = 0.5,face="bold.italic",color="grey"))+
   scale_fill_brewer( palette=17)
 ```
 
+```{r}
+dataset_Rate_child<-dataset %>% select("Who_Region": "year",
+                                 "Rate_Mort_Child")
+
+dataset_Rate_child_longer <- dataset_Rate_child %>%
+  pivot_longer(cols="Rate_Mort_Child",
+               names_to="Indicador",
+               values_to = "values")
+
+ggplot(data=dataset_Rate_child_longer, aes(x=values, color=Who_Region, fill=Who_Region)) + 
+  geom_histogram(aes(y=..density..), alpha=0.6, 
+                 position="identity")+
+  geom_density(alpha=.2)+
+  ggtitle("Distribution of density
+Under-five mortality rate 
+*years: 2010-2017*")+
+  theme(plot.title = element_text(hjust = 0.5,face="bold.italic",color="grey"))+
+  theme(axis.text.x=element_text(angle=90, hjust=1))+
+  xlab("probability of dying by age 5 per 1000 live births")
+```
 
