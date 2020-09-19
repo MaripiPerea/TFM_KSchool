@@ -114,8 +114,8 @@ Modelos aplicados:
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Encabezado.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Analisis_Reg_Penalizada1.png?raw=true)
 __*Comprobando "Suposiciones de Regresión" en LASSO:*__
-> - Análisis de los supuestos de Regresión lineal con __"lm"__ para las variables identificadas por Lasso. Comentar que el modelo lineal tiene un R2=0.9998 muy bueno, y que tanto el intercept cómo los coeficientes de las variables predictoras varían respecto al "CV k-fold", cómo es lógico.
-> - Cómo se observa en los gráficos, se cumplen las hipótesis de regresión lineal. Se ejecuta el modelo excluyendo el valor atípico #9 (por tener un residuo estandarizado >3), mejorando el R2 y sin obtener mucha variación entre los coeficientes.
+> ##### - Análisis de los supuestos de Regresión lineal con __"lm"__ para las variables identificadas por Lasso. Comentar que el modelo lineal tiene un R2=0.9998 muy bueno, y que tanto el intercept cómo los coeficientes de las variables predictoras varían respecto al "CV k-fold", cómo es lógico.
+> ##### - Cómo se observa en los gráficos, se cumplen las hipótesis de regresión lineal. Se ejecuta el modelo excluyendo el valor atípico #9 (por tener un residuo estandarizado >3), mejorando el R2 y sin obtener mucha variación entre los coeficientes.
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Analisis_Reg_Penalizada2.png?raw=true)
 
 ### __*7.2- REGRESIÓN STEPWISE*__
@@ -127,8 +127,8 @@ Modelos aplicados:
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo2_Analisis_Reg_STEPWISE1.png?raw=true)
 
 __*Comprobando "Suposiciones de Regresión" para "leapForward":*__
-> - Comentar que el modelo lineal tiene un excelente R2=0.9999 , y que tanto el intercept cómo los coeficientes de las variables predictoras son muy similares respecto al "CV k-fold", cómo es lógico por el propio algoritmo del modelo de ir incluyendo variables.
-> - Cómo se observa en los gráficos, se cumplen las hipótesis de regresión lineal, exepto la de "Normalidad de los residuos".Se realiza uns transformación logarítmica de la variable objetivo para corregir la gráfica Normal Q-Q, pues  tienes escalones entorno al 0. Se consigue corregir, aunque en las colas hay puntos dispersos.
+> ##### - Comentar que el modelo lineal tiene un excelente R2=0.9999 , y que tanto el intercept cómo los coeficientes de las variables predictoras son muy similares respecto al "CV k-fold", cómo es lógico por el propio algoritmo del modelo de ir incluyendo variables.
+> ##### - Cómo se observa en los gráficos, se cumplen las hipótesis de regresión lineal, exepto la de "Normalidad de los residuos".Se realiza uns transformación logarítmica de la variable objetivo para corregir la gráfica Normal Q-Q, pues  tienes escalones entorno al 0. Se consigue corregir, aunque en las colas hay puntos dispersos.
 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo2_Analisis_Reg_STEPWISE2.png?raw=true)
 
@@ -146,7 +146,7 @@ Modelos aplicados:
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo3_Analisis_REGSUBSETS1.png?raw=true)
 
 __*Comprobando "Suposiciones de Regresión" mejor modelo RegSubsets:*__
-> - Se comprueba que cumple las hipótesis de regresión lineal.
+> ##### - Se comprueba que cumple las hipótesis de regresión lineal.
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo3_Analisis_REGSUBSETS2.png?raw=true)
 
 
@@ -169,9 +169,9 @@ Algoritmos aplicados:
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1-Conclusiones4.png)
 
 ### __*10.- ENLACES RMarkDown de RStudio y librerias necesarias*__
-> ###### - RMarkDown -> ![Código RStudio] (https://github.com/MaripiPerea/TFM_KSchool/blob/master/TFM_V1.Rmd)
-> ###### - RMarkDown.html -> ![Código RStudio y resultados en html] (https://github.com/MaripiPerea/TFM_KSchool/blob/master/TFM_V1.html)
+> ##### - RMarkDown -> ![Código RStudio] (https://github.com/MaripiPerea/TFM_KSchool/blob/master/TFM_V1.Rmd)
+> ##### - RMarkDown.html -> ![Código RStudio y resultados en html] (https://github.com/MaripiPerea/TFM_KSchool/blob/master/TFM_V1.html)
 > ###### - *** Debido a que el fichero html es muy grande no es posible visualizarlo completo en Github. He intentado particionarlo, sin éxito, pudiento sólo crear el html con el código utilizado para el  "diseño del dataset" y los resultados de la ejecución.
-> ###### - RMarkDown_Data.html -> ![Código RStudio y resultados "Dataset" html] (https://github.com/MaripiPerea/TFM_KSchool/blob/master/TFM_V1_Data.html)
-> ###### - Librerías RStudio -> 
+> ##### - RMarkDown_Data.html -> ![Código RStudio y resultados "Dataset" html] (https://github.com/MaripiPerea/TFM_KSchool/blob/master/TFM_V1_Data.html)
+> ##### - Librerías RStudio -> 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Librerias%20RStudio.png)
