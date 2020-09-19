@@ -171,7 +171,7 @@ Algoritmos aplicados:
 ### __*10.- ENLACES RMarkDown de RStudio y librerias necesarias*__
 > ###### - RMarkDown -> ![Código RStudio] (https://github.com/MaripiPerea/TFM_KSchool/blob/master/TFM_V1.Rmd)
 > ###### - RMarkDown.html -> ![Código RStudio y resultados en html] (https://github.com/MaripiPerea/TFM_KSchool/blob/master/TFM_V1.html)
-> *** Debido a que el fichero html es muy grande no es posible visualizarlo completo en Github. He intentado particionarlo, sin éxito, pudiento sólo crear el html con el código utilizado para el  "diseño del dataset" y los resultados de la ejecución.
+> ###### - *** Debido a que el fichero html es muy grande no es posible visualizarlo completo en Github. He intentado particionarlo, sin éxito, pudiento sólo crear el html con el código utilizado para el  "diseño del dataset" y los resultados de la ejecución.
 > ###### - RMarkDown_Data.html -> ![Código RStudio y resultados "Dataset" html] (https://github.com/MaripiPerea/TFM_KSchool/blob/master/TFM_V1_Data.html)
 > ###### - Librerías RStudio -> 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Librerias%20RStudio.png)
