@@ -25,7 +25,7 @@ El objetivo principal del proyecto es encontrar el mejor modelo para predecir la
 Es muy importante destacar que el indicador **"Tasa de Mortalidad Infantil"** *es una probabilidad de muerte derivada de una tabla de vida y expresada cómo una tasa por 1000*. Es decir, **no es una tasa estrictamente** (número de muertes / población de riesgo), ni se obtiene de las "Tasas de Mortalidad infantil por Causas". Es evidente, que estas tasas serán muy influyentes en el modelo, pero la diversidad de *"Regiones Mundiales"* con su *"variedad" de causas de mortalidad (12 en total)*, hará que el modelo seleccione las más *"relevantes"* para poder estimar cualquier Región de forma óptima.
 
 Derivado de lo anterior, otro objetivo importante del estudio será *identificar los principales indicadores* que realmente están condicionando positiva o negativamente en el movimiento de la tasa. De cara a poder hacer *"estimaciones futuras"* del ratio, disponiendo solamente de los resultados de estas variables. 
-Esto se consigue con los *"Modelos de Selección de Variables"* cómo la "Regresión Penalizada", la "Regresión por Pasos (Stepwise)" o "RegSubsets", dónde claramente hace una selección de "x variables predictoras" obteniendo su coeficiente asociado, que minimizan el "Error de predicción" o la "Tasa de Error".
+Esto se consigue con los *"Modelos de Selección de Variables"* cómo la "Regresión Penalizada", la "Regresión por Pasos (Stepwise)" o "RegSubsets", dónde claramente hace una selección de "x variables predictoras" obteniendo su coeficiente asociado, que minimizan el "Error de predicción" y la "Tasa de Error".
 
 En cambio, otros modelos cómo la "Regresión de Componentes Principales" (PCR y PLS) devuelve los resultados con todas las variables, sin llegar a prescindir de ninguna porque sus coeficientes no llegan a 0, aunque también proporciona las de mayor importancia en la predicción.
 
@@ -52,6 +52,7 @@ Enlaces al repositorio Who:
 ![Enlace Indicadores "Who_Life_Expectancy"] (https://apps.who.int/gho/data/view.main.SDG2016LEXREGv?lang=en)
 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo7_Def_M%C3%A9trics_Women_Health_%20Life_Expectancy.png?raw=true)
+>** Los indicadores "Woman Health" se presentan en el apartado 3.2, conjuntamente con los indicadores "Child Malnutrition"
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo12_Graficas_Life_Expectancy.png?raw=true)
 
 ###  __*3.2.- METRICS "CHILDREN MALNUTRITION"*__
@@ -86,11 +87,11 @@ Enlace al repositorio Who:
 
 
 ## __*4.- ESTIMACIÓN DE VALORES "NAs"*__
-
+> Se detallan los pasos e indicadores estimados por "regresión lineal" para los valores NAs por el tiempo invertido en ello.
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo%200_NAs1.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo%200_NAs2.png?raw=true)
 
-## __*5.- Distribución NORMAL y CORRELACIÓN"*__
+## __*5.- "Distribución NORMAL y CORRELACIÓN"*__
 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo%200_Encabezado%20Normal.png)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo%200_Distribuci%C3%B3n%20Normal.png)
@@ -112,7 +113,9 @@ Modelos aplicados:
 > ###### - NET ELASTIC
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Encabezado.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Analisis_Reg_Penalizada1.png?raw=true)
-__*Comprobando "Suposiciones de Regresión":*__
+__*Comprobando "Suposiciones de Regresión" en LASSO:*__
+> Análisis de los supuestos de Regresión lineal con __"lm"__ para las variables identificadas por Lasso. Comentar que el modelo lineal tiene un R2=0.9998 muy bueno, y que tanto el intercept cómo los coeficientes de las variables predictoras varían respecto al "CV k-fold", cómo es lógico.
+> Cómo se observa en los gráficos, se cumplen las hipótesis de regresión lineal. Se ejecuta el modelo excluyendo el valor atípico #9 (por tener un residuo estandarizado >3), mejorando el R2 y sin obtener mucha variación entre los coeficientes.
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Analisis_Reg_Penalizada2.png?raw=true)
 
 ### __*7.2- REGRESIÓN STEPWISE*__
@@ -124,6 +127,8 @@ Modelos aplicados:
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo2_Analisis_Reg_STEPWISE1.png?raw=true)
 
 __*Comprobando "Suposiciones de Regresión":*__
+> Análisis de los supuestos de Regresión lineal con __"lm"__ para las variables identificadas por leapForward. Comentar que el modelo lineal tiene un R2=0.9998 muy bueno, y que tanto el intercept cómo los coeficientes de las variables predictoras varían respecto al "CV k-fold", cómo es lógico.
+> Cómo se observa en los gráficos, se cumplen las hipótesis de regresión lineal. Se ejecuta el modelo excluyendo el valor atípico #9 (por tener un residuo estandarizado >3), mejorando el R2 y sin obtener mucha variación entre los coeficientes.
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo2_Analisis_Reg_STEPWISE2.png?raw=true)
 
 ### __*7.3- REGRESIÓN basada en COMPONENTES PRINCIPALES*__
