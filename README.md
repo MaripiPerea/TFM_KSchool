@@ -22,7 +22,7 @@ Mientras que __**"South-East Asia"**__ está aproximándose, **"Eastern Mediterr
 ## __*2.- OBJETIVOS del PROYECTO*__. *Modelos aplicados*.
 El objetivo principal del proyecto es encontrar el mejor modelo para predecir la __**"Tasa de Mortalidad Infantil"**__ por **"Región Mundial"**, en base a indicadores de la __*OMS*__ de **"Cobertura de Inmunización"**, del **"Reglamento de Salud Internacional"**, **"Ratio de Mortalidad por Causas"**, indicadores de **"Malnutrición Infantil"** relacionado con la **"Anemia"** y el **"Bajo peso al nacer"**, así cómo también los relacionados con la **"Salud Maternal"** en edad reproductiva y en mujeres embarazadas, y con la **"Mortalidad de las madres"**. Teniendo en cuenta también el indicador de la **"Esperanza de vida al nacer"** según el país de procedencia.
 
-Es muy importante destacar que el indicador **"Tasa de Mortalidad Infantil"** *es una probabilidad de muerte derivada de una tabla de vida y expresada cómo una tasa por 1000*. Es decir, **no es una tasa estrictamente** (número de muertes / población de riesgo), ni se obtiene de las "Tasas de Mortalidad infantil por Causas". Es evidente, que estas tasas serán muy influyentes en el modelo, pero la diversidad de *"Regiones Mundiales"* con su *"variedad" de causas de mortalidad (12 en total)*, hará que el modelo seleccione las más *"relevantes"* para poder estimar cualquier Región de forma óptima.
+Es muy importante destacar que el indicador **"Tasa de Mortalidad Infantil"** *es una probabilidad de muerte derivada de una tabla de vida y expresada cómo una tasa por 1000*. Es decir, **no es una tasa estrictamente** (número de muertes / población de riesgo), ni se obtiene de las "Tasas de Mortalidad infantil por Causas". Es evidente, que estas tasas serán muy influyentes en el modelo, pero la diversidad de *"Regiones Mundiales"* con su *"variedad" de causas de mortalidad (12 en total)*, hará que el modelo seleccione las más *"correlacionadas"* para poder estimar cualquier Región de forma óptima.
 
 Derivado de lo anterior, otro objetivo importante del estudio será *identificar los principales indicadores* que realmente están condicionando positiva o negativamente en el movimiento de la tasa. De cara a poder hacer *"estimaciones futuras"* del ratio, disponiendo solamente de los resultados de estas variables. 
 Esto se consigue con los *"Modelos de Selección de Variables"* cómo la "Regresión Penalizada", la "Regresión por Pasos (Stepwise)" o "RegSubsets", dónde claramente hace una selección de "x variables predictoras" obteniendo su coeficiente asociado, que minimizan el "Error de predicción" y la "Tasa de Error".
@@ -87,7 +87,7 @@ Enlace al repositorio Who:
 
 
 ## __*4.- ESTIMACIÓN DE VALORES "NAs"*__
-> Se detallan los pasos e indicadores estimados por "regresión lineal" para los valores NAs por el tiempo invertido en ello.
+> #### Debido al tiempo invertido en ello, se detallan los pasos e indicadores estimados por "regresión lineal" para los valores NAs.
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo%200_NAs1.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo%200_NAs2.png?raw=true)
 
@@ -114,8 +114,8 @@ Modelos aplicados:
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Encabezado.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Analisis_Reg_Penalizada1.png?raw=true)
 __*Comprobando "Suposiciones de Regresión" en LASSO:*__
-> - Análisis de los supuestos de Regresión lineal con __"lm"__ para las variables identificadas por Lasso. Comentar que el modelo lineal tiene un R2=0.9998 muy bueno, y que tanto el intercept cómo los coeficientes de las variables predictoras varían respecto al "CV k-fold", cómo es lógico.
-> - Cómo se observa en los gráficos, se cumplen las hipótesis de regresión lineal. Se ejecuta el modelo excluyendo el valor atípico #9 (por tener un residuo estandarizado >3), mejorando el R2 y sin obtener mucha variación entre los coeficientes.
+> ##### - Análisis de los supuestos de Regresión lineal con __"lm"__ para las variables identificadas por Lasso. Comentar que el modelo lineal tiene un R2=0.9998 muy bueno, y que tanto el intercept cómo los coeficientes de las variables predictoras varían respecto al "CV k-fold", cómo es lógico.
+> ##### - Cómo se observa en los gráficos, se cumplen las hipótesis de regresión lineal. Se ejecuta el modelo excluyendo el valor atípico #9 (por tener un residuo estandarizado >3), mejorando el R2 y sin obtener mucha variación entre los coeficientes.
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Analisis_Reg_Penalizada2.png?raw=true)
 
 ### __*7.2- REGRESIÓN STEPWISE*__
@@ -127,8 +127,8 @@ Modelos aplicados:
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo2_Analisis_Reg_STEPWISE1.png?raw=true)
 
 __*Comprobando "Suposiciones de Regresión" para "leapForward":*__
-> - Comentar que el modelo lineal tiene un excelente R2=0.9999 , y que tanto el intercept cómo los coeficientes de las variables predictoras son muy similares respecto al "CV k-fold", cómo es lógico por el propio algoritmo del modelo de ir incluyendo variables.
-> - Cómo se observa en los gráficos, se cumplen las hipótesis de regresión lineal, exepto la de "Normalidad de los residuos".Se realiza uns transformación logarítmica de la variable objetivo para corregir la gráfica Normal Q-Q, pues  tienes escalones entorno al 0. Se consigue corregir, aunque en las colas hay puntos dispersos.
+> ##### - Comentar que el modelo lineal tiene un excelente R2=0.9999 , y que tanto el intercept cómo los coeficientes de las variables predictoras son muy similares respecto al "CV k-fold", cómo es lógico por el propio algoritmo del modelo de ir incluyendo variables.
+> ##### - Cómo se observa en los gráficos, se cumplen las hipótesis de regresión lineal, exepto la de "Normalidad de los residuos".Se realiza uns transformación logarítmica de la variable objetivo para corregir la gráfica Normal Q-Q, pues  tienes escalones entorno al 0. Se consigue corregir, aunque en las colas hay puntos dispersos.
 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo2_Analisis_Reg_STEPWISE2.png?raw=true)
 
@@ -146,7 +146,7 @@ Modelos aplicados:
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo3_Analisis_REGSUBSETS1.png?raw=true)
 
 __*Comprobando "Suposiciones de Regresión" mejor modelo RegSubsets:*__
-> - Se comprueba que cumple las hipótesis de regresión lineal.
+> ##### - Se comprueba que cumple las hipótesis de regresión lineal.
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo3_Analisis_REGSUBSETS2.png?raw=true)
 
 
@@ -168,8 +168,10 @@ Algoritmos aplicados:
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1-Conclusiones3.png)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1-Conclusiones4.png)
 
-### __*10.- ENLACES RStudio*__
-> ###### - RMarkDown -> ![Código RStudio] (https://github.com/MaripiPerea/TFM_KSchool/blob/master/TFM_V1.Rmd)
-> ###### - RMarkDown.html -> ![Código RStudio y resultados en html] (https://github.com/MaripiPerea/TFM_KSchool/blob/master/TFM_V1.html)
-
-
+### __*10.- ENLACES RMarkDown de RStudio y librerias necesarias*__
+> ##### - RMarkDown -> ![Código RStudio] (https://github.com/MaripiPerea/TFM_KSchool/blob/master/TFM_V1.Rmd)
+> ##### - RMarkDown.html -> ![Código RStudio y resultados en html] (https://github.com/MaripiPerea/TFM_KSchool/blob/master/TFM_V1.html)
+> ###### - *** Debido a que el fichero html es muy grande no es posible visualizarlo completo en Github. He intentado particionarlo, sin éxito, pudiento sólo crear el html con el código utilizado para el  "diseño del dataset" y los resultados de la ejecución.
+> ##### - RMarkDown_Data.html -> ![Código RStudio y resultados "Dataset" html] (https://github.com/MaripiPerea/TFM_KSchool/blob/master/TFM_V1_Data.html)
+> ##### - Librerías RStudio -> 
+![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Librerias%20RStudio.png)
