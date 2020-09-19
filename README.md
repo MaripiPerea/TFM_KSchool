@@ -114,8 +114,8 @@ Modelos aplicados:
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Encabezado.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Analisis_Reg_Penalizada1.png?raw=true)
 __*Comprobando "Suposiciones de Regresión" en LASSO:*__
-> Análisis de los supuestos de Regresión lineal con __"lm"__ para las variables identificadas por Lasso. Comentar que el modelo lineal tiene un R2=0.9998 muy bueno, y que tanto el intercept cómo los coeficientes de las variables predictoras varían respecto al "CV k-fold", cómo es lógico.
-> Cómo se observa en los gráficos, se cumplen las hipótesis de regresión lineal. Se ejecuta el modelo excluyendo el valor atípico #9 (por tener un residuo estandarizado >3), mejorando el R2 y sin obtener mucha variación entre los coeficientes.
+> - Análisis de los supuestos de Regresión lineal con __"lm"__ para las variables identificadas por Lasso. Comentar que el modelo lineal tiene un R2=0.9998 muy bueno, y que tanto el intercept cómo los coeficientes de las variables predictoras varían respecto al "CV k-fold", cómo es lógico.
+> - Cómo se observa en los gráficos, se cumplen las hipótesis de regresión lineal. Se ejecuta el modelo excluyendo el valor atípico #9 (por tener un residuo estandarizado >3), mejorando el R2 y sin obtener mucha variación entre los coeficientes.
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo1_Analisis_Reg_Penalizada2.png?raw=true)
 
 ### __*7.2- REGRESIÓN STEPWISE*__
@@ -126,9 +126,10 @@ Modelos aplicados:
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo2_Encabezado.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo2_Analisis_Reg_STEPWISE1.png?raw=true)
 
-__*Comprobando "Suposiciones de Regresión":*__
-> Análisis de los supuestos de Regresión lineal con __"lm"__ para las variables identificadas por leapForward. Comentar que el modelo lineal tiene un R2=0.9998 muy bueno, y que tanto el intercept cómo los coeficientes de las variables predictoras varían respecto al "CV k-fold", cómo es lógico.
-> Cómo se observa en los gráficos, se cumplen las hipótesis de regresión lineal. Se ejecuta el modelo excluyendo el valor atípico #9 (por tener un residuo estandarizado >3), mejorando el R2 y sin obtener mucha variación entre los coeficientes.
+__*Comprobando "Suposiciones de Regresión" para "leapForward":*__
+> - Comentar que el modelo lineal tiene un excelente R2=0.9999 , y que tanto el intercept cómo los coeficientes de las variables predictoras son muy similares respecto al "CV k-fold", cómo es lógico por el propio algoritmo del modelo de ir incluyendo variables.
+> - Cómo se observa en los gráficos, se cumplen las hipótesis de regresión lineal, exepto la de "Normalidad de los residuos".Se realiza uns transformación logarítmica de la variable objetivo para corregir la gráfica Normal Q-Q, pues  tienes escalones entorno al 0. Se consigue corregir, aunque en las colas hay puntos dispersos.
+
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo2_Analisis_Reg_STEPWISE2.png?raw=true)
 
 ### __*7.3- REGRESIÓN basada en COMPONENTES PRINCIPALES*__
@@ -144,7 +145,8 @@ Modelos aplicados:
 > ###### - Regsubsets (Subconjuntos)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo3_Analisis_REGSUBSETS1.png?raw=true)
 
-__*Comprobando "Suposiciones de Regresión":*__
+__*Comprobando "Suposiciones de Regresión" mejor modelo RegSubsets:*__
+> - Se comprueba que cumple las hipótesis de regresión lineal.
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo3_Analisis_REGSUBSETS2.png?raw=true)
 
 
