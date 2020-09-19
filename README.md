@@ -87,7 +87,7 @@ Enlace al repositorio Who:
 
 
 ## __*4.- ESTIMACIÓN DE VALORES "NAs"*__
-> Se detallan los pasos e indicadores estimados por "regresión lineal" para los valores NAs por el tiempo invertido en ello.
+> #### Se detallan los pasos e indicadores estimados por "regresión lineal" para los valores NAs por el tiempo invertido en ello.
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo%200_NAs1.png?raw=true)
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Diapo%200_NAs2.png?raw=true)
 
