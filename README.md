@@ -24,7 +24,7 @@ El objetivo principal del proyecto es encontrar el mejor modelo para predecir la
 
 Es muy importante destacar que el indicador **"Tasa de Mortalidad Infantil"** *es una probabilidad de muerte derivada de una tabla de vida y expresada cómo una tasa por 1000*. Es decir, **no es una tasa estrictamente** (número de muertes / población de riesgo), ni se obtiene de las "Tasas de Mortalidad infantil por Causas". Es evidente, que estas tasas serán muy influyentes en el modelo, pero la diversidad de *"Regiones Mundiales"* con su *"variedad" de causas de mortalidad (12 en total)*, hará que el modelo seleccione las más *"correlacionadas"* para poder estimar cualquier Región de forma óptima.
 
-Derivado de lo anterior, otro objetivo importante del estudio será *identificar los principales indicadores* que realmente están condicionando positiva o negativamente en el movimiento de la tasa. De cara a poder hacer *"estimaciones futuras"* del ratio, disponiendo solamente de los resultados de estas variables. 
+Derivado de lo anterior, otro objetivo importante del estudio será *identificar los principales indicadores* que realmente están condicionando positiva o negativamente en el movimiento de la tasa, para poder focalizar esfuerzos en la mejora y repercusión a nivel mundial. Con el potencial de realizar *"estimaciones futuras"* del ratio, disponiendo solamente de los datos de estas variables predictoras. 
 Esto se consigue con los *"Modelos de Selección de Variables"* cómo la "Regresión Penalizada", la "Regresión por Pasos (Stepwise)" o "RegSubsets", dónde claramente hace una selección de "x variables predictoras" obteniendo su coeficiente asociado, que minimizan el "Error de predicción" y la "Tasa de Error".
 
 En cambio, otros modelos cómo la "Regresión de Componentes Principales" (PCR y PLS) devuelve los resultados con todas las variables, sin llegar a prescindir de ninguna porque sus coeficientes no llegan a 0, aunque también proporciona las de mayor importancia en la predicción.
@@ -171,7 +171,7 @@ Algoritmos aplicados:
 ### __*10.- ENLACES RMarkDown de RStudio y librerias necesarias*__
 > ##### - RMarkDown -> ![Código RStudio] (https://github.com/MaripiPerea/TFM_KSchool/blob/master/TFM_V1.Rmd)
 > ##### - RMarkDown.html -> ![Código RStudio y resultados en html] (https://github.com/MaripiPerea/TFM_KSchool/blob/master/TFM_V1.html)
-> ###### - *** Debido a que el fichero html es muy grande no es posible visualizarlo completo en Github. He intentado particionarlo, sin éxito, pudiento sólo crear el html con el código utilizado para el  "diseño del dataset" y los resultados de la ejecución.
+> ###### - *** Debido a que el fichero html es muy grande no es posible visualizarlo completo en Github. He intentado particionarlo, sin éxito, pudiendo sólo crear el html con el código utilizado para el  "diseño del dataset" y los resultados de la ejecución.
 > ##### - RMarkDown_Data.html -> ![Código RStudio y resultados "Dataset" html] (https://github.com/MaripiPerea/TFM_KSchool/blob/master/TFM_V1_Data.html)
 > ##### - Librerías RStudio -> 
 ![GitHub Logo](https://github.com/MaripiPerea/TFM_KSchool/blob/master/Librerias%20RStudio.png)
